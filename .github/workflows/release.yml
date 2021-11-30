@@ -1,0 +1,98 @@
+name: Release
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'The version being released (pom.xml files will be updated)'
+        required: true
+      netty:
+        description: 'The version range to use for the Netty Core dependencies'
+        required: false
+        default: '(5.0,)'
+
+jobs:
+  Build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out project
+        uses: actions/checkout@v2
+
+      # Configure Java
+      - uses: actions/setup-java@v2
+        with:
+          distribution: 'adopt'
+          java-version: '11'
+          cache: 'maven'
+
+      - name: Import GPG key
+        id: import_gpg
+        uses: crazy-max/ghaction-import-gpg@v3
+        with:
+          gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
+          passphrase: ${{ secrets.GPG_PASSPHRASE }}
+
+#      - name: Install SSH key
+#        uses: shimataro/ssh-key-action@v2
+#        with:
+#          key: ${{ secrets.SSH_PRIVATE_KEY_PEM }}
+#          known_hosts: ${{ secrets.SSH_KNOWN_HOSTS }}
+
+      - name: Configure Git
+        run: |
+          git config user.name "Netty Project Bot on behalf of ${{ github.actor }}"
+          git config user.email "netty-project-bot@users.noreply.github.com"
+
+      - name: Configure Maven Release Repository
+        uses: s4u/maven-settings-action@v2
+        with:
+          githubServer: false
+          servers: |
+            [{
+              "id": "sonatype-nexus",
+              "username": "${{ secrets.SONATYPE_USERNAME }}",
+              "password": "${{ secrets.SONATYPE_PASSWORD }}"
+            },{
+              "id": "github",
+              "username": "${{ github.actor }}",
+              "password": "${{ secrets.GITHUB_TOKEN }}"
+            }]
+
+      # See https://docs.github.com/en/actions/learn-github-actions/workflow-commands-for-github-actions#setting-an-environment-variable
+      - name: Inspect Project
+        run: |
+          echo "netty_snapshot=$(mvn help:evaluate -Dexpression=netty.version -q -DforceStdout)" >> $GITHUB_ENV
+          echo "tag=$(mvn help:evaluate -Dexpression=project.artifactId -q -DforceStdout)-${{ github.event.inputs.version }}" >> $GITHUB_ENV
+
+      - name: Set Netty Core Version
+        run: |
+          mvn versions:set-property -Dproperty=netty.version '-DnewVersion=${{ github.event.inputs.netty }}'
+
+      - name: Verify Build
+        run: |
+          mvn clean install -B -ntp
+
+      - name: Update versions for release
+        run: |
+          git add .
+          git commit -m 'Update versions for release'
+
+      - name: Prepare release with Maven
+        run: mvn -B -ntp --file pom.xml release:prepare -DpreparationGoals=clean -DskipTests '-DreleaseVersion=${{ github.event.inputs.version }}' '-Dtag=${{ env.tag }}'
+
+      - name: Perform release with Maven
+        run: mvn -B -ntp --file pom.xml release:perform -Drelease.gpg.keyname=${{ secrets.GPG_KEYNAME }} -Drelease.gpg.passphrase=${{ secrets.GPG_PASSPHRASE }}
+
+      - name: Prepare for next development version
+        run: |
+          mvn versions:set-property -Dproperty=netty.version '-DnewVersion=${{ env.netty_snapshot }}'
+          mvn versions:commit
+          git add .
+          git commit -m 'Update versions for development'
+          git push
+
+      - name: Rollback release on failure
+        if: ${{ failure() }}
+        # Rollback the release in case of an failure
+        run: |
+          mvn -B -ntp --file pom.xml release:rollback
+          git push origin :"${{ env.tag }}"

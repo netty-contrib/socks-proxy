@@ -1,0 +1,12 @@
+.project
+.classpath
+.settings
+*.iml
+*.ipr
+*.iws
+.idea/
+.shelf/
+target/
+.DS_Store
+hs_err_pid*.log
+dependency-reduced-pom.xml
