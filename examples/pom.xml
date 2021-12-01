@@ -6,18 +6,23 @@
 
     <parent>
         <groupId>io.netty.contrib</groupId>
-        <artifactId>netty-template-parent</artifactId>
+        <artifactId>netty-socks-proxy-parent</artifactId>
         <version>5.0.0.Final-SNAPSHOT</version>
     </parent>
 
-    <artifactId>netty-template-examples</artifactId>
+    <artifactId>netty-socks-proxy-examples</artifactId>
     <version>${parent.version}</version>
 
     <dependencies>
         <dependency>
             <groupId>io.netty.contrib</groupId>
-            <artifactId>netty-template</artifactId>
+            <artifactId>netty-codec-socks</artifactId>
             <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-handler</artifactId>
+            <version>${netty.version}</version>
         </dependency>
     </dependencies>
 </project>

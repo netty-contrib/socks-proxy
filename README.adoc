@@ -1,8 +1,8 @@
-= Netty 5.x Template Repository for Netty Contrib
+= Netty 5.x SOCKS Codec and Handler Repository for Netty Contrib
 
 * Netty core repository: https://github.com/netty/netty
 * License: Apache-2.0 License
 * Required Java version: Java 11
 * Maven coordinates:
-** `io.netty.contrib:netty-template:5.0.0.Final-SNAPSHOT`
+** `io.netty.contrib:netty-socks-proxy:5.0.0.Final-SNAPSHOT`
 

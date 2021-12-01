@@ -23,9 +23,9 @@
   </parent>
 
   <groupId>io.netty.contrib</groupId>
-  <artifactId>netty-template-parent</artifactId>
+  <artifactId>netty-socks-proxy-parent</artifactId>
   <version>5.0.0.Final-SNAPSHOT</version>
-  <name>Netty/Codec/Template Parent</name>
+  <name>Netty/Codec/Socks Proxy Parent</name>
   <packaging>pom</packaging>
   <url>https://netty.io/</url>
   <description>
@@ -48,9 +48,9 @@
   <inceptionYear>2021</inceptionYear>
 
   <scm>
-    <url>https://github.com/netty-contrib/template</url>
-    <connection>scm:git:https://github.com/netty-contrib/template.git</connection>
-    <developerConnection>scm:git:https://github.com/netty-contrib/template.git</developerConnection>
+    <url>https://github.com/netty-contrib/socks-proxyy</url>
+    <connection>scm:git:https://github.com/netty-contrib/socks-proxy.git</connection>
+    <developerConnection>scm:git:https://github.com/netty-contrib/socks-proxy.git</developerConnection>
     <tag>HEAD</tag>
   </scm>
 
@@ -75,9 +75,9 @@
   </properties>
 
   <modules>
-    <module>template</module>
+    <module>codec-socks</module>
+    <module>handler-proxy</module>
     <module>examples</module>
-    <module>benchmarks</module>
   </modules>
 
   <build>
@@ -277,6 +277,12 @@
       <dependency>
         <groupId>org.junit.jupiter</groupId>
         <artifactId>junit-jupiter-engine</artifactId>
+        <version>5.8.1</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.junit.jupiter</groupId>
+        <artifactId>junit-jupiter-params</artifactId>
         <version>5.8.1</version>
         <scope>test</scope>
       </dependency>
