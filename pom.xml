@@ -267,7 +267,7 @@
     <profile>
       <id>leak</id>
       <properties>
-        <test.argLine>-Dio.netty.leakDetectionLevel=paranoid -Dio.netty.leakDetection.targetRecords=32</test.argLine>
+        <test.argLine>-Dio.netty5.leakDetectionLevel=paranoid -Dio.netty5.leakDetection.targetRecords=32</test.argLine>
       </properties>
     </profile>
   </profiles>

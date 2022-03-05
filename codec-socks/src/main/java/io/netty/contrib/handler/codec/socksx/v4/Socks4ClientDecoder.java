@@ -15,12 +15,12 @@
  */
 package io.netty.contrib.handler.codec.socksx.v4;
 
-import io.netty.buffer.ByteBuf;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.handler.codec.ByteToMessageDecoder;
-import io.netty.handler.codec.DecoderException;
-import io.netty.handler.codec.DecoderResult;
-import io.netty.util.NetUtil;
+import io.netty5.buffer.ByteBuf;
+import io.netty5.channel.ChannelHandlerContext;
+import io.netty5.handler.codec.ByteToMessageDecoder;
+import io.netty5.handler.codec.DecoderException;
+import io.netty5.handler.codec.DecoderResult;
+import io.netty5.util.NetUtil;
 
 /**
  * Decodes a single {@link Socks4CommandResponse} from the inbound {@link ByteBuf}s.

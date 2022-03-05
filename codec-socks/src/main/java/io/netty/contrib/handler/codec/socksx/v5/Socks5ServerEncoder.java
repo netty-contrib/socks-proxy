@@ -15,12 +15,12 @@
  */
 package io.netty.contrib.handler.codec.socksx.v5;
 
-import io.netty.buffer.ByteBuf;
-import io.netty.channel.ChannelHandler.Sharable;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.handler.codec.EncoderException;
-import io.netty.handler.codec.MessageToByteEncoder;
-import io.netty.util.internal.StringUtil;
+import io.netty5.buffer.ByteBuf;
+import io.netty5.channel.ChannelHandler.Sharable;
+import io.netty5.channel.ChannelHandlerContext;
+import io.netty5.handler.codec.EncoderException;
+import io.netty5.handler.codec.MessageToByteEncoder;
+import io.netty5.util.internal.StringUtil;
 
 import static java.util.Objects.requireNonNull;
 

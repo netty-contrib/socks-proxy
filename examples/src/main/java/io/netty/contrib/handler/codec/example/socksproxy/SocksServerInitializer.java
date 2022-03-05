@@ -15,11 +15,11 @@
  */
 package io.netty.contrib.handler.codec.example.socksproxy;
 
-import io.netty.channel.ChannelInitializer;
-import io.netty.channel.socket.SocketChannel;
+import io.netty5.channel.ChannelInitializer;
+import io.netty5.channel.socket.SocketChannel;
 import io.netty.contrib.handler.codec.socksx.SocksPortUnificationServerHandler;
-import io.netty.handler.logging.LogLevel;
-import io.netty.handler.logging.LoggingHandler;
+import io.netty5.handler.logging.LogLevel;
+import io.netty5.handler.logging.LoggingHandler;
 
 public final class SocksServerInitializer extends ChannelInitializer<SocketChannel> {
     @Override

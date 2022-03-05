@@ -15,7 +15,7 @@
  */
 package io.netty.contrib.handler.codec.socksx.v4;
 
-import io.netty.channel.embedded.EmbeddedChannel;
+import io.netty5.channel.embedded.EmbeddedChannel;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

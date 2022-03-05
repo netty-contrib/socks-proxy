@@ -15,10 +15,10 @@
  */
 package io.netty.contrib.handler.codec.example.socksproxy;
 
-import io.netty.channel.Channel;
-import io.netty.channel.ChannelHandler;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.util.concurrent.Promise;
+import io.netty5.channel.Channel;
+import io.netty5.channel.ChannelHandler;
+import io.netty5.channel.ChannelHandlerContext;
+import io.netty5.util.concurrent.Promise;
 
 public final class DirectClientHandler implements ChannelHandler {
 

@@ -11,7 +11,7 @@
     </parent>
 
     <artifactId>netty-socks-proxy-examples</artifactId>
-    <version>${parent.version}</version>
+    <version>${project.parent.version}</version>
 
     <dependencies>
         <dependency>
@@ -21,7 +21,7 @@
         </dependency>
         <dependency>
             <groupId>io.netty</groupId>
-            <artifactId>netty-handler</artifactId>
+            <artifactId>netty5-handler</artifactId>
             <version>${netty.version}</version>
         </dependency>
     </dependencies>

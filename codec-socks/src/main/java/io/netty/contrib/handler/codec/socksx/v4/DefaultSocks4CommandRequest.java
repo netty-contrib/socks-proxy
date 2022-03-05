@@ -15,8 +15,8 @@
  */
 package io.netty.contrib.handler.codec.socksx.v4;
 
-import io.netty.handler.codec.DecoderResult;
-import io.netty.util.internal.StringUtil;
+import io.netty5.handler.codec.DecoderResult;
+import io.netty5.util.internal.StringUtil;
 
 import java.net.IDN;
 

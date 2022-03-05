@@ -15,7 +15,7 @@
  */
 package io.netty.contrib.handler.codec.socksx;
 
-import io.netty.handler.codec.DecoderResult;
+import io.netty5.handler.codec.DecoderResult;
 
 import static java.util.Objects.requireNonNull;
 

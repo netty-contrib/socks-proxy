@@ -15,8 +15,8 @@
  */
 package io.netty.contrib.handler.proxy;
 
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelPipeline;
+import io.netty5.channel.ChannelHandlerContext;
+import io.netty5.channel.ChannelPipeline;
 import io.netty.contrib.handler.codec.socksx.v5.DefaultSocks5CommandRequest;
 import io.netty.contrib.handler.codec.socksx.v5.DefaultSocks5InitialRequest;
 import io.netty.contrib.handler.codec.socksx.v5.DefaultSocks5PasswordAuthRequest;
@@ -33,8 +33,8 @@ import io.netty.contrib.handler.codec.socksx.v5.Socks5InitialResponseDecoder;
 import io.netty.contrib.handler.codec.socksx.v5.Socks5PasswordAuthResponse;
 import io.netty.contrib.handler.codec.socksx.v5.Socks5PasswordAuthResponseDecoder;
 import io.netty.contrib.handler.codec.socksx.v5.Socks5PasswordAuthStatus;
-import io.netty.util.NetUtil;
-import io.netty.util.internal.StringUtil;
+import io.netty5.util.NetUtil;
+import io.netty5.util.internal.StringUtil;
 
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;

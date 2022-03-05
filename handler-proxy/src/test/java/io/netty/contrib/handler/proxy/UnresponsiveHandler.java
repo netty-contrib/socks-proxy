@@ -15,9 +15,9 @@
  */
 package io.netty.contrib.handler.proxy;
 
-import io.netty.channel.ChannelHandler.Sharable;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.SimpleChannelInboundHandler;
+import io.netty5.channel.ChannelHandler.Sharable;
+import io.netty5.channel.ChannelHandlerContext;
+import io.netty5.channel.SimpleChannelInboundHandler;
 
 @Sharable
 final class UnresponsiveHandler extends SimpleChannelInboundHandler<Object> {

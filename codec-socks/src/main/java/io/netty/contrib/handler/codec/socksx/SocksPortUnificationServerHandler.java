@@ -15,17 +15,17 @@
  */
 package io.netty.contrib.handler.codec.socksx;
 
-import io.netty.buffer.ByteBuf;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelPipeline;
-import io.netty.handler.codec.ByteToMessageDecoder;
+import io.netty5.buffer.ByteBuf;
+import io.netty5.channel.ChannelHandlerContext;
+import io.netty5.channel.ChannelPipeline;
+import io.netty5.handler.codec.ByteToMessageDecoder;
 import io.netty.contrib.handler.codec.socksx.v4.Socks4ServerDecoder;
 import io.netty.contrib.handler.codec.socksx.v4.Socks4ServerEncoder;
 import io.netty.contrib.handler.codec.socksx.v5.Socks5AddressEncoder;
 import io.netty.contrib.handler.codec.socksx.v5.Socks5InitialRequestDecoder;
 import io.netty.contrib.handler.codec.socksx.v5.Socks5ServerEncoder;
-import io.netty.util.internal.logging.InternalLogger;
-import io.netty.util.internal.logging.InternalLoggerFactory;
+import io.netty5.util.internal.logging.InternalLogger;
+import io.netty5.util.internal.logging.InternalLoggerFactory;
 
 import static java.util.Objects.requireNonNull;
 

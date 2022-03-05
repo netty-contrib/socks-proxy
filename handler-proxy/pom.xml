@@ -11,7 +11,7 @@
     </parent>
 
     <artifactId>netty-handler-proxy</artifactId>
-    <version>${parent.version}</version>
+    <version>${project.parent.version}</version>
 
     <build>
         <extensions>
@@ -31,12 +31,12 @@
         </dependency>
         <dependency>
             <groupId>io.netty</groupId>
-            <artifactId>netty-handler</artifactId>
+            <artifactId>netty5-handler</artifactId>
             <version>${netty.version}</version>
         </dependency>
         <dependency>
             <groupId>io.netty</groupId>
-            <artifactId>netty-codec-http</artifactId>
+            <artifactId>netty5-codec-http</artifactId>
             <version>${netty.version}</version>
         </dependency>
 

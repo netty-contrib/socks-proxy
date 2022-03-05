@@ -15,9 +15,9 @@
  */
 package io.netty.contrib.handler.codec.example.socksproxy;
 
-import io.netty.buffer.Unpooled;
-import io.netty.channel.Channel;
-import io.netty.channel.ChannelFutureListeners;
+import io.netty5.buffer.Unpooled;
+import io.netty5.channel.Channel;
+import io.netty5.channel.ChannelFutureListeners;
 
 public final class SocksServerUtils {
 

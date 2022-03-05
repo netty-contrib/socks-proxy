@@ -15,38 +15,38 @@
  */
 package io.netty.contrib.handler.proxy;
 
-import io.netty.bootstrap.Bootstrap;
-import io.netty.bootstrap.ServerBootstrap;
-import io.netty.channel.Channel;
-import io.netty.channel.ChannelHandler;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelInitializer;
-import io.netty.channel.EventLoopGroup;
-import io.netty.channel.MultithreadEventLoopGroup;
-import io.netty.channel.embedded.EmbeddedChannel;
-import io.netty.channel.local.LocalAddress;
-import io.netty.channel.local.LocalChannel;
-import io.netty.channel.local.LocalHandler;
-import io.netty.channel.local.LocalServerChannel;
+import io.netty5.bootstrap.Bootstrap;
+import io.netty5.bootstrap.ServerBootstrap;
+import io.netty5.channel.Channel;
+import io.netty5.channel.ChannelHandler;
+import io.netty5.channel.ChannelHandlerContext;
+import io.netty5.channel.ChannelInitializer;
+import io.netty5.channel.EventLoopGroup;
+import io.netty5.channel.MultithreadEventLoopGroup;
+import io.netty5.channel.embedded.EmbeddedChannel;
+import io.netty5.channel.local.LocalAddress;
+import io.netty5.channel.local.LocalChannel;
+import io.netty5.channel.local.LocalHandler;
+import io.netty5.channel.local.LocalServerChannel;
 import io.netty.contrib.handler.proxy.HttpProxyHandler.HttpProxyConnectException;
-import io.netty.handler.codec.http.DefaultFullHttpResponse;
-import io.netty.handler.codec.http.DefaultHttpHeaders;
-import io.netty.handler.codec.http.FullHttpRequest;
-import io.netty.handler.codec.http.HttpClientCodec;
-import io.netty.handler.codec.http.HttpHeaderNames;
-import io.netty.handler.codec.http.HttpHeaders;
-import io.netty.handler.codec.http.HttpResponseEncoder;
-import io.netty.handler.codec.http.HttpResponseStatus;
-import io.netty.handler.codec.http.HttpVersion;
-import io.netty.util.NetUtil;
-import io.netty.util.concurrent.Future;
+import io.netty5.handler.codec.http.DefaultFullHttpResponse;
+import io.netty5.handler.codec.http.DefaultHttpHeaders;
+import io.netty5.handler.codec.http.FullHttpRequest;
+import io.netty5.handler.codec.http.HttpClientCodec;
+import io.netty5.handler.codec.http.HttpHeaderNames;
+import io.netty5.handler.codec.http.HttpHeaders;
+import io.netty5.handler.codec.http.HttpResponseEncoder;
+import io.netty5.handler.codec.http.HttpResponseStatus;
+import io.netty5.handler.codec.http.HttpVersion;
+import io.netty5.util.NetUtil;
+import io.netty5.util.concurrent.Future;
 import org.junit.jupiter.api.Test;
 
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.util.concurrent.atomic.AtomicReference;
 
-import static io.netty.buffer.api.DefaultGlobalBufferAllocator.DEFAULT_GLOBAL_BUFFER_ALLOCATOR;
+import static io.netty5.buffer.api.DefaultBufferAllocators.preferredAllocator;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -201,7 +201,7 @@ public class HttpProxyHandlerTest {
                                     DefaultFullHttpResponse response = new DefaultFullHttpResponse(
                                             HttpVersion.HTTP_1_1,
                                             HttpResponseStatus.BAD_GATEWAY,
-                                            DEFAULT_GLOBAL_BUFFER_ALLOCATOR.allocate(0));
+                                            preferredAllocator().allocate(0));
                                     response.headers().add("name", "value");
                                     response.headers().add(HttpHeaderNames.CONTENT_LENGTH, "0");
                                     ctx.writeAndFlush(response);
@@ -256,7 +256,7 @@ public class HttpProxyHandlerTest {
 
         ChannelHandlerContext ctx = mock(ChannelHandlerContext.class);
         when(ctx.connect(same(proxyAddress), isNull())).thenReturn(future);
-        when(ctx.bufferAllocator()).thenReturn(DEFAULT_GLOBAL_BUFFER_ALLOCATOR);
+        when(ctx.bufferAllocator()).thenReturn(preferredAllocator());
 
         HttpProxyHandler handler = new HttpProxyHandler(
                 new InetSocketAddress(NetUtil.LOCALHOST, 8080),
