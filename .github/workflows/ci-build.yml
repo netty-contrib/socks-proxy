@@ -17,7 +17,9 @@ name: Build
 
 on:
   push:
+    branches: ["main"]
   pull_request:
+    branches: ["main"]
   workflow_dispatch: # Allows you to run this workflow manually from the Actions tab
   schedule:
     - cron: '30 8 * * 1'  # At 08:30 on Monday, every Monday.
@@ -39,7 +41,7 @@ jobs:
         with:
           repository: netty/netty
           path: netty
-          ref: ${{ github.ref }} # Netty core branch of same name as our contrib branch
+          ref: main # Netty core main branch for all Netty 5 targeting contrib repos.
           fetch-depth: 1
 
       # Configure Java
@@ -50,7 +52,7 @@ jobs:
           cache: 'maven'
 
       - name: Build Netty Core
-        run: mvn install -B -T1C -q -am -pl :netty-transport,:netty-codec,:netty-handler,:netty-resolver-dns -DskipTests -Dcheckstyle.skip -Dxml.skip -Danimal.sniffer.skip -Djapicmp.skip -Drevapi.skip -Dmaven.javadoc.skip
+        run: mvn install -B -T1C -q -am -pl :netty5-transport,:netty5-codec,:netty5-handler,:netty5-resolver-dns -DskipTests -Dcheckstyle.skip -Dxml.skip -Danimal.sniffer.skip -Djapicmp.skip -Drevapi.skip -Dmaven.javadoc.skip
         working-directory: ./netty
 
       # See https://docs.github.com/en/actions/learn-github-actions/workflow-commands-for-github-actions#setting-an-environment-variable
@@ -103,7 +105,7 @@ jobs:
         with:
           repository: netty/netty
           path: netty
-          ref: ${{ github.ref }} # Netty core branch of same name as our contrib branch
+          ref: main # Netty core main branch for all Netty 5 targeting contrib repos.
           fetch-depth: 1
 
       # Configure Java
@@ -114,7 +116,7 @@ jobs:
           cache: 'maven'
 
       - name: Build Netty Core
-        run: mvn install -B -T1C -q -am -pl :netty-transport,:netty-codec,:netty-handler,:netty-resolver-dns -DskipTests -Dcheckstyle.skip -Dxml.skip -Danimal.sniffer.skip -Djapicmp.skip -Drevapi.skip -Dmaven.javadoc.skip
+        run: mvn install -B -T1C -q -am -pl :netty5-transport,:netty5-codec,:netty5-handler,:netty5-resolver-dns -DskipTests -Dcheckstyle.skip -Dxml.skip -Danimal.sniffer.skip -Djapicmp.skip -Drevapi.skip -Dmaven.javadoc.skip
         working-directory: ./netty
 
       # See https://docs.github.com/en/actions/learn-github-actions/workflow-commands-for-github-actions#setting-an-environment-variable
