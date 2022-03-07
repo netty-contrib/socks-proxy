@@ -18,6 +18,7 @@ name: Build
 on:
   push:
   pull_request:
+    branches: ["main"]
   workflow_dispatch: # Allows you to run this workflow manually from the Actions tab
   schedule:
     - cron: '30 8 * * 1'  # At 08:30 on Monday, every Monday.
