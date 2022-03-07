@@ -51,7 +51,7 @@ jobs:
           cache: 'maven'
 
       - name: Build Netty Core
-        run: mvn install -B -T1C -q -am -pl :netty-transport,:netty-codec,:netty-handler,:netty-resolver-dns -DskipTests -Dcheckstyle.skip -Dxml.skip -Danimal.sniffer.skip -Djapicmp.skip -Drevapi.skip -Dmaven.javadoc.skip
+        run: mvn install -B -T1C -q -am -pl :netty5-transport,:netty5-codec,:netty5-handler,:netty5-resolver-dns -DskipTests -Dcheckstyle.skip -Dxml.skip -Danimal.sniffer.skip -Djapicmp.skip -Drevapi.skip -Dmaven.javadoc.skip
         working-directory: ./netty
 
       # See https://docs.github.com/en/actions/learn-github-actions/workflow-commands-for-github-actions#setting-an-environment-variable
@@ -115,7 +115,7 @@ jobs:
           cache: 'maven'
 
       - name: Build Netty Core
-        run: mvn install -B -T1C -q -am -pl :netty-transport,:netty-codec,:netty-handler,:netty-resolver-dns -DskipTests -Dcheckstyle.skip -Dxml.skip -Danimal.sniffer.skip -Djapicmp.skip -Drevapi.skip -Dmaven.javadoc.skip
+        run: mvn install -B -T1C -q -am -pl :netty5-transport,:netty5-codec,:netty5-handler,:netty5-resolver-dns -DskipTests -Dcheckstyle.skip -Dxml.skip -Danimal.sniffer.skip -Djapicmp.skip -Drevapi.skip -Dmaven.javadoc.skip
         working-directory: ./netty
 
       # See https://docs.github.com/en/actions/learn-github-actions/workflow-commands-for-github-actions#setting-an-environment-variable
