@@ -105,7 +105,7 @@ jobs:
         with:
           repository: netty/netty
           path: netty
-          ref: ${{ github.ref }} # Netty core branch of same name as our contrib branch
+          ref: main # Netty core main branch for all Netty 5 targeting contrib repos.
           fetch-depth: 1
 
       # Configure Java
