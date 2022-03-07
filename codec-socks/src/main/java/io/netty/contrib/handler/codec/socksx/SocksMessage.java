@@ -15,7 +15,7 @@
  */
 package io.netty.contrib.handler.codec.socksx;
 
-import io.netty.handler.codec.DecoderResultProvider;
+import io.netty5.handler.codec.DecoderResultProvider;
 
 /**
  * An interface that all SOCKS protocol messages implement.

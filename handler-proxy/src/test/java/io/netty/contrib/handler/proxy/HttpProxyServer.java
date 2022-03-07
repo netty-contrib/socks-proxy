@@ -15,30 +15,30 @@
  */
 package io.netty.contrib.handler.proxy;
 
-import io.netty.buffer.Unpooled;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelPipeline;
-import io.netty.channel.socket.SocketChannel;
-import io.netty.handler.codec.LineBasedFrameDecoder;
-import io.netty.handler.codec.http.DefaultFullHttpResponse;
-import io.netty.handler.codec.http.DefaultHttpContent;
-import io.netty.handler.codec.http.FullHttpRequest;
-import io.netty.handler.codec.http.FullHttpResponse;
-import io.netty.handler.codec.http.HttpHeaderNames;
-import io.netty.handler.codec.http.HttpMethod;
-import io.netty.handler.codec.http.HttpObjectAggregator;
-import io.netty.handler.codec.http.HttpResponseStatus;
-import io.netty.handler.codec.http.HttpServerCodec;
-import io.netty.handler.codec.http.HttpVersion;
-import io.netty.util.internal.SocketUtils;
+import io.netty5.buffer.Unpooled;
+import io.netty5.channel.ChannelHandlerContext;
+import io.netty5.channel.ChannelPipeline;
+import io.netty5.channel.socket.SocketChannel;
+import io.netty5.handler.codec.LineBasedFrameDecoder;
+import io.netty5.handler.codec.http.DefaultFullHttpResponse;
+import io.netty5.handler.codec.http.DefaultHttpContent;
+import io.netty5.handler.codec.http.FullHttpRequest;
+import io.netty5.handler.codec.http.FullHttpResponse;
+import io.netty5.handler.codec.http.HttpHeaderNames;
+import io.netty5.handler.codec.http.HttpMethod;
+import io.netty5.handler.codec.http.HttpObjectAggregator;
+import io.netty5.handler.codec.http.HttpResponseStatus;
+import io.netty5.handler.codec.http.HttpServerCodec;
+import io.netty5.handler.codec.http.HttpVersion;
+import io.netty5.util.internal.SocketUtils;
 
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
-import static io.netty.buffer.api.DefaultGlobalBufferAllocator.DEFAULT_GLOBAL_BUFFER_ALLOCATOR;
-import static io.netty.handler.codec.ByteBufToBufferHandler.BYTEBUF_TO_BUFFER_HANDLER;
+import static io.netty5.buffer.api.DefaultBufferAllocators.preferredAllocator;
+import static io.netty5.handler.codec.ByteBufToBufferHandler.BYTEBUF_TO_BUFFER_HANDLER;
 import static org.assertj.core.api.Assertions.assertThat;
 
 final class HttpProxyServer extends ProxyServer {
@@ -112,11 +112,11 @@ final class HttpProxyServer extends ProxyServer {
             FullHttpResponse res;
             if (!authenticate(ctx, req)) {
                 res = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.UNAUTHORIZED,
-                        DEFAULT_GLOBAL_BUFFER_ALLOCATOR.allocate(0));
+                        preferredAllocator().allocate(0));
                 res.headers().set(HttpHeaderNames.CONTENT_LENGTH, 0);
             } else {
                 res = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.OK,
-                        DEFAULT_GLOBAL_BUFFER_ALLOCATOR.allocate(0));
+                        preferredAllocator().allocate(0));
                 String uri = req.uri();
                 int lastColonPos = uri.lastIndexOf(':');
                 assertThat(lastColonPos).isGreaterThan(0);
@@ -145,15 +145,15 @@ final class HttpProxyServer extends ProxyServer {
 
             if (!authenticate(ctx, req)) {
                 res = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.UNAUTHORIZED,
-                        DEFAULT_GLOBAL_BUFFER_ALLOCATOR.allocate(0));
+                        preferredAllocator().allocate(0));
                 res.headers().set(HttpHeaderNames.CONTENT_LENGTH, 0);
             } else if (!req.uri().equals(destination.getHostString() + ':' + destination.getPort())) {
                 res = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.FORBIDDEN,
-                        DEFAULT_GLOBAL_BUFFER_ALLOCATOR.allocate(0));
+                        preferredAllocator().allocate(0));
                 res.headers().set(HttpHeaderNames.CONTENT_LENGTH, 0);
             } else {
                 res = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.OK,
-                        DEFAULT_GLOBAL_BUFFER_ALLOCATOR.allocate(0));
+                        preferredAllocator().allocate(0));
                 sendGreeting = true;
             }
 

@@ -15,9 +15,9 @@
  */
 package io.netty.contrib.handler.codec.socksx.v5;
 
-import io.netty.channel.embedded.EmbeddedChannel;
-import io.netty.util.internal.logging.InternalLogger;
-import io.netty.util.internal.logging.InternalLoggerFactory;
+import io.netty5.channel.embedded.EmbeddedChannel;
+import io.netty5.util.internal.logging.InternalLogger;
+import io.netty5.util.internal.logging.InternalLoggerFactory;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertNull;

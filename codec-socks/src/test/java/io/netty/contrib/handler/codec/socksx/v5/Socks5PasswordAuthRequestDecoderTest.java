@@ -15,7 +15,7 @@
  */
 package io.netty.contrib.handler.codec.socksx.v5;
 
-import io.netty.channel.embedded.EmbeddedChannel;
+import io.netty5.channel.embedded.EmbeddedChannel;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

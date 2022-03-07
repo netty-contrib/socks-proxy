@@ -15,9 +15,9 @@
  */
 package io.netty.contrib.handler.codec.socks;
 
-import io.netty.buffer.ByteBuf;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.handler.codec.ByteToMessageDecoder;
+import io.netty5.buffer.ByteBuf;
+import io.netty5.channel.ChannelHandlerContext;
+import io.netty5.handler.codec.ByteToMessageDecoder;
 
 import java.util.ArrayList;
 import java.util.Collections;

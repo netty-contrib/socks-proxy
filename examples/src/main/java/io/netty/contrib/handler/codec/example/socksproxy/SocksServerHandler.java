@@ -15,9 +15,9 @@
  */
 package io.netty.contrib.handler.codec.example.socksproxy;
 
-import io.netty.channel.ChannelHandler;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.SimpleChannelInboundHandler;
+import io.netty5.channel.ChannelHandler;
+import io.netty5.channel.ChannelHandlerContext;
+import io.netty5.channel.SimpleChannelInboundHandler;
 import io.netty.contrib.handler.codec.socksx.SocksMessage;
 import io.netty.contrib.handler.codec.socksx.v4.Socks4CommandRequest;
 import io.netty.contrib.handler.codec.socksx.v4.Socks4CommandType;

@@ -15,9 +15,9 @@
  */
 package io.netty.contrib.handler.codec.socks;
 
-import io.netty.buffer.ByteBuf;
-import io.netty.util.CharsetUtil;
-import io.netty.util.internal.StringUtil;
+import io.netty5.buffer.ByteBuf;
+import io.netty5.util.CharsetUtil;
+import io.netty5.util.internal.StringUtil;
 
 final class SocksCommonUtils {
     public static final SocksRequest UNKNOWN_SOCKS_REQUEST = new UnknownSocksRequest();

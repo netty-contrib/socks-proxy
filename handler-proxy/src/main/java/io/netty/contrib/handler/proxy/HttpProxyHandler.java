@@ -15,22 +15,22 @@
  */
 package io.netty.contrib.handler.proxy;
 
-import io.netty.channel.ChannelHandler;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelPipeline;
-import io.netty.handler.codec.http.DefaultFullHttpRequest;
-import io.netty.handler.codec.http.FullHttpRequest;
-import io.netty.handler.codec.http.HttpClientCodec;
-import io.netty.handler.codec.http.HttpHeaderNames;
-import io.netty.handler.codec.http.HttpHeaders;
-import io.netty.handler.codec.http.HttpMethod;
-import io.netty.handler.codec.http.HttpResponse;
-import io.netty.handler.codec.http.HttpResponseStatus;
-import io.netty.handler.codec.http.HttpUtil;
-import io.netty.handler.codec.http.HttpVersion;
-import io.netty.handler.codec.http.LastHttpContent;
-import io.netty.util.AsciiString;
-import io.netty.util.concurrent.Future;
+import io.netty5.channel.ChannelHandler;
+import io.netty5.channel.ChannelHandlerContext;
+import io.netty5.channel.ChannelPipeline;
+import io.netty5.handler.codec.http.DefaultFullHttpRequest;
+import io.netty5.handler.codec.http.FullHttpRequest;
+import io.netty5.handler.codec.http.HttpClientCodec;
+import io.netty5.handler.codec.http.HttpHeaderNames;
+import io.netty5.handler.codec.http.HttpHeaders;
+import io.netty5.handler.codec.http.HttpMethod;
+import io.netty5.handler.codec.http.HttpResponse;
+import io.netty5.handler.codec.http.HttpResponseStatus;
+import io.netty5.handler.codec.http.HttpUtil;
+import io.netty5.handler.codec.http.HttpVersion;
+import io.netty5.handler.codec.http.LastHttpContent;
+import io.netty5.util.AsciiString;
+import io.netty5.util.concurrent.Future;
 
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
@@ -38,7 +38,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Base64;
 
-import static io.netty.handler.codec.ByteBufToBufferHandler.BYTEBUF_TO_BUFFER_HANDLER;
+import static io.netty5.handler.codec.ByteBufToBufferHandler.BYTEBUF_TO_BUFFER_HANDLER;
 import static java.util.Objects.requireNonNull;
 
 public final class HttpProxyHandler extends ProxyHandler {

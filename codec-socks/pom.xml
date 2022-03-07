@@ -11,7 +11,7 @@
     </parent>
 
     <artifactId>netty-codec-socks</artifactId>
-    <version>${parent.version}</version>
+    <version>${project.parent.version}</version>
     <name>Netty/Codec/Socks</name>
     <packaging>jar</packaging>
 
@@ -22,22 +22,22 @@
     <dependencies>
         <dependency>
             <groupId>io.netty</groupId>
-            <artifactId>netty-common</artifactId>
+            <artifactId>netty5-common</artifactId>
             <version>${netty.version}</version>
         </dependency>
         <dependency>
             <groupId>io.netty</groupId>
-            <artifactId>netty-buffer</artifactId>
+            <artifactId>netty5-buffer</artifactId>
             <version>${netty.version}</version>
         </dependency>
         <dependency>
             <groupId>io.netty</groupId>
-            <artifactId>netty-transport</artifactId>
+            <artifactId>netty5-transport</artifactId>
             <version>${netty.version}</version>
         </dependency>
         <dependency>
             <groupId>io.netty</groupId>
-            <artifactId>netty-codec</artifactId>
+            <artifactId>netty5-codec</artifactId>
             <version>${netty.version}</version>
         </dependency>
 

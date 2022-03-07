@@ -15,10 +15,10 @@
  */
 package io.netty.contrib.handler.proxy;
 
-import io.netty.buffer.Unpooled;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelPipeline;
-import io.netty.channel.socket.SocketChannel;
+import io.netty5.buffer.Unpooled;
+import io.netty5.channel.ChannelHandlerContext;
+import io.netty5.channel.ChannelPipeline;
+import io.netty5.channel.socket.SocketChannel;
 import io.netty.contrib.handler.codec.socksx.v4.DefaultSocks4CommandResponse;
 import io.netty.contrib.handler.codec.socksx.v4.Socks4CommandRequest;
 import io.netty.contrib.handler.codec.socksx.v4.Socks4CommandResponse;
@@ -26,9 +26,9 @@ import io.netty.contrib.handler.codec.socksx.v4.Socks4CommandStatus;
 import io.netty.contrib.handler.codec.socksx.v4.Socks4CommandType;
 import io.netty.contrib.handler.codec.socksx.v4.Socks4ServerDecoder;
 import io.netty.contrib.handler.codec.socksx.v4.Socks4ServerEncoder;
-import io.netty.handler.codec.LineBasedFrameDecoder;
-import io.netty.util.CharsetUtil;
-import io.netty.util.internal.SocketUtils;
+import io.netty5.handler.codec.LineBasedFrameDecoder;
+import io.netty5.util.CharsetUtil;
+import io.netty5.util.internal.SocketUtils;
 
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;

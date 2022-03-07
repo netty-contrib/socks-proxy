@@ -15,10 +15,10 @@
  */
 package io.netty.contrib.handler.codec.socksx.v5;
 
-import io.netty.buffer.ByteBuf;
-import io.netty.handler.codec.DecoderException;
-import io.netty.util.CharsetUtil;
-import io.netty.util.NetUtil;
+import io.netty5.buffer.ByteBuf;
+import io.netty5.handler.codec.DecoderException;
+import io.netty5.util.CharsetUtil;
+import io.netty5.util.NetUtil;
 
 /**
  * Decodes a SOCKS5 address field into its string representation.

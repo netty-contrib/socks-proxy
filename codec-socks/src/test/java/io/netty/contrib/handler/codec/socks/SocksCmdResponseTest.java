@@ -15,9 +15,9 @@
  */
 package io.netty.contrib.handler.codec.socks;
 
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
-import io.netty.util.CharsetUtil;
+import io.netty5.buffer.ByteBuf;
+import io.netty5.buffer.Unpooled;
+import io.netty5.util.CharsetUtil;
 import org.junit.jupiter.api.Test;
 
 import java.net.IDN;

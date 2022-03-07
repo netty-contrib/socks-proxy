@@ -15,13 +15,13 @@
  */
 package io.netty.contrib.handler.codec.example.socksproxy;
 
-import io.netty.bootstrap.Bootstrap;
-import io.netty.channel.Channel;
-import io.netty.channel.ChannelHandler;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelOption;
-import io.netty.channel.SimpleChannelInboundHandler;
-import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty5.bootstrap.Bootstrap;
+import io.netty5.channel.Channel;
+import io.netty5.channel.ChannelHandler;
+import io.netty5.channel.ChannelHandlerContext;
+import io.netty5.channel.ChannelOption;
+import io.netty5.channel.SimpleChannelInboundHandler;
+import io.netty5.channel.socket.nio.NioSocketChannel;
 import io.netty.contrib.handler.codec.socksx.SocksMessage;
 import io.netty.contrib.handler.codec.socksx.v4.DefaultSocks4CommandResponse;
 import io.netty.contrib.handler.codec.socksx.v4.Socks4CommandRequest;
@@ -29,8 +29,8 @@ import io.netty.contrib.handler.codec.socksx.v4.Socks4CommandStatus;
 import io.netty.contrib.handler.codec.socksx.v5.DefaultSocks5CommandResponse;
 import io.netty.contrib.handler.codec.socksx.v5.Socks5CommandRequest;
 import io.netty.contrib.handler.codec.socksx.v5.Socks5CommandStatus;
-import io.netty.util.concurrent.Future;
-import io.netty.util.concurrent.Promise;
+import io.netty5.util.concurrent.Future;
+import io.netty5.util.concurrent.Promise;
 
 @ChannelHandler.Sharable
 public final class SocksServerConnectHandler extends SimpleChannelInboundHandler<SocksMessage> {

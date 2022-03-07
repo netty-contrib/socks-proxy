@@ -15,18 +15,18 @@
  */
 package io.netty.contrib.handler.proxy;
 
-import io.netty.channel.Channel;
-import io.netty.channel.ChannelHandler;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.PendingWriteQueue;
-import io.netty.util.ReferenceCountUtil;
-import io.netty.util.concurrent.DefaultPromise;
-import io.netty.util.concurrent.Future;
-import io.netty.util.concurrent.FutureListener;
-import io.netty.util.concurrent.ImmediateEventExecutor;
-import io.netty.util.concurrent.Promise;
-import io.netty.util.internal.logging.InternalLogger;
-import io.netty.util.internal.logging.InternalLoggerFactory;
+import io.netty5.channel.Channel;
+import io.netty5.channel.ChannelHandler;
+import io.netty5.channel.ChannelHandlerContext;
+import io.netty5.channel.PendingWriteQueue;
+import io.netty5.util.ReferenceCountUtil;
+import io.netty5.util.concurrent.DefaultPromise;
+import io.netty5.util.concurrent.Future;
+import io.netty5.util.concurrent.FutureListener;
+import io.netty5.util.concurrent.ImmediateEventExecutor;
+import io.netty5.util.concurrent.Promise;
+import io.netty5.util.internal.logging.InternalLogger;
+import io.netty5.util.internal.logging.InternalLoggerFactory;
 
 import java.net.SocketAddress;
 import java.nio.channels.ConnectionPendingException;

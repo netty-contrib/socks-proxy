@@ -15,7 +15,7 @@
  */
 package io.netty.contrib.handler.proxy;
 
-import io.netty.util.internal.StringUtil;
+import io.netty5.util.internal.StringUtil;
 
 import java.net.SocketAddress;
 

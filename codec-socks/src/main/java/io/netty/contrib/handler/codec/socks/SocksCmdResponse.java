@@ -15,9 +15,9 @@
  */
 package io.netty.contrib.handler.codec.socks;
 
-import io.netty.buffer.ByteBuf;
-import io.netty.util.CharsetUtil;
-import io.netty.util.NetUtil;
+import io.netty5.buffer.ByteBuf;
+import io.netty5.util.CharsetUtil;
+import io.netty5.util.NetUtil;
 
 import java.net.IDN;
 
