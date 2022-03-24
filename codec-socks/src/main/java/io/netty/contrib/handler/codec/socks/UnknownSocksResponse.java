@@ -15,7 +15,7 @@
  */
 package io.netty.contrib.handler.codec.socks;
 
-import io.netty5.buffer.ByteBuf;
+import io.netty.buffer.ByteBuf;
 
 /**
  * An unknown socks response.

@@ -15,7 +15,7 @@
  */
 package io.netty.contrib.handler.codec.socksx.v5;
 
-import io.netty5.buffer.ByteBuf;
+import io.netty.buffer.ByteBuf;
 import io.netty5.handler.codec.EncoderException;
 import io.netty5.util.CharsetUtil;
 import io.netty5.util.NetUtil;
