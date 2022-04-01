@@ -38,7 +38,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
 import static io.netty5.buffer.api.DefaultBufferAllocators.preferredAllocator;
-import static io.netty5.handler.codec.ByteBufToBufferHandler.BYTEBUF_TO_BUFFER_HANDLER;
+import static io.netty5.handler.adaptor.BufferConversionHandler.byteBufToBuffer;
 import static org.assertj.core.api.Assertions.assertThat;
 
 final class HttpProxyServer extends ProxyServer {
@@ -57,13 +57,13 @@ final class HttpProxyServer extends ProxyServer {
         ChannelPipeline p = ch.pipeline();
         switch (testMode) {
         case INTERMEDIARY:
-            p.addLast(BYTEBUF_TO_BUFFER_HANDLER);
+            p.addLast(byteBufToBuffer());
             p.addLast(new HttpServerCodec());
             p.addLast(new HttpObjectAggregator<DefaultHttpContent>(1));
             p.addLast(new HttpIntermediaryHandler());
             break;
         case TERMINAL:
-            p.addLast(BYTEBUF_TO_BUFFER_HANDLER);
+            p.addLast(byteBufToBuffer());
             p.addLast(new HttpServerCodec());
             p.addLast(new HttpObjectAggregator<DefaultHttpContent>(1));
             p.addLast(new HttpTerminalHandler());
