@@ -15,7 +15,7 @@
  */
 package io.netty.contrib.handler.proxy;
 
-import io.netty5.buffer.Unpooled;
+import io.netty.buffer.Unpooled;
 import io.netty5.channel.ChannelHandlerContext;
 import io.netty5.channel.ChannelPipeline;
 import io.netty5.channel.socket.SocketChannel;

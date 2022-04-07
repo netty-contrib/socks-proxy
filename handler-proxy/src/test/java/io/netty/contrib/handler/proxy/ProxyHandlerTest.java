@@ -16,9 +16,9 @@
 package io.netty.contrib.handler.proxy;
 
 import io.netty5.bootstrap.Bootstrap;
-import io.netty5.buffer.ByteBuf;
-import io.netty5.buffer.PooledByteBufAllocator;
-import io.netty5.buffer.Unpooled;
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.PooledByteBufAllocator;
+import io.netty.buffer.Unpooled;
 import io.netty5.channel.Channel;
 import io.netty5.channel.ChannelHandler;
 import io.netty5.channel.ChannelHandlerContext;

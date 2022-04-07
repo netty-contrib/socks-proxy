@@ -38,7 +38,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Base64;
 
-import static io.netty5.handler.codec.ByteBufToBufferHandler.BYTEBUF_TO_BUFFER_HANDLER;
+import static io.netty5.handler.adaptor.BufferConversionHandler.byteBufToBuffer;
 import static java.util.Objects.requireNonNull;
 
 public final class HttpProxyHandler extends ProxyHandler {
@@ -134,7 +134,7 @@ public final class HttpProxyHandler extends ProxyHandler {
     protected void addCodec(ChannelHandlerContext ctx) throws Exception {
         ChannelPipeline p = ctx.pipeline();
         String name = ctx.name();
-        p.addBefore(name, null, BYTEBUF_TO_BUFFER_HANDLER);
+        p.addBefore(name, null, byteBufToBuffer());
         p.addBefore(name, null, codecWrapper);
     }
 
