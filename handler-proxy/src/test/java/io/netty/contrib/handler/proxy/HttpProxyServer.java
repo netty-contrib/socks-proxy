@@ -15,7 +15,6 @@
  */
 package io.netty.contrib.handler.proxy;
 
-import io.netty.buffer.Unpooled;
 import io.netty5.channel.ChannelHandlerContext;
 import io.netty5.channel.ChannelPipeline;
 import io.netty5.channel.socket.SocketChannel;
@@ -37,8 +36,8 @@ import java.net.SocketAddress;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
+import static io.netty5.buffer.ByteBufUtil.writeAscii;
 import static io.netty5.buffer.api.DefaultBufferAllocators.preferredAllocator;
-import static io.netty5.handler.adaptor.BufferConversionHandler.byteBufToBuffer;
 import static org.assertj.core.api.Assertions.assertThat;
 
 final class HttpProxyServer extends ProxyServer {
@@ -57,13 +56,11 @@ final class HttpProxyServer extends ProxyServer {
         ChannelPipeline p = ch.pipeline();
         switch (testMode) {
         case INTERMEDIARY:
-            p.addLast(byteBufToBuffer());
             p.addLast(new HttpServerCodec());
             p.addLast(new HttpObjectAggregator<DefaultHttpContent>(1));
             p.addLast(new HttpIntermediaryHandler());
             break;
         case TERMINAL:
-            p.addLast(byteBufToBuffer());
             p.addLast(new HttpServerCodec());
             p.addLast(new HttpObjectAggregator<DefaultHttpContent>(1));
             p.addLast(new HttpTerminalHandler());
@@ -107,7 +104,7 @@ final class HttpProxyServer extends ProxyServer {
         private SocketAddress intermediaryDestination;
 
         @Override
-        protected boolean handleProxyProtocol(ChannelHandlerContext ctx, Object msg) throws Exception {
+        protected boolean handleProxyProtocol(ChannelHandlerContext ctx, Object msg) {
             FullHttpRequest req = (FullHttpRequest) msg;
             FullHttpResponse res;
             if (!authenticate(ctx, req)) {
@@ -161,7 +158,7 @@ final class HttpProxyServer extends ProxyServer {
             ctx.pipeline().get(HttpServerCodec.class).removeOutboundHandler();
 
             if (sendGreeting) {
-                ctx.write(Unpooled.copiedBuffer("0\n", StandardCharsets.US_ASCII));
+                ctx.write(writeAscii(ctx.bufferAllocator(), "0\n"));
             }
 
             return true;

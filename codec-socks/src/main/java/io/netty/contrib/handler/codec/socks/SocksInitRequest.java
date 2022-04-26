@@ -15,7 +15,7 @@
  */
 package io.netty.contrib.handler.codec.socks;
 
-import io.netty.buffer.ByteBuf;
+import io.netty5.buffer.api.Buffer;
 
 import java.util.Collections;
 import java.util.List;
@@ -47,9 +47,9 @@ public final class SocksInitRequest extends SocksRequest {
     }
 
     @Override
-    public void encodeAsByteBuf(ByteBuf byteBuf) {
+    public void encodeAsByteBuf(Buffer byteBuf) {
         byteBuf.writeByte(protocolVersion().byteValue());
-        byteBuf.writeByte(authSchemes.size());
+        byteBuf.writeByte((byte) authSchemes.size());
         for (SocksAuthScheme authScheme : authSchemes) {
             byteBuf.writeByte(authScheme.byteValue());
         }

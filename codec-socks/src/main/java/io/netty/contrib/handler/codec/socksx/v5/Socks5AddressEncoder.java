@@ -15,7 +15,7 @@
  */
 package io.netty.contrib.handler.codec.socksx.v5;
 
-import io.netty.buffer.ByteBuf;
+import io.netty5.buffer.api.Buffer;
 import io.netty5.handler.codec.EncoderException;
 import io.netty5.util.CharsetUtil;
 import io.netty5.util.NetUtil;
@@ -38,10 +38,10 @@ public interface Socks5AddressEncoder {
             }
         } else if (typeVal == Socks5AddressType.DOMAIN.byteValue()) {
             if (addrValue != null) {
-                out.writeByte(addrValue.length());
+                out.writeByte((byte) addrValue.length());
                 out.writeCharSequence(addrValue, CharsetUtil.US_ASCII);
             } else {
-                out.writeByte(0);
+                out.writeByte((byte) 0);
             }
         } else if (typeVal == Socks5AddressType.IPv6.byteValue()) {
             if (addrValue != null) {
@@ -62,5 +62,5 @@ public interface Socks5AddressEncoder {
      * @param addrValue the string representation of the address
      * @param out the output buffer where the encoded SOCKS5 address field will be written to
      */
-    void encodeAddress(Socks5AddressType addrType, String addrValue, ByteBuf out) throws Exception;
+    void encodeAddress(Socks5AddressType addrType, String addrValue, Buffer out) throws Exception;
 }

@@ -15,7 +15,7 @@
  */
 package io.netty.contrib.handler.codec.socks;
 
-import io.netty.buffer.ByteBuf;
+import io.netty5.buffer.api.Buffer;
 
 import static java.util.Objects.requireNonNull;
 
@@ -45,7 +45,7 @@ public final class SocksAuthResponse extends SocksResponse {
     }
 
     @Override
-    public void encodeAsByteBuf(ByteBuf byteBuf) {
+    public void encodeAsByteBuf(Buffer byteBuf) {
         byteBuf.writeByte(SUBNEGOTIATION_VERSION.byteValue());
         byteBuf.writeByte(authStatus.byteValue());
     }

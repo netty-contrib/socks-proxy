@@ -15,22 +15,28 @@
  */
 package io.netty.contrib.handler.codec.socks;
 
-import io.netty.buffer.ByteBuf;
+import io.netty5.buffer.api.Buffer;
 import io.netty5.channel.ChannelHandler;
 import io.netty5.channel.ChannelHandlerContext;
-import io.netty5.handler.codec.MessageToByteEncoder;
+import io.netty5.handler.codec.MessageToByteEncoderForBuffer;
 
 /**
- * Encodes an {@link SocksMessage} into a {@link ByteBuf}.
- * {@link MessageToByteEncoder} implementation.
+ * Encodes an {@link SocksMessage} into a {@link Buffer}.
+ * {@link MessageToByteEncoderForBuffer} implementation.
  * Use this with {@link SocksInitRequest}, {@link SocksInitResponse}, {@link SocksAuthRequest},
  * {@link SocksAuthResponse}, {@link SocksCmdRequest} and {@link SocksCmdResponse}
  */
 @ChannelHandler.Sharable
-public class SocksMessageEncoder extends MessageToByteEncoder<SocksMessage> {
+public class SocksMessageEncoder extends MessageToByteEncoderForBuffer<SocksMessage> {
+
+    @Override
+    protected Buffer allocateBuffer(ChannelHandlerContext ctx, SocksMessage msg) {
+        return ctx.bufferAllocator().allocate(256);
+    }
+
     @Override
     @SuppressWarnings("deprecation")
-    protected void encode(ChannelHandlerContext ctx, SocksMessage msg, ByteBuf out) throws Exception {
+    protected void encode(ChannelHandlerContext ctx, SocksMessage msg, Buffer out) {
         msg.encodeAsByteBuf(out);
     }
 }

@@ -15,14 +15,14 @@
  */
 package io.netty.contrib.handler.codec.socks;
 
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
+import io.netty5.buffer.api.Buffer;
 import io.netty5.util.CharsetUtil;
 import org.junit.jupiter.api.Test;
 
 import java.net.IDN;
 import java.nio.CharBuffer;
 
+import static io.netty5.buffer.api.DefaultBufferAllocators.preferredAllocator;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -76,17 +76,16 @@ public class SocksCmdRequestTest {
         SocksCmdRequest rq = new SocksCmdRequest(SocksCmdType.BIND, SocksAddressType.UNKNOWN, asciiHost, port);
         assertEquals(asciiHost, rq.host());
 
-        ByteBuf buffer = Unpooled.buffer(16);
-        rq.encodeAsByteBuf(buffer);
+        try (Buffer buffer = preferredAllocator().allocate(16)) {
+            rq.encodeAsByteBuf(buffer);
 
-        buffer.readerIndex(0);
-        assertEquals(SocksProtocolVersion.SOCKS5.byteValue(), buffer.readByte());
-        assertEquals(SocksCmdType.BIND.byteValue(), buffer.readByte());
-        assertEquals((byte) 0x00, buffer.readByte());
-        assertEquals(SocksAddressType.UNKNOWN.byteValue(), buffer.readByte());
-        assertFalse(buffer.isReadable());
-
-        buffer.release();
+            buffer.readerOffset(0);
+            assertEquals(SocksProtocolVersion.SOCKS5.byteValue(), buffer.readByte());
+            assertEquals(SocksCmdType.BIND.byteValue(), buffer.readByte());
+            assertEquals((byte) 0x00, buffer.readByte());
+            assertEquals(SocksAddressType.UNKNOWN.byteValue(), buffer.readByte());
+            assertFalse(buffer.readableBytes() > 0);
+        }
     }
 
     @Test
@@ -98,20 +97,19 @@ public class SocksCmdRequestTest {
         SocksCmdRequest rq = new SocksCmdRequest(SocksCmdType.BIND, SocksAddressType.DOMAIN, host, port);
         assertEquals(host, rq.host());
 
-        ByteBuf buffer = Unpooled.buffer(24);
-        rq.encodeAsByteBuf(buffer);
+        try (Buffer buffer = preferredAllocator().allocate(32)) {
+            rq.encodeAsByteBuf(buffer);
 
-        buffer.readerIndex(0);
-        assertEquals(SocksProtocolVersion.SOCKS5.byteValue(), buffer.readByte());
-        assertEquals(SocksCmdType.BIND.byteValue(), buffer.readByte());
-        assertEquals((byte) 0x00, buffer.readByte());
-        assertEquals(SocksAddressType.DOMAIN.byteValue(), buffer.readByte());
-        assertEquals((byte) asciiHost.length(), buffer.readUnsignedByte());
-        assertEquals(asciiHost,
-            CharBuffer.wrap(buffer.readCharSequence(asciiHost.length(), CharsetUtil.US_ASCII)));
-        assertEquals(port, buffer.readUnsignedShort());
-
-        buffer.release();
+            buffer.readerOffset(0);
+            assertEquals(SocksProtocolVersion.SOCKS5.byteValue(), buffer.readByte());
+            assertEquals(SocksCmdType.BIND.byteValue(), buffer.readByte());
+            assertEquals((byte) 0x00, buffer.readByte());
+            assertEquals(SocksAddressType.DOMAIN.byteValue(), buffer.readByte());
+            assertEquals((byte) asciiHost.length(), buffer.readUnsignedByte());
+            assertEquals(asciiHost,
+                    CharBuffer.wrap(buffer.readCharSequence(asciiHost.length(), CharsetUtil.US_ASCII)));
+            assertEquals(port, buffer.readUnsignedShort());
+        }
     }
 
     @Test

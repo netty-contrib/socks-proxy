@@ -15,7 +15,7 @@
  */
 package io.netty.contrib.handler.codec.socks;
 
-import io.netty.buffer.ByteBuf;
+import io.netty5.buffer.api.Buffer;
 
 /**
  * An unknown socks response.
@@ -31,7 +31,7 @@ public final class UnknownSocksResponse extends SocksResponse {
     }
 
     @Override
-    public void encodeAsByteBuf(ByteBuf byteBuf) {
+    public void encodeAsByteBuf(Buffer byteBuf) {
         // NOOP
     }
 }

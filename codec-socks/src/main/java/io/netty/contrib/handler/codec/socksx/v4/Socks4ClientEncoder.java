@@ -15,18 +15,18 @@
  */
 package io.netty.contrib.handler.codec.socksx.v4;
 
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.ByteBufUtil;
+import io.netty5.buffer.api.Buffer;
 import io.netty5.channel.ChannelHandler.Sharable;
 import io.netty5.channel.ChannelHandlerContext;
-import io.netty5.handler.codec.MessageToByteEncoder;
+import io.netty5.handler.codec.MessageToByteEncoderForBuffer;
+import io.netty5.util.CharsetUtil;
 import io.netty5.util.NetUtil;
 
 /**
- * Encodes a {@link Socks4CommandRequest} into a {@link ByteBuf}.
+ * Encodes a {@link Socks4CommandRequest} into a {@link Buffer}.
  */
 @Sharable
-public final class Socks4ClientEncoder extends MessageToByteEncoder<Socks4CommandRequest> {
+public final class Socks4ClientEncoder extends MessageToByteEncoderForBuffer<Socks4CommandRequest> {
 
     /**
      * The singleton instance of {@link Socks4ClientEncoder}
@@ -38,20 +38,25 @@ public final class Socks4ClientEncoder extends MessageToByteEncoder<Socks4Comman
     private Socks4ClientEncoder() { }
 
     @Override
-    protected void encode(ChannelHandlerContext ctx, Socks4CommandRequest msg, ByteBuf out) throws Exception {
+    protected Buffer allocateBuffer(ChannelHandlerContext ctx, Socks4CommandRequest msg) {
+        return ctx.bufferAllocator().allocate(256);
+    }
+
+    @Override
+    protected void encode(ChannelHandlerContext ctx, Socks4CommandRequest msg, Buffer out) {
         out.writeByte(msg.version().byteValue());
         out.writeByte(msg.type().byteValue());
-        out.writeShort(msg.dstPort());
+        out.writeShort((short) msg.dstPort());
         if (NetUtil.isValidIpV4Address(msg.dstAddr())) {
             out.writeBytes(NetUtil.createByteArrayFromIpAddressString(msg.dstAddr()));
-            ByteBufUtil.writeAscii(out, msg.userId());
-            out.writeByte(0);
+            out.writeCharSequence(msg.userId(), CharsetUtil.US_ASCII);
+            out.writeByte((byte) 0);
         } else {
             out.writeBytes(IPv4_DOMAIN_MARKER);
-            ByteBufUtil.writeAscii(out, msg.userId());
-            out.writeByte(0);
-            ByteBufUtil.writeAscii(out, msg.dstAddr());
-            out.writeByte(0);
+            out.writeCharSequence(msg.userId(), CharsetUtil.US_ASCII);
+            out.writeByte((byte) 0);
+            out.writeCharSequence(msg.dstAddr(), CharsetUtil.US_ASCII);
+            out.writeByte((byte) 0);
         }
     }
 }

@@ -16,9 +16,7 @@
 package io.netty.contrib.handler.proxy;
 
 import io.netty5.bootstrap.Bootstrap;
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.PooledByteBufAllocator;
-import io.netty.buffer.Unpooled;
+import io.netty5.buffer.api.Buffer;
 import io.netty5.channel.Channel;
 import io.netty5.channel.ChannelHandler;
 import io.netty5.channel.ChannelHandlerContext;
@@ -63,6 +61,8 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
+import static io.netty5.buffer.ByteBufUtil.writeAscii;
+import static io.netty5.buffer.api.DefaultBufferAllocators.preferredAllocator;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -194,57 +194,57 @@ public class ProxyHandlerTest {
                         "Anonymous HTTPS proxy: successful connection, AUTO_READ on",
                         DESTINATION,
                         true,
-                        clientSslCtx.newHandler(PooledByteBufAllocator.DEFAULT),
+                        clientSslCtx.newHandler(preferredAllocator()),
                         new HttpProxyHandler(anonHttpsProxy.address())),
 
                 new SuccessTestItem(
                         "Anonymous HTTPS proxy: successful connection, AUTO_READ off",
                         DESTINATION,
                         false,
-                        clientSslCtx.newHandler(PooledByteBufAllocator.DEFAULT),
+                        clientSslCtx.newHandler(preferredAllocator()),
                         new HttpProxyHandler(anonHttpsProxy.address())),
 
                 new FailureTestItem(
                         "Anonymous HTTPS proxy: rejected connection",
                         BAD_DESTINATION, "status: 403",
-                        clientSslCtx.newHandler(PooledByteBufAllocator.DEFAULT),
+                        clientSslCtx.newHandler(preferredAllocator()),
                         new HttpProxyHandler(anonHttpsProxy.address())),
 
                 new FailureTestItem(
                         "HTTPS proxy: rejected anonymous connection",
                         DESTINATION, "status: 401",
-                        clientSslCtx.newHandler(PooledByteBufAllocator.DEFAULT),
+                        clientSslCtx.newHandler(preferredAllocator()),
                         new HttpProxyHandler(httpsProxy.address())),
 
                 new SuccessTestItem(
                         "HTTPS proxy: successful connection, AUTO_READ on",
                         DESTINATION,
                         true,
-                        clientSslCtx.newHandler(PooledByteBufAllocator.DEFAULT),
+                        clientSslCtx.newHandler(preferredAllocator()),
                         new HttpProxyHandler(httpsProxy.address(), USERNAME, PASSWORD)),
 
                 new SuccessTestItem(
                         "HTTPS proxy: successful connection, AUTO_READ off",
                         DESTINATION,
                         false,
-                        clientSslCtx.newHandler(PooledByteBufAllocator.DEFAULT),
+                        clientSslCtx.newHandler(preferredAllocator()),
                         new HttpProxyHandler(httpsProxy.address(), USERNAME, PASSWORD)),
 
                 new FailureTestItem(
                         "HTTPS proxy: rejected connection",
                         BAD_DESTINATION, "status: 403",
-                        clientSslCtx.newHandler(PooledByteBufAllocator.DEFAULT),
+                        clientSslCtx.newHandler(preferredAllocator()),
                         new HttpProxyHandler(httpsProxy.address(), USERNAME, PASSWORD)),
 
                 new FailureTestItem(
                         "HTTPS proxy: authentication failure",
                         DESTINATION, "status: 401",
-                        clientSslCtx.newHandler(PooledByteBufAllocator.DEFAULT),
+                        clientSslCtx.newHandler(preferredAllocator()),
                         new HttpProxyHandler(httpsProxy.address(), BAD_USERNAME, BAD_PASSWORD)),
 
                 new TimeoutTestItem(
                         "HTTPS proxy: timeout",
-                        clientSslCtx.newHandler(PooledByteBufAllocator.DEFAULT),
+                        clientSslCtx.newHandler(preferredAllocator()),
                         new HttpProxyHandler(deadHttpsProxy.address())),
 
                 // SOCKS4 -----------------------------------------------------
@@ -355,7 +355,7 @@ public class ProxyHandlerTest {
                         true,
                         new Socks5ProxyHandler(interSocks5Proxy.address()), // SOCKS5
                         new Socks4ProxyHandler(interSocks4Proxy.address()), // SOCKS4
-                        clientSslCtx.newHandler(PooledByteBufAllocator.DEFAULT),
+                        clientSslCtx.newHandler(preferredAllocator()),
                         new HttpProxyHandler(interHttpsProxy.address()), // HTTPS
                         new HttpProxyHandler(interHttpProxy.address()), // HTTP
                         new HttpProxyHandler(anonHttpProxy.address())),
@@ -366,7 +366,7 @@ public class ProxyHandlerTest {
                         false,
                         new Socks5ProxyHandler(interSocks5Proxy.address()), // SOCKS5
                         new Socks4ProxyHandler(interSocks4Proxy.address()), // SOCKS4
-                        clientSslCtx.newHandler(PooledByteBufAllocator.DEFAULT),
+                        clientSslCtx.newHandler(preferredAllocator()),
                         new HttpProxyHandler(interHttpsProxy.address()), // HTTPS
                         new HttpProxyHandler(interHttpProxy.address()), // HTTP
                         new HttpProxyHandler(anonHttpProxy.address())),
@@ -379,12 +379,12 @@ public class ProxyHandlerTest {
                         true,
                         new Socks5ProxyHandler(interSocks5Proxy.address()), // SOCKS5
                         new Socks4ProxyHandler(interSocks4Proxy.address()), // SOCKS4
-                        clientSslCtx.newHandler(PooledByteBufAllocator.DEFAULT),
+                        clientSslCtx.newHandler(preferredAllocator()),
                         new HttpProxyHandler(interHttpsProxy.address()), // HTTPS
                         new HttpProxyHandler(interHttpProxy.address()), // HTTP
                         new Socks5ProxyHandler(interSocks5Proxy.address()), // SOCKS5
                         new Socks4ProxyHandler(interSocks4Proxy.address()), // SOCKS4
-                        clientSslCtx.newHandler(PooledByteBufAllocator.DEFAULT),
+                        clientSslCtx.newHandler(preferredAllocator()),
                         new HttpProxyHandler(interHttpsProxy.address()), // HTTPS
                         new HttpProxyHandler(interHttpProxy.address()), // HTTP
                         new HttpProxyHandler(anonHttpProxy.address())),
@@ -395,12 +395,12 @@ public class ProxyHandlerTest {
                         false,
                         new Socks5ProxyHandler(interSocks5Proxy.address()), // SOCKS5
                         new Socks4ProxyHandler(interSocks4Proxy.address()), // SOCKS4
-                        clientSslCtx.newHandler(PooledByteBufAllocator.DEFAULT),
+                        clientSslCtx.newHandler(preferredAllocator()),
                         new HttpProxyHandler(interHttpsProxy.address()), // HTTPS
                         new HttpProxyHandler(interHttpProxy.address()), // HTTP
                         new Socks5ProxyHandler(interSocks5Proxy.address()), // SOCKS5
                         new Socks4ProxyHandler(interSocks4Proxy.address()), // SOCKS4
-                        clientSslCtx.newHandler(PooledByteBufAllocator.DEFAULT),
+                        clientSslCtx.newHandler(preferredAllocator()),
                         new HttpProxyHandler(interHttpsProxy.address()), // HTTPS
                         new HttpProxyHandler(interHttpProxy.address()), // HTTP
                         new HttpProxyHandler(anonHttpProxy.address()))
@@ -428,7 +428,7 @@ public class ProxyHandlerTest {
     }
 
     @BeforeEach
-    public void clearServerExceptions() throws Exception {
+    public void clearServerExceptions() {
         for (ProxyServer p: allProxies) {
             p.clearExceptions();
         }
@@ -441,7 +441,7 @@ public class ProxyHandlerTest {
     }
 
     @AfterEach
-    public void checkServerExceptions() throws Exception {
+    public void checkServerExceptions() {
         for (ProxyServer p: allProxies) {
             p.checkExceptions();
         }
@@ -460,37 +460,37 @@ public class ProxyHandlerTest {
         }
 
         @Override
-        public void channelActive(ChannelHandlerContext ctx) throws Exception {
-            ctx.writeAndFlush(Unpooled.copiedBuffer("A\n", CharsetUtil.US_ASCII));
+        public void channelActive(ChannelHandlerContext ctx) {
+            ctx.writeAndFlush(writeAscii(ctx.bufferAllocator(), "A\n"));
             readIfNeeded(ctx);
         }
 
         @Override
-        public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
+        public void userEventTriggered(ChannelHandlerContext ctx, Object evt) {
             if (evt instanceof ProxyConnectionEvent) {
                 eventCount ++;
 
                 if (eventCount == 1) {
                     // Note that ProxyConnectionEvent can be triggered multiple times when there are multiple
                     // ProxyHandlers in the pipeline.  Therefore, we send the 'B' message only on the first event.
-                    ctx.writeAndFlush(Unpooled.copiedBuffer("B\n", CharsetUtil.US_ASCII));
+                    ctx.writeAndFlush(writeAscii(ctx.bufferAllocator(), "B\n"));
                 }
                 readIfNeeded(ctx);
             }
         }
 
         @Override
-        protected void messageReceived(ChannelHandlerContext ctx, Object msg) throws Exception {
-            String str = ((ByteBuf) msg).toString(CharsetUtil.US_ASCII);
+        protected void messageReceived(ChannelHandlerContext ctx, Object msg) {
+            String str = ((Buffer) msg).toString(CharsetUtil.US_ASCII);
             received.add(str);
             if ("2".equals(str)) {
-                ctx.writeAndFlush(Unpooled.copiedBuffer("C\n", CharsetUtil.US_ASCII));
+                ctx.writeAndFlush(writeAscii(ctx.bufferAllocator(), "C\n"));
             }
             readIfNeeded(ctx);
         }
 
         @Override
-        public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+        public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
             exceptions.add(cause);
             ctx.close();
         }
@@ -510,8 +510,8 @@ public class ProxyHandlerTest {
         final CountDownLatch latch = new CountDownLatch(2);
 
         @Override
-        public void channelActive(ChannelHandlerContext ctx) throws Exception {
-            ctx.writeAndFlush(Unpooled.copiedBuffer("A\n", CharsetUtil.US_ASCII)).addListener(
+        public void channelActive(ChannelHandlerContext ctx) {
+            ctx.writeAndFlush(writeAscii(ctx.bufferAllocator(), "A\n")).addListener(
                     future -> {
                         latch.countDown();
                         if (!(future.cause() instanceof ProxyConnectException)) {
@@ -522,24 +522,24 @@ public class ProxyHandlerTest {
         }
 
         @Override
-        public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+        public void channelInactive(ChannelHandlerContext ctx) {
             latch.countDown();
         }
 
         @Override
-        public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
+        public void userEventTriggered(ChannelHandlerContext ctx, Object evt) {
             if (evt instanceof ProxyConnectionEvent) {
                 fail("Unexpected event: " + evt);
             }
         }
 
         @Override
-        protected void messageReceived(ChannelHandlerContext ctx, Object msg) throws Exception {
+        protected void messageReceived(ChannelHandlerContext ctx, Object msg) {
             fail("Unexpected message: " + msg);
         }
 
         @Override
-        public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+        public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
             exceptions.add(cause);
             ctx.close();
         }
@@ -632,7 +632,7 @@ public class ProxyHandlerTest {
             b.resolver(NoopAddressResolverGroup.INSTANCE);
             b.handler(new ChannelInitializer<SocketChannel>() {
                 @Override
-                protected void initChannel(SocketChannel ch) throws Exception {
+                protected void initChannel(SocketChannel ch) {
                     ChannelPipeline p = ch.pipeline();
                     p.addLast(clientHandlers);
                     p.addLast(new LineBasedFrameDecoder(64));
@@ -681,7 +681,7 @@ public class ProxyHandlerTest {
             b.resolver(NoopAddressResolverGroup.INSTANCE);
             b.handler(new ChannelInitializer<SocketChannel>() {
                 @Override
-                protected void initChannel(SocketChannel ch) throws Exception {
+                protected void initChannel(SocketChannel ch) {
                     ChannelPipeline p = ch.pipeline();
                     p.addLast(clientHandlers);
                     p.addLast(new LineBasedFrameDecoder(64));
@@ -727,7 +727,7 @@ public class ProxyHandlerTest {
             b.resolver(NoopAddressResolverGroup.INSTANCE);
             b.handler(new ChannelInitializer<SocketChannel>() {
                 @Override
-                protected void initChannel(SocketChannel ch) throws Exception {
+                protected void initChannel(SocketChannel ch) {
                     ChannelPipeline p = ch.pipeline();
                     p.addLast(clientHandlers);
                     p.addLast(new LineBasedFrameDecoder(64));

@@ -15,7 +15,6 @@
  */
 package io.netty.contrib.handler.proxy;
 
-import io.netty.buffer.Unpooled;
 import io.netty5.channel.ChannelHandlerContext;
 import io.netty5.channel.ChannelPipeline;
 import io.netty5.channel.socket.SocketChannel;
@@ -33,6 +32,7 @@ import io.netty5.util.internal.SocketUtils;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 
+import static io.netty5.buffer.ByteBufUtil.writeAscii;
 import static org.assertj.core.api.Assertions.assertThat;
 
 final class Socks4ProxyServer extends ProxyServer {
@@ -46,7 +46,7 @@ final class Socks4ProxyServer extends ProxyServer {
     }
 
     @Override
-    protected void configure(SocketChannel ch) throws Exception {
+    protected void configure(SocketChannel ch) {
         ChannelPipeline p = ch.pipeline();
         switch (testMode) {
         case INTERMEDIARY:
@@ -86,7 +86,7 @@ final class Socks4ProxyServer extends ProxyServer {
         private SocketAddress intermediaryDestination;
 
         @Override
-        protected boolean handleProxyProtocol(ChannelHandlerContext ctx, Object msg) throws Exception {
+        protected boolean handleProxyProtocol(ChannelHandlerContext ctx, Object msg) {
             Socks4CommandRequest req = (Socks4CommandRequest) msg;
             Socks4CommandResponse res;
 
@@ -113,7 +113,7 @@ final class Socks4ProxyServer extends ProxyServer {
 
     private final class Socks4TerminalHandler extends TerminalHandler {
         @Override
-        protected boolean handleProxyProtocol(ChannelHandlerContext ctx, Object msg) throws Exception {
+        protected boolean handleProxyProtocol(ChannelHandlerContext ctx, Object msg) {
             Socks4CommandRequest req = (Socks4CommandRequest) msg;
             boolean authzSuccess = authenticate(ctx, req);
 
@@ -135,7 +135,7 @@ final class Socks4ProxyServer extends ProxyServer {
             ctx.pipeline().remove(Socks4ServerEncoder.class);
 
             if (sendGreeting) {
-                ctx.write(Unpooled.copiedBuffer("0\n", CharsetUtil.US_ASCII));
+                ctx.write(writeAscii(ctx.bufferAllocator(), "0\n"));
             }
 
             return true;

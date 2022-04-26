@@ -15,9 +15,9 @@
  */
 package io.netty.contrib.handler.codec.socksx.v5;
 
-import io.netty.buffer.ByteBuf;
+import io.netty5.buffer.api.Buffer;
 import io.netty5.channel.ChannelHandlerContext;
-import io.netty5.handler.codec.ByteToMessageDecoder;
+import io.netty5.handler.codec.ByteToMessageDecoderForBuffer;
 import io.netty5.handler.codec.DecoderException;
 import io.netty5.handler.codec.DecoderResult;
 import io.netty.contrib.handler.codec.socksx.SocksVersion;
@@ -25,12 +25,12 @@ import io.netty.contrib.handler.codec.socksx.SocksVersion;
 import static java.util.Objects.requireNonNull;
 
 /**
- * Decodes a single {@link Socks5CommandRequest} from the inbound {@link ByteBuf}s.
+ * Decodes a single {@link Socks5CommandRequest} from the inbound {@link Buffer}s.
  * On successful decode, this decoder will forward the received data to the next handler, so that
  * other handler can remove or replace this decoder later.  On failed decode, this decoder will
  * discard the received data, so that other handler closes the connection later.
  */
-public class Socks5CommandRequestDecoder extends ByteToMessageDecoder {
+public class Socks5CommandRequestDecoder extends ByteToMessageDecoderForBuffer {
 
     private enum State {
         INIT,
@@ -51,11 +51,11 @@ public class Socks5CommandRequestDecoder extends ByteToMessageDecoder {
     }
 
     @Override
-    protected void decode(ChannelHandlerContext ctx, ByteBuf in) throws Exception {
+    protected void decode(ChannelHandlerContext ctx, Buffer in) throws Exception {
         try {
             switch (state) {
             case INIT: {
-                int readerIndex = in.readerIndex();
+                int readerIndex = in.readerOffset();
                 if (in.readableBytes() < 6) {
                     return;
                 }
@@ -66,12 +66,12 @@ public class Socks5CommandRequestDecoder extends ByteToMessageDecoder {
                 }
 
                 final Socks5CommandType type = Socks5CommandType.valueOf(in.readByte());
-                in.skipBytes(1); // RSV
+                in.skipReadable(1); // RSV
                 final Socks5AddressType dstAddrType = Socks5AddressType.valueOf(in.readByte());
 
                 final String dstAddr = addressDecoder.decodeAddress(dstAddrType, in);
                 if (dstAddr == null || in.readableBytes() < 2) {
-                    in.readerIndex(readerIndex);
+                    in.readerOffset(readerIndex);
                     return;
                 }
 
@@ -83,12 +83,12 @@ public class Socks5CommandRequestDecoder extends ByteToMessageDecoder {
             case SUCCESS: {
                 int readableBytes = actualReadableBytes();
                 if (readableBytes > 0) {
-                    ctx.fireChannelRead(in.readRetainedSlice(readableBytes));
+                    ctx.fireChannelRead(in.readSplit(readableBytes));
                 }
                 break;
             }
             case FAILURE: {
-                in.skipBytes(actualReadableBytes());
+                in.skipReadable(actualReadableBytes());
                 break;
             }
             }

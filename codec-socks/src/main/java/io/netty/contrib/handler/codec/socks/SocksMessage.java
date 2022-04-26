@@ -15,7 +15,7 @@
  */
 package io.netty.contrib.handler.codec.socks;
 
-import io.netty.buffer.ByteBuf;
+import io.netty5.buffer.api.Buffer;
 
 import static java.util.Objects.requireNonNull;
 
@@ -57,5 +57,5 @@ public abstract class SocksMessage {
      * @deprecated Do not use; this method was intended for an internal use only.
      */
     @Deprecated
-    public abstract void encodeAsByteBuf(ByteBuf byteBuf);
+    public abstract void encodeAsByteBuf(Buffer byteBuf);
 }

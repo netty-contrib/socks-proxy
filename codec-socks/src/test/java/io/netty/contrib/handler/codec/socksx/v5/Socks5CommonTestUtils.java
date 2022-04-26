@@ -15,7 +15,7 @@
  */
 package io.netty.contrib.handler.codec.socksx.v5;
 
-import io.netty.buffer.ByteBuf;
+import io.netty5.buffer.api.Buffer;
 import io.netty5.channel.embedded.EmbeddedChannel;
 
 final class Socks5CommonTestUtils {
@@ -34,21 +34,21 @@ final class Socks5CommonTestUtils {
         embedder.writeInbound(encodeServer(msg));
     }
 
-    public static ByteBuf encodeClient(Socks5Message msg) {
+    public static Buffer encodeClient(Socks5Message msg) {
         EmbeddedChannel out = new EmbeddedChannel(Socks5ClientEncoder.DEFAULT);
         out.writeOutbound(msg);
 
-        ByteBuf encoded = out.readOutbound();
+        Buffer encoded = out.readOutbound();
         out.finish();
 
         return encoded;
     }
 
-    public static ByteBuf encodeServer(Socks5Message msg) {
+    public static Buffer encodeServer(Socks5Message msg) {
         EmbeddedChannel out = new EmbeddedChannel(Socks5ServerEncoder.DEFAULT);
         out.writeOutbound(msg);
 
-        ByteBuf encoded = out.readOutbound();
+        Buffer encoded = out.readOutbound();
         out.finish();
 
         return encoded;

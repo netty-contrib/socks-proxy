@@ -15,7 +15,7 @@
  */
 package io.netty.contrib.handler.codec.socks;
 
-import io.netty.buffer.ByteBuf;
+import io.netty5.buffer.api.Buffer;
 import io.netty5.util.CharsetUtil;
 import io.netty5.util.NetUtil;
 
@@ -107,23 +107,23 @@ public final class SocksCmdRequest extends SocksRequest {
     }
 
     @Override
-    public void encodeAsByteBuf(ByteBuf byteBuf) {
+    public void encodeAsByteBuf(Buffer byteBuf) {
         byteBuf.writeByte(protocolVersion().byteValue());
         byteBuf.writeByte(cmdType.byteValue());
-        byteBuf.writeByte(0x00);
+        byteBuf.writeByte((byte) 0x00);
         byteBuf.writeByte(addressType.byteValue());
         switch (addressType) {
             case IPv4:
             case IPv6: {
                 byteBuf.writeBytes(NetUtil.createByteArrayFromIpAddressString(host));
-                byteBuf.writeShort(port);
+                byteBuf.writeShort((short) port);
                 break;
             }
 
             case DOMAIN: {
-                byteBuf.writeByte(host.length());
+                byteBuf.writeByte((byte) host.length());
                 byteBuf.writeCharSequence(host, CharsetUtil.US_ASCII);
-                byteBuf.writeShort(port);
+                byteBuf.writeShort((short) port);
                 break;
             }
         }

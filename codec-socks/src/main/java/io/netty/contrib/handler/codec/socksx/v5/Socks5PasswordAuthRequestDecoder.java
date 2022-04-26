@@ -15,20 +15,20 @@
  */
 package io.netty.contrib.handler.codec.socksx.v5;
 
-import io.netty.buffer.ByteBuf;
+import io.netty5.buffer.api.Buffer;
 import io.netty5.channel.ChannelHandlerContext;
-import io.netty5.handler.codec.ByteToMessageDecoder;
+import io.netty5.handler.codec.ByteToMessageDecoderForBuffer;
 import io.netty5.handler.codec.DecoderException;
 import io.netty5.handler.codec.DecoderResult;
 import io.netty5.util.CharsetUtil;
 
 /**
- * Decodes a single {@link Socks5PasswordAuthRequest} from the inbound {@link ByteBuf}s.
+ * Decodes a single {@link Socks5PasswordAuthRequest} from the inbound {@link Buffer}s.
  * On successful decode, this decoder will forward the received data to the next handler, so that
  * other handler can remove or replace this decoder later.  On failed decode, this decoder will
  * discard the received data, so that other handler closes the connection later.
  */
-public class Socks5PasswordAuthRequestDecoder extends ByteToMessageDecoder {
+public class Socks5PasswordAuthRequestDecoder extends ByteToMessageDecoderForBuffer {
 
     private enum State {
         INIT,
@@ -39,14 +39,14 @@ public class Socks5PasswordAuthRequestDecoder extends ByteToMessageDecoder {
     private State state = State.INIT;
 
     @Override
-    protected void decode(ChannelHandlerContext ctx, ByteBuf in) throws Exception {
+    protected void decode(ChannelHandlerContext ctx, Buffer in) throws Exception {
         try {
             switch (state) {
             case INIT: {
                 if (in.readableBytes() < 3) {
                     return;
                 }
-                final int startOffset = in.readerIndex();
+                final int startOffset = in.readerOffset();
                 final byte version = in.getByte(startOffset);
                 if (version != 1) {
                     throw new DecoderException("unsupported subnegotiation version: " + version + " (expected: 1)");
@@ -58,22 +58,23 @@ public class Socks5PasswordAuthRequestDecoder extends ByteToMessageDecoder {
                 if (in.readableBytes() < totalLength) {
                     return;
                 }
-                in.skipBytes(totalLength);
-                ctx.fireChannelRead(new DefaultSocks5PasswordAuthRequest(
-                        in.toString(startOffset + 2, usernameLength, CharsetUtil.US_ASCII),
-                        in.toString(startOffset + 3 + usernameLength, passwordLength, CharsetUtil.US_ASCII)));
+                in.skipReadable(2);
+                String username = in.readCharSequence(usernameLength, CharsetUtil.US_ASCII).toString();
+                in.skipReadable(1);
+                String password = in.readCharSequence(passwordLength, CharsetUtil.US_ASCII).toString();
+                ctx.fireChannelRead(new DefaultSocks5PasswordAuthRequest(username, password));
 
                 state = State.SUCCESS;
             }
             case SUCCESS: {
                 int readableBytes = actualReadableBytes();
                 if (readableBytes > 0) {
-                    ctx.fireChannelRead(in.readRetainedSlice(readableBytes));
+                    ctx.fireChannelRead(in.readSplit(readableBytes));
                 }
                 break;
             }
             case FAILURE: {
-                in.skipBytes(actualReadableBytes());
+                in.skipReadable(actualReadableBytes());
                 break;
             }
             }

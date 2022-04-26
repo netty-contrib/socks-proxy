@@ -15,17 +15,17 @@
  */
 package io.netty.contrib.handler.codec.socksx.v4;
 
-import io.netty.buffer.ByteBuf;
+import io.netty5.buffer.api.Buffer;
 import io.netty5.channel.ChannelHandler.Sharable;
 import io.netty5.channel.ChannelHandlerContext;
-import io.netty5.handler.codec.MessageToByteEncoder;
+import io.netty5.handler.codec.MessageToByteEncoderForBuffer;
 import io.netty5.util.NetUtil;
 
 /**
- * Encodes a {@link Socks4CommandResponse} into a {@link ByteBuf}.
+ * Encodes a {@link Socks4CommandResponse} into a {@link Buffer}.
  */
 @Sharable
-public final class Socks4ServerEncoder extends MessageToByteEncoder<Socks4CommandResponse> {
+public final class Socks4ServerEncoder extends MessageToByteEncoderForBuffer<Socks4CommandResponse> {
 
     public static final Socks4ServerEncoder INSTANCE = new Socks4ServerEncoder();
 
@@ -34,10 +34,15 @@ public final class Socks4ServerEncoder extends MessageToByteEncoder<Socks4Comman
     private Socks4ServerEncoder() { }
 
     @Override
-    protected void encode(ChannelHandlerContext ctx, Socks4CommandResponse msg, ByteBuf out) throws Exception {
-        out.writeByte(0);
+    protected Buffer allocateBuffer(ChannelHandlerContext ctx, Socks4CommandResponse msg) {
+        return ctx.bufferAllocator().allocate(256);
+    }
+
+    @Override
+    protected void encode(ChannelHandlerContext ctx, Socks4CommandResponse msg, Buffer out) {
+        out.writeByte((byte) 0);
         out.writeByte(msg.status().byteValue());
-        out.writeShort(msg.dstPort());
+        out.writeShort((short) msg.dstPort());
         out.writeBytes(msg.dstAddr() == null? IPv4_HOSTNAME_ZEROED
                                             : NetUtil.createByteArrayFromIpAddressString(msg.dstAddr()));
     }

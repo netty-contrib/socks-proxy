@@ -15,16 +15,17 @@
  */
 package io.netty.contrib.handler.codec.socks;
 
-import io.netty.buffer.ByteBuf;
+import io.netty5.buffer.api.Buffer;
 import io.netty5.channel.ChannelHandlerContext;
-import io.netty5.handler.codec.ByteToMessageDecoder;
+import io.netty5.handler.codec.ByteToMessageDecoderForBuffer;
+import io.netty5.util.CharsetUtil;
 import io.netty5.util.NetUtil;
 
 /**
- * Decodes {@link ByteBuf}s into {@link SocksCmdResponse}.
+ * Decodes {@link Buffer}s into {@link SocksCmdResponse}.
  * Before returning SocksResponse decoder removes itself from pipeline.
  */
-public class SocksCmdResponseDecoder extends ByteToMessageDecoder {
+public class SocksCmdResponseDecoder extends ByteToMessageDecoderForBuffer {
 
     private enum State {
         CHECK_PROTOCOL_VERSION,
@@ -36,7 +37,7 @@ public class SocksCmdResponseDecoder extends ByteToMessageDecoder {
     private SocksAddressType addressType;
 
     @Override
-    protected void decode(ChannelHandlerContext ctx, ByteBuf byteBuf) throws Exception {
+    protected void decode(ChannelHandlerContext ctx, Buffer byteBuf) throws Exception {
         switch (state) {
             case CHECK_PROTOCOL_VERSION: {
                 if (byteBuf.readableBytes() < 1) {
@@ -53,7 +54,7 @@ public class SocksCmdResponseDecoder extends ByteToMessageDecoder {
                     return;
                 }
                 cmdStatus = SocksCmdStatus.valueOf(byteBuf.readByte());
-                byteBuf.skipBytes(1); // reserved
+                byteBuf.skipReadable(1); // reserved
                 addressType = SocksAddressType.valueOf(byteBuf.readByte());
                 state = State.READ_CMD_ADDRESS;
             }
@@ -72,12 +73,12 @@ public class SocksCmdResponseDecoder extends ByteToMessageDecoder {
                         if (byteBuf.readableBytes() < 1) {
                             return;
                         }
-                        int fieldLength = byteBuf.getByte(byteBuf.readerIndex());
+                        int fieldLength = byteBuf.getByte(byteBuf.readerOffset());
                         if (byteBuf.readableBytes() < 3 + fieldLength) {
                             return;
                         }
-                        byteBuf.skipBytes(1);
-                        String host = SocksCommonUtils.readUsAscii(byteBuf, fieldLength);
+                        byteBuf.skipReadable(1);
+                        String host = byteBuf.readCharSequence(fieldLength, CharsetUtil.US_ASCII).toString();
                         int port = byteBuf.readUnsignedShort();
                         ctx.fireChannelRead(new SocksCmdResponse(cmdStatus, addressType, host, port));
                         break;
@@ -87,7 +88,7 @@ public class SocksCmdResponseDecoder extends ByteToMessageDecoder {
                             return;
                         }
                         byte[] bytes = new byte[16];
-                        byteBuf.readBytes(bytes);
+                        byteBuf.readBytes(bytes, 0, bytes.length);
                         String host = SocksCommonUtils.ipv6toStr(bytes);
                         int port = byteBuf.readUnsignedShort();
                         ctx.fireChannelRead(new SocksCmdResponse(cmdStatus, addressType, host, port));

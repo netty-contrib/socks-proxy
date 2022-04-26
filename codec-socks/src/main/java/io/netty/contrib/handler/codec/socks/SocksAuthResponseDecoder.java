@@ -15,15 +15,15 @@
  */
 package io.netty.contrib.handler.codec.socks;
 
-import io.netty.buffer.ByteBuf;
+import io.netty5.buffer.api.Buffer;
 import io.netty5.channel.ChannelHandlerContext;
-import io.netty5.handler.codec.ByteToMessageDecoder;
+import io.netty5.handler.codec.ByteToMessageDecoderForBuffer;
 
 /**
- * Decodes {@link ByteBuf}s into {@link SocksAuthResponse}.
+ * Decodes {@link Buffer}s into {@link SocksAuthResponse}.
  * Before returning SocksResponse decoder removes itself from pipeline.
  */
-public class SocksAuthResponseDecoder extends ByteToMessageDecoder {
+public class SocksAuthResponseDecoder extends ByteToMessageDecoderForBuffer {
 
     private enum State {
         CHECK_PROTOCOL_VERSION,
@@ -33,7 +33,7 @@ public class SocksAuthResponseDecoder extends ByteToMessageDecoder {
     private State state = State.CHECK_PROTOCOL_VERSION;
 
     @Override
-    protected void decode(ChannelHandlerContext ctx, ByteBuf byteBuf)
+    protected void decode(ChannelHandlerContext ctx, Buffer byteBuf)
             throws Exception {
         switch (state) {
             case CHECK_PROTOCOL_VERSION: {

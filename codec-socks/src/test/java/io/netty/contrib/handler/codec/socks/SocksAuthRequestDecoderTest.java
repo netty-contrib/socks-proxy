@@ -15,8 +15,7 @@
  */
 package io.netty.contrib.handler.codec.socks;
 
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
+import io.netty5.buffer.api.Buffer;
 import io.netty5.channel.embedded.EmbeddedChannel;
 import org.junit.jupiter.api.Test;
 
@@ -44,20 +43,20 @@ public class SocksAuthRequestDecoderTest {
     @Test
     public void testAuthRequestDecoderPartialSend() {
         EmbeddedChannel ch = new EmbeddedChannel(new SocksAuthRequestDecoder());
-        ByteBuf byteBuf = Unpooled.buffer(16);
+        Buffer byteBuf = ch.bufferAllocator().allocate(16);
 
         // Send username and password size
         byteBuf.writeByte(SocksSubnegotiationVersion.AUTH_PASSWORD.byteValue());
-        byteBuf.writeByte(username.length());
+        byteBuf.writeByte((byte) username.length());
         byteBuf.writeBytes(username.getBytes());
-        byteBuf.writeByte(password.length());
+        byteBuf.writeByte((byte) password.length());
         ch.writeInbound(byteBuf);
 
         // Check that channel is empty
         assertNull(ch.readInbound());
 
         // Send password
-        ByteBuf byteBuf2 = Unpooled.buffer();
+        Buffer byteBuf2 = ch.bufferAllocator().allocate(16);
         byteBuf2.writeBytes(password.getBytes());
         ch.writeInbound(byteBuf2);
 

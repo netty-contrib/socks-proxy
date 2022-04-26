@@ -15,15 +15,15 @@
  */
 package io.netty.contrib.handler.codec.socksx;
 
-import io.netty.buffer.ByteBuf;
+import io.netty5.buffer.api.Buffer;
 import io.netty5.channel.ChannelHandlerContext;
 import io.netty5.channel.ChannelPipeline;
-import io.netty5.handler.codec.ByteToMessageDecoder;
 import io.netty.contrib.handler.codec.socksx.v4.Socks4ServerDecoder;
 import io.netty.contrib.handler.codec.socksx.v4.Socks4ServerEncoder;
 import io.netty.contrib.handler.codec.socksx.v5.Socks5AddressEncoder;
 import io.netty.contrib.handler.codec.socksx.v5.Socks5InitialRequestDecoder;
 import io.netty.contrib.handler.codec.socksx.v5.Socks5ServerEncoder;
+import io.netty5.handler.codec.ByteToMessageDecoderForBuffer;
 import io.netty5.util.internal.logging.InternalLogger;
 import io.netty5.util.internal.logging.InternalLoggerFactory;
 
@@ -33,7 +33,7 @@ import static java.util.Objects.requireNonNull;
  * Detects the version of the current SOCKS connection and initializes the pipeline with
  * {@link Socks4ServerDecoder} or {@link Socks5InitialRequestDecoder}.
  */
-public class SocksPortUnificationServerHandler extends ByteToMessageDecoder {
+public class SocksPortUnificationServerHandler extends ByteToMessageDecoderForBuffer {
 
     private static final InternalLogger logger =
             InternalLoggerFactory.getInstance(SocksPortUnificationServerHandler.class);
@@ -58,9 +58,9 @@ public class SocksPortUnificationServerHandler extends ByteToMessageDecoder {
     }
 
     @Override
-    protected void decode(ChannelHandlerContext ctx, ByteBuf in) throws Exception {
-        final int readerIndex = in.readerIndex();
-        if (in.writerIndex() == readerIndex) {
+    protected void decode(ChannelHandlerContext ctx, Buffer in) throws Exception {
+        final int readerIndex = in.readerOffset();
+        if (in.writerOffset() == readerIndex) {
             return;
         }
 
@@ -81,7 +81,7 @@ public class SocksPortUnificationServerHandler extends ByteToMessageDecoder {
             break;
         default:
             logUnknownVersion(ctx, versionVal);
-            in.skipBytes(in.readableBytes());
+            in.skipReadable(in.readableBytes());
             ctx.close();
             return;
         }

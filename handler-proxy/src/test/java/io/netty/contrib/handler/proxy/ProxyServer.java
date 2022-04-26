@@ -17,8 +17,7 @@ package io.netty.contrib.handler.proxy;
 
 import io.netty5.bootstrap.Bootstrap;
 import io.netty5.bootstrap.ServerBootstrap;
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
+import io.netty5.buffer.api.Buffer;
 import io.netty5.channel.Channel;
 import io.netty5.channel.ChannelFutureListeners;
 import io.netty5.channel.ChannelHandler;
@@ -44,6 +43,8 @@ import java.net.SocketAddress;
 import java.util.ArrayDeque;
 import java.util.Queue;
 import java.util.concurrent.LinkedBlockingQueue;
+
+import static io.netty5.buffer.ByteBufUtil.writeAscii;
 
 abstract class ProxyServer {
 
@@ -97,7 +98,7 @@ abstract class ProxyServer {
             protected void initChannel(SocketChannel ch) throws Exception {
                 ChannelPipeline p = ch.pipeline();
                 if (useSsl) {
-                    p.addLast(ProxyHandlerTest.serverSslCtx.newHandler(ch.alloc()));
+                    p.addLast(ProxyHandlerTest.serverSslCtx.newHandler(ch.bufferAllocator()));
                 }
 
                 configure(ch);
@@ -210,19 +211,19 @@ abstract class ProxyServer {
         }
 
         @Override
-        public final void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
+        public final void channelReadComplete(ChannelHandlerContext ctx) {
             ctx.flush();
         }
 
         @Override
-        public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+        public void channelInactive(ChannelHandlerContext ctx) {
             if (backend != null) {
                 backend.close();
             }
         }
 
         @Override
-        public final void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+        public final void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
             recordException(cause);
             ctx.close();
         }
@@ -236,22 +237,22 @@ abstract class ProxyServer {
             }
 
             @Override
-            public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+            public void channelRead(ChannelHandlerContext ctx, Object msg) {
                 frontend.write(msg);
             }
 
             @Override
-            public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
+            public void channelReadComplete(ChannelHandlerContext ctx) {
                 frontend.flush();
             }
 
             @Override
-            public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+            public void channelInactive(ChannelHandlerContext ctx) {
                 frontend.close();
             }
 
             @Override
-            public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+            public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
                 recordException(cause);
                 ctx.close();
             }
@@ -265,13 +266,13 @@ abstract class ProxyServer {
         @Override
         protected final void messageReceived(ChannelHandlerContext ctx, Object msg) throws Exception {
             if (finished) {
-                String str = ((ByteBuf) msg).toString(CharsetUtil.US_ASCII);
+                String str = ((Buffer) msg).toString(CharsetUtil.US_ASCII);
                 if ("A\n".equals(str)) {
-                    ctx.write(Unpooled.copiedBuffer("1\n", CharsetUtil.US_ASCII));
+                    ctx.write(writeAscii(ctx.bufferAllocator(), "1\n"));
                 } else if ("B\n".equals(str)) {
-                    ctx.write(Unpooled.copiedBuffer("2\n", CharsetUtil.US_ASCII));
+                    ctx.write(writeAscii(ctx.bufferAllocator(), "2\n"));
                 } else if ("C\n".equals(str)) {
-                    ctx.write(Unpooled.copiedBuffer("3\n", CharsetUtil.US_ASCII))
+                    ctx.write(writeAscii(ctx.bufferAllocator(), "3\n"))
                        .addListener(ctx, ChannelFutureListeners.CLOSE);
                 } else {
                     throw new IllegalStateException("unexpected message: " + str);
@@ -288,12 +289,12 @@ abstract class ProxyServer {
         protected abstract boolean handleProxyProtocol(ChannelHandlerContext ctx, Object msg) throws Exception;
 
         @Override
-        public final void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
+        public final void channelReadComplete(ChannelHandlerContext ctx) {
             ctx.flush();
         }
 
         @Override
-        public final void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+        public final void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
             recordException(cause);
             ctx.close();
         }

@@ -15,14 +15,14 @@
  */
 package io.netty.contrib.handler.codec.socks;
 
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
+import io.netty5.buffer.api.Buffer;
 import io.netty5.util.CharsetUtil;
 import org.junit.jupiter.api.Test;
 
 import java.net.IDN;
 import java.nio.CharBuffer;
 
+import static io.netty5.buffer.api.DefaultBufferAllocators.preferredAllocator;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -45,19 +45,20 @@ public class SocksCmdResponseTest {
         SocksCmdResponse socksCmdResponse = new SocksCmdResponse(SocksCmdStatus.SUCCESS, SocksAddressType.DOMAIN);
         assertNull(socksCmdResponse.host());
         assertEquals(0, socksCmdResponse.port());
-        ByteBuf buffer = Unpooled.buffer(20);
-        socksCmdResponse.encodeAsByteBuf(buffer);
-        byte[] expected = {
-                0x05, // version
-                0x00, // success reply
-                0x00, // reserved
-                0x03, // address type domain
-                0x01, // length of domain
-                0x00, // domain value
-                0x00, // port value
-                0x00
-        };
-        assertByteBufEquals(expected, buffer);
+        try (Buffer buffer = preferredAllocator().allocate(20)) {
+            socksCmdResponse.encodeAsByteBuf(buffer);
+            byte[] expected = {
+                    0x05, // version
+                    0x00, // success reply
+                    0x00, // reserved
+                    0x03, // address type domain
+                    0x01, // length of domain
+                    0x00, // domain value
+                    0x00, // port value
+                    0x00
+            };
+            assertByteBufEquals(expected, buffer);
+        }
     }
 
     /**
@@ -69,21 +70,22 @@ public class SocksCmdResponseTest {
                 "127.0.0.1", 80);
         assertEquals("127.0.0.1", socksCmdResponse.host());
         assertEquals(80, socksCmdResponse.port());
-        ByteBuf buffer = Unpooled.buffer(20);
-        socksCmdResponse.encodeAsByteBuf(buffer);
-        byte[] expected = {
-                0x05, // version
-                0x00, // success reply
-                0x00, // reserved
-                0x01, // address type IPv4
-                0x7F, // address 127.0.0.1
-                0x00,
-                0x00,
-                0x01,
-                0x00, // port
-                0x50
-                };
-        assertByteBufEquals(expected, buffer);
+        try (Buffer buffer = preferredAllocator().allocate(20)) {
+            socksCmdResponse.encodeAsByteBuf(buffer);
+            byte[] expected = {
+                    0x05, // version
+                    0x00, // success reply
+                    0x00, // reserved
+                    0x01, // address type IPv4
+                    0x7F, // address 127.0.0.1
+                    0x00,
+                    0x00,
+                    0x01,
+                    0x00, // port
+                    0x50
+            };
+            assertByteBufEquals(expected, buffer);
+        }
     }
 
     /**
@@ -95,18 +97,19 @@ public class SocksCmdResponseTest {
                 "", 80);
         assertEquals("", socksCmdResponse.host());
         assertEquals(80, socksCmdResponse.port());
-        ByteBuf buffer = Unpooled.buffer(20);
-        socksCmdResponse.encodeAsByteBuf(buffer);
-        byte[] expected = {
-                0x05, // version
-                0x00, // success reply
-                0x00, // reserved
-                0x03, // address type domain
-                0x00, // domain length
-                0x00, // port
-                0x50
-        };
-        assertByteBufEquals(expected, buffer);
+        try (Buffer buffer = preferredAllocator().allocate(20)) {
+            socksCmdResponse.encodeAsByteBuf(buffer);
+            byte[] expected = {
+                    0x05, // version
+                    0x00, // success reply
+                    0x00, // reserved
+                    0x03, // address type domain
+                    0x00, // domain length
+                    0x00, // port
+                    0x50
+            };
+            assertByteBufEquals(expected, buffer);
+        }
     }
 
     @Test
@@ -117,17 +120,16 @@ public class SocksCmdResponseTest {
         SocksCmdResponse rs = new SocksCmdResponse(SocksCmdStatus.SUCCESS, SocksAddressType.UNKNOWN, asciiHost, port);
         assertEquals(asciiHost, rs.host());
 
-        ByteBuf buffer = Unpooled.buffer(16);
-        rs.encodeAsByteBuf(buffer);
+        try (Buffer buffer = preferredAllocator().allocate(16)) {
+            rs.encodeAsByteBuf(buffer);
 
-        buffer.readerIndex(0);
-        assertEquals(SocksProtocolVersion.SOCKS5.byteValue(), buffer.readByte());
-        assertEquals(SocksCmdStatus.SUCCESS.byteValue(), buffer.readByte());
-        assertEquals((byte) 0x00, buffer.readByte());
-        assertEquals(SocksAddressType.UNKNOWN.byteValue(), buffer.readByte());
-        assertFalse(buffer.isReadable());
-
-        buffer.release();
+            buffer.readerOffset(0);
+            assertEquals(SocksProtocolVersion.SOCKS5.byteValue(), buffer.readByte());
+            assertEquals(SocksCmdStatus.SUCCESS.byteValue(), buffer.readByte());
+            assertEquals((byte) 0x00, buffer.readByte());
+            assertEquals(SocksAddressType.UNKNOWN.byteValue(), buffer.readByte());
+            assertFalse(buffer.readableBytes() > 0);
+        }
     }
 
     @Test
@@ -139,20 +141,19 @@ public class SocksCmdResponseTest {
         SocksCmdResponse rs = new SocksCmdResponse(SocksCmdStatus.SUCCESS, SocksAddressType.DOMAIN, host, port);
         assertEquals(host, rs.host());
 
-        ByteBuf buffer = Unpooled.buffer(24);
-        rs.encodeAsByteBuf(buffer);
+        try (Buffer buffer = preferredAllocator().allocate(32)) {
+            rs.encodeAsByteBuf(buffer);
 
-        buffer.readerIndex(0);
-        assertEquals(SocksProtocolVersion.SOCKS5.byteValue(), buffer.readByte());
-        assertEquals(SocksCmdStatus.SUCCESS.byteValue(), buffer.readByte());
-        assertEquals((byte) 0x00, buffer.readByte());
-        assertEquals(SocksAddressType.DOMAIN.byteValue(), buffer.readByte());
-        assertEquals((byte) asciiHost.length(), buffer.readUnsignedByte());
-        assertEquals(asciiHost,
-            CharBuffer.wrap(buffer.readCharSequence(asciiHost.length(), CharsetUtil.US_ASCII)));
-        assertEquals(port, buffer.readUnsignedShort());
-
-        buffer.release();
+            buffer.readerOffset(0);
+            assertEquals(SocksProtocolVersion.SOCKS5.byteValue(), buffer.readByte());
+            assertEquals(SocksCmdStatus.SUCCESS.byteValue(), buffer.readByte());
+            assertEquals((byte) 0x00, buffer.readByte());
+            assertEquals(SocksAddressType.DOMAIN.byteValue(), buffer.readByte());
+            assertEquals((byte) asciiHost.length(), buffer.readUnsignedByte());
+            assertEquals(asciiHost,
+                    CharBuffer.wrap(buffer.readCharSequence(asciiHost.length(), CharsetUtil.US_ASCII)));
+            assertEquals(port, buffer.readUnsignedShort());
+        }
     }
 
     /**
@@ -164,9 +165,9 @@ public class SocksCmdResponseTest {
             () -> new SocksCmdResponse(SocksCmdStatus.SUCCESS, SocksAddressType.IPv4, "127.0.0", 1000));
     }
 
-    private static void assertByteBufEquals(byte[] expected, ByteBuf actual) {
+    private static void assertByteBufEquals(byte[] expected, Buffer actual) {
         byte[] actualBytes = new byte[actual.readableBytes()];
-        actual.readBytes(actualBytes);
+        actual.readBytes(actualBytes, 0, actualBytes.length);
         assertEquals(expected.length, actualBytes.length, "Generated response has incorrect length");
         assertArrayEquals(expected, actualBytes, "Generated response differs from expected");
     }

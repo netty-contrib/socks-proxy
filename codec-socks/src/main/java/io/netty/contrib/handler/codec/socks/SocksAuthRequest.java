@@ -15,7 +15,7 @@
  */
 package io.netty.contrib.handler.codec.socks;
 
-import io.netty.buffer.ByteBuf;
+import io.netty5.buffer.api.Buffer;
 import io.netty5.util.CharsetUtil;
 
 import java.nio.charset.CharsetEncoder;
@@ -72,11 +72,11 @@ public final class SocksAuthRequest extends SocksRequest {
     }
 
     @Override
-    public void encodeAsByteBuf(ByteBuf byteBuf) {
+    public void encodeAsByteBuf(Buffer byteBuf) {
         byteBuf.writeByte(SUBNEGOTIATION_VERSION.byteValue());
-        byteBuf.writeByte(username.length());
+        byteBuf.writeByte((byte) username.length());
         byteBuf.writeCharSequence(username, CharsetUtil.US_ASCII);
-        byteBuf.writeByte(password.length());
+        byteBuf.writeByte((byte) password.length());
         byteBuf.writeCharSequence(password, CharsetUtil.US_ASCII);
     }
 }
