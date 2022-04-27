@@ -36,32 +36,32 @@ public class SocksInitRequestDecoder extends ByteToMessageDecoderForBuffer {
     private State state = State.CHECK_PROTOCOL_VERSION;
 
     @Override
-    protected void decode(ChannelHandlerContext ctx, Buffer byteBuf) throws Exception {
+    protected void decode(ChannelHandlerContext ctx, Buffer buffer) throws Exception {
         switch (state) {
             case CHECK_PROTOCOL_VERSION: {
-                if (byteBuf.readableBytes() < 1) {
+                if (buffer.readableBytes() < 1) {
                     return;
                 }
-                if (byteBuf.readByte() != SocksProtocolVersion.SOCKS5.byteValue()) {
+                if (buffer.readByte() != SocksProtocolVersion.SOCKS5.byteValue()) {
                     ctx.fireChannelRead(SocksCommonUtils.UNKNOWN_SOCKS_REQUEST);
                     break;
                 }
                 state = State.READ_AUTH_SCHEMES;
             }
             case READ_AUTH_SCHEMES: {
-                if (byteBuf.readableBytes() < 1) {
+                if (buffer.readableBytes() < 1) {
                     return;
                 }
-                final byte authSchemeNum = byteBuf.getByte(byteBuf.readerOffset());
-                if (byteBuf.readableBytes() < 1 + authSchemeNum) {
+                final byte authSchemeNum = buffer.getByte(buffer.readerOffset());
+                if (buffer.readableBytes() < 1 + authSchemeNum) {
                     return;
                 }
-                byteBuf.skipReadable(1);
+                buffer.skipReadable(1);
                 final List<SocksAuthScheme> authSchemes;
                 if (authSchemeNum > 0) {
                     authSchemes = new ArrayList<>(authSchemeNum);
                     for (int i = 0; i < authSchemeNum; i++) {
-                        authSchemes.add(SocksAuthScheme.valueOf(byteBuf.readByte()));
+                        authSchemes.add(SocksAuthScheme.valueOf(buffer.readByte()));
                     }
                 } else {
                     authSchemes = Collections.emptyList();

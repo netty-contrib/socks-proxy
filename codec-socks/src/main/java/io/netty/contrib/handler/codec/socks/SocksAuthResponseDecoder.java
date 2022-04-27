@@ -33,24 +33,24 @@ public class SocksAuthResponseDecoder extends ByteToMessageDecoderForBuffer {
     private State state = State.CHECK_PROTOCOL_VERSION;
 
     @Override
-    protected void decode(ChannelHandlerContext ctx, Buffer byteBuf)
+    protected void decode(ChannelHandlerContext ctx, Buffer buffer)
             throws Exception {
         switch (state) {
             case CHECK_PROTOCOL_VERSION: {
-                if (byteBuf.readableBytes() < 1) {
+                if (buffer.readableBytes() < 1) {
                     return;
                 }
-                if (byteBuf.readByte() != SocksSubnegotiationVersion.AUTH_PASSWORD.byteValue()) {
+                if (buffer.readByte() != SocksSubnegotiationVersion.AUTH_PASSWORD.byteValue()) {
                     ctx.fireChannelRead(SocksCommonUtils.UNKNOWN_SOCKS_RESPONSE);
                     break;
                 }
                 state = State.READ_AUTH_RESPONSE;
             }
             case READ_AUTH_RESPONSE: {
-                if (byteBuf.readableBytes() < 1) {
+                if (buffer.readableBytes() < 1) {
                     return;
                 }
-                SocksAuthStatus authStatus = SocksAuthStatus.valueOf(byteBuf.readByte());
+                SocksAuthStatus authStatus = SocksAuthStatus.valueOf(buffer.readByte());
                 ctx.fireChannelRead(new SocksAuthResponse(authStatus));
                 break;
             }

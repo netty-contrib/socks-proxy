@@ -43,22 +43,22 @@ public class SocksAuthRequestDecoderTest {
     @Test
     public void testAuthRequestDecoderPartialSend() {
         EmbeddedChannel ch = new EmbeddedChannel(new SocksAuthRequestDecoder());
-        Buffer byteBuf = ch.bufferAllocator().allocate(16);
+        Buffer buffer = ch.bufferAllocator().allocate(16);
 
         // Send username and password size
-        byteBuf.writeByte(SocksSubnegotiationVersion.AUTH_PASSWORD.byteValue());
-        byteBuf.writeByte((byte) username.length());
-        byteBuf.writeBytes(username.getBytes());
-        byteBuf.writeByte((byte) password.length());
-        ch.writeInbound(byteBuf);
+        buffer.writeByte(SocksSubnegotiationVersion.AUTH_PASSWORD.byteValue());
+        buffer.writeByte((byte) username.length());
+        buffer.writeBytes(username.getBytes());
+        buffer.writeByte((byte) password.length());
+        ch.writeInbound(buffer);
 
         // Check that channel is empty
         assertNull(ch.readInbound());
 
         // Send password
-        Buffer byteBuf2 = ch.bufferAllocator().allocate(16);
-        byteBuf2.writeBytes(password.getBytes());
-        ch.writeInbound(byteBuf2);
+        Buffer buffer2 = ch.bufferAllocator().allocate(16);
+        buffer2.writeBytes(password.getBytes());
+        ch.writeInbound(buffer2);
 
         // Read message from channel
         SocksAuthRequest msg = ch.readInbound();

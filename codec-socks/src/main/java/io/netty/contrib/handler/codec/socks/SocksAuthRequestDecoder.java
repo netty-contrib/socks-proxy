@@ -35,40 +35,40 @@ public class SocksAuthRequestDecoder extends ByteToMessageDecoderForBuffer {
     private String username;
 
     @Override
-    protected void decode(ChannelHandlerContext ctx, Buffer byteBuf) throws Exception {
+    protected void decode(ChannelHandlerContext ctx, Buffer buffer) throws Exception {
         switch (state) {
             case CHECK_PROTOCOL_VERSION: {
-                if (byteBuf.readableBytes() < 1) {
+                if (buffer.readableBytes() < 1) {
                     return;
                 }
-                if (byteBuf.readByte() != SocksSubnegotiationVersion.AUTH_PASSWORD.byteValue()) {
+                if (buffer.readByte() != SocksSubnegotiationVersion.AUTH_PASSWORD.byteValue()) {
                     ctx.fireChannelRead(SocksCommonUtils.UNKNOWN_SOCKS_REQUEST);
                     break;
                 }
                 state = State.READ_USERNAME;
             }
             case READ_USERNAME: {
-                if (byteBuf.readableBytes() < 1) {
+                if (buffer.readableBytes() < 1) {
                     return;
                 }
-                int fieldLength = byteBuf.getByte(byteBuf.readerOffset());
-                if (byteBuf.readableBytes() < 1 + fieldLength) {
+                int fieldLength = buffer.getByte(buffer.readerOffset());
+                if (buffer.readableBytes() < 1 + fieldLength) {
                     return;
                 }
-                byteBuf.skipReadable(1);
-                username = byteBuf.readCharSequence(fieldLength, CharsetUtil.US_ASCII).toString();
+                buffer.skipReadable(1);
+                username = buffer.readCharSequence(fieldLength, CharsetUtil.US_ASCII).toString();
                 state = State.READ_PASSWORD;
             }
             case READ_PASSWORD: {
-                if (byteBuf.readableBytes() < 1) {
+                if (buffer.readableBytes() < 1) {
                     return;
                 }
-                int fieldLength = byteBuf.getByte(byteBuf.readerOffset());
-                if (byteBuf.readableBytes() < 1 + fieldLength) {
+                int fieldLength = buffer.getByte(buffer.readerOffset());
+                if (buffer.readableBytes() < 1 + fieldLength) {
                     return;
                 }
-                byteBuf.skipReadable(1);
-                String password = byteBuf.readCharSequence(fieldLength, CharsetUtil.US_ASCII).toString();
+                buffer.skipReadable(1);
+                String password = buffer.readCharSequence(fieldLength, CharsetUtil.US_ASCII).toString();
                 ctx.fireChannelRead(new SocksAuthRequest(username, password));
                 break;
             }

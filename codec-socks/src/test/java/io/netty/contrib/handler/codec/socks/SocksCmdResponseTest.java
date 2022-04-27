@@ -57,7 +57,7 @@ public class SocksCmdResponseTest {
                     0x00, // port value
                     0x00
             };
-            assertByteBufEquals(expected, buffer);
+            assertBufferEquals(expected, buffer);
         }
     }
 
@@ -84,7 +84,7 @@ public class SocksCmdResponseTest {
                     0x00, // port
                     0x50
             };
-            assertByteBufEquals(expected, buffer);
+            assertBufferEquals(expected, buffer);
         }
     }
 
@@ -108,7 +108,7 @@ public class SocksCmdResponseTest {
                     0x00, // port
                     0x50
             };
-            assertByteBufEquals(expected, buffer);
+            assertBufferEquals(expected, buffer);
         }
     }
 
@@ -165,7 +165,7 @@ public class SocksCmdResponseTest {
             () -> new SocksCmdResponse(SocksCmdStatus.SUCCESS, SocksAddressType.IPv4, "127.0.0", 1000));
     }
 
-    private static void assertByteBufEquals(byte[] expected, Buffer actual) {
+    private static void assertBufferEquals(byte[] expected, Buffer actual) {
         byte[] actualBytes = new byte[actual.readableBytes()];
         actual.readBytes(actualBytes, 0, actualBytes.length);
         assertEquals(expected.length, actualBytes.length, "Generated response has incorrect length");
