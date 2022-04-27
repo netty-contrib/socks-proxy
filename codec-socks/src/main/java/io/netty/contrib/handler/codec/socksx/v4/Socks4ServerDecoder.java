@@ -129,9 +129,8 @@ public class Socks4ServerDecoder extends ByteToMessageDecoderForBuffer {
      * Reads a variable-length NUL-terminated string as defined in SOCKS4.
      */
     private static String readString(String fieldName, Buffer in) {
-        int length = in.openCursor(in.readerOffset(), Math.min(in.readableBytes(), MAX_FIELD_LENGTH + 1))
-                .process(ByteProcessor.FIND_NUL);
-        if (length >= 0) {
+        int length = in.bytesBefore((byte) 0);
+        if (length >= 0 && length < MAX_FIELD_LENGTH) {
             if (in.readableBytes() < length + 1) {
                 return null;
             }
