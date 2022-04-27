@@ -138,35 +138,35 @@ public final class SocksCmdResponse extends SocksResponse {
     }
 
     @Override
-    public void encodeAsByteBuf(Buffer byteBuf) {
-        byteBuf.writeByte(protocolVersion().byteValue());
-        byteBuf.writeByte(cmdStatus.byteValue());
-        byteBuf.writeByte((byte) 0x00);
-        byteBuf.writeByte(addressType.byteValue());
+    public void encodeAsBuffer(Buffer buffer) {
+        buffer.writeByte(protocolVersion().byteValue());
+        buffer.writeByte(cmdStatus.byteValue());
+        buffer.writeByte((byte) 0x00);
+        buffer.writeByte(addressType.byteValue());
         switch (addressType) {
             case IPv4: {
                 byte[] hostContent = host == null ?
                         IPv4_HOSTNAME_ZEROED : NetUtil.createByteArrayFromIpAddressString(host);
-                byteBuf.writeBytes(hostContent);
-                byteBuf.writeShort((short) port);
+                buffer.writeBytes(hostContent);
+                buffer.writeShort((short) port);
                 break;
             }
             case DOMAIN: {
                 if (host != null) {
-                    byteBuf.writeByte((byte) host.length());
-                    byteBuf.writeCharSequence(host, CharsetUtil.US_ASCII);
+                    buffer.writeByte((byte) host.length());
+                    buffer.writeCharSequence(host, CharsetUtil.US_ASCII);
                 } else {
-                    byteBuf.writeByte((byte) DOMAIN_ZEROED.length);
-                    byteBuf.writeBytes(DOMAIN_ZEROED);
+                    buffer.writeByte((byte) DOMAIN_ZEROED.length);
+                    buffer.writeBytes(DOMAIN_ZEROED);
                 }
-                byteBuf.writeShort((short) port);
+                buffer.writeShort((short) port);
                 break;
             }
             case IPv6: {
                 byte[] hostContent = host == null
                         ? IPv6_HOSTNAME_ZEROED : NetUtil.createByteArrayFromIpAddressString(host);
-                byteBuf.writeBytes(hostContent);
-                byteBuf.writeShort((short) port);
+                buffer.writeBytes(hostContent);
+                buffer.writeShort((short) port);
                 break;
             }
         }

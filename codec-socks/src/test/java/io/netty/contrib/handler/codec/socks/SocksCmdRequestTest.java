@@ -77,7 +77,7 @@ public class SocksCmdRequestTest {
         assertEquals(asciiHost, rq.host());
 
         try (Buffer buffer = preferredAllocator().allocate(16)) {
-            rq.encodeAsByteBuf(buffer);
+            rq.encodeAsBuffer(buffer);
 
             buffer.readerOffset(0);
             assertEquals(SocksProtocolVersion.SOCKS5.byteValue(), buffer.readByte());
@@ -98,7 +98,7 @@ public class SocksCmdRequestTest {
         assertEquals(host, rq.host());
 
         try (Buffer buffer = preferredAllocator().allocate(32)) {
-            rq.encodeAsByteBuf(buffer);
+            rq.encodeAsBuffer(buffer);
 
             buffer.readerOffset(0);
             assertEquals(SocksProtocolVersion.SOCKS5.byteValue(), buffer.readByte());

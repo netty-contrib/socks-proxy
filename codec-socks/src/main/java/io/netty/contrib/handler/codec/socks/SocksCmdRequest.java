@@ -107,23 +107,23 @@ public final class SocksCmdRequest extends SocksRequest {
     }
 
     @Override
-    public void encodeAsByteBuf(Buffer byteBuf) {
-        byteBuf.writeByte(protocolVersion().byteValue());
-        byteBuf.writeByte(cmdType.byteValue());
-        byteBuf.writeByte((byte) 0x00);
-        byteBuf.writeByte(addressType.byteValue());
+    public void encodeAsBuffer(Buffer buffer) {
+        buffer.writeByte(protocolVersion().byteValue());
+        buffer.writeByte(cmdType.byteValue());
+        buffer.writeByte((byte) 0x00);
+        buffer.writeByte(addressType.byteValue());
         switch (addressType) {
             case IPv4:
             case IPv6: {
-                byteBuf.writeBytes(NetUtil.createByteArrayFromIpAddressString(host));
-                byteBuf.writeShort((short) port);
+                buffer.writeBytes(NetUtil.createByteArrayFromIpAddressString(host));
+                buffer.writeShort((short) port);
                 break;
             }
 
             case DOMAIN: {
-                byteBuf.writeByte((byte) host.length());
-                byteBuf.writeCharSequence(host, CharsetUtil.US_ASCII);
-                byteBuf.writeShort((short) port);
+                buffer.writeByte((byte) host.length());
+                buffer.writeCharSequence(host, CharsetUtil.US_ASCII);
+                buffer.writeShort((short) port);
                 break;
             }
         }

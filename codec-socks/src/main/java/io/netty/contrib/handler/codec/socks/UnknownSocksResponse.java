@@ -31,7 +31,7 @@ public final class UnknownSocksResponse extends SocksResponse {
     }
 
     @Override
-    public void encodeAsByteBuf(Buffer byteBuf) {
+    public void encodeAsBuffer(Buffer buffer) {
         // NOOP
     }
 }

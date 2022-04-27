@@ -37,6 +37,6 @@ public class SocksMessageEncoder extends MessageToByteEncoderForBuffer<SocksMess
     @Override
     @SuppressWarnings("deprecation")
     protected void encode(ChannelHandlerContext ctx, SocksMessage msg, Buffer out) {
-        msg.encodeAsByteBuf(out);
+        msg.encodeAsBuffer(out);
     }
 }

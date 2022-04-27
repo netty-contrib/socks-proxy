@@ -29,7 +29,7 @@ final class SocksCommonTestUtils {
     @SuppressWarnings("deprecation")
     public static void writeMessageIntoEmbedder(EmbeddedChannel embedder, SocksMessage msg) {
         Buffer buf = embedder.bufferAllocator().allocate(64);
-        msg.encodeAsByteBuf(buf);
+        msg.encodeAsBuffer(buf);
         embedder.writeInbound(buf);
     }
 }

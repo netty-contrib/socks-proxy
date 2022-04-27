@@ -46,7 +46,7 @@ public class SocksCmdResponseTest {
         assertNull(socksCmdResponse.host());
         assertEquals(0, socksCmdResponse.port());
         try (Buffer buffer = preferredAllocator().allocate(20)) {
-            socksCmdResponse.encodeAsByteBuf(buffer);
+            socksCmdResponse.encodeAsBuffer(buffer);
             byte[] expected = {
                     0x05, // version
                     0x00, // success reply
@@ -71,7 +71,7 @@ public class SocksCmdResponseTest {
         assertEquals("127.0.0.1", socksCmdResponse.host());
         assertEquals(80, socksCmdResponse.port());
         try (Buffer buffer = preferredAllocator().allocate(20)) {
-            socksCmdResponse.encodeAsByteBuf(buffer);
+            socksCmdResponse.encodeAsBuffer(buffer);
             byte[] expected = {
                     0x05, // version
                     0x00, // success reply
@@ -98,7 +98,7 @@ public class SocksCmdResponseTest {
         assertEquals("", socksCmdResponse.host());
         assertEquals(80, socksCmdResponse.port());
         try (Buffer buffer = preferredAllocator().allocate(20)) {
-            socksCmdResponse.encodeAsByteBuf(buffer);
+            socksCmdResponse.encodeAsBuffer(buffer);
             byte[] expected = {
                     0x05, // version
                     0x00, // success reply
@@ -121,7 +121,7 @@ public class SocksCmdResponseTest {
         assertEquals(asciiHost, rs.host());
 
         try (Buffer buffer = preferredAllocator().allocate(16)) {
-            rs.encodeAsByteBuf(buffer);
+            rs.encodeAsBuffer(buffer);
 
             buffer.readerOffset(0);
             assertEquals(SocksProtocolVersion.SOCKS5.byteValue(), buffer.readByte());
@@ -142,7 +142,7 @@ public class SocksCmdResponseTest {
         assertEquals(host, rs.host());
 
         try (Buffer buffer = preferredAllocator().allocate(32)) {
-            rs.encodeAsByteBuf(buffer);
+            rs.encodeAsBuffer(buffer);
 
             buffer.readerOffset(0);
             assertEquals(SocksProtocolVersion.SOCKS5.byteValue(), buffer.readByte());

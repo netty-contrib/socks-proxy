@@ -57,5 +57,5 @@ public abstract class SocksMessage {
      * @deprecated Do not use; this method was intended for an internal use only.
      */
     @Deprecated
-    public abstract void encodeAsByteBuf(Buffer byteBuf);
+    public abstract void encodeAsBuffer(Buffer buffer);
 }
