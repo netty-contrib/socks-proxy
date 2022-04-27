@@ -15,12 +15,12 @@
  */
 package io.netty.contrib.handler.codec.socksx.v5;
 
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.ByteBufUtil;
+import io.netty5.buffer.api.Buffer;
 import io.netty5.channel.ChannelHandler.Sharable;
 import io.netty5.channel.ChannelHandlerContext;
 import io.netty5.handler.codec.EncoderException;
-import io.netty5.handler.codec.MessageToByteEncoder;
+import io.netty5.handler.codec.MessageToByteEncoderForBuffer;
+import io.netty5.util.CharsetUtil;
 import io.netty5.util.internal.StringUtil;
 
 import java.util.List;
@@ -29,10 +29,10 @@ import java.util.RandomAccess;
 import static java.util.Objects.requireNonNull;
 
 /**
- * Encodes a client-side {@link Socks5Message} into a {@link ByteBuf}.
+ * Encodes a client-side {@link Socks5Message} into a {@link Buffer}.
  */
 @Sharable
-public class Socks5ClientEncoder extends MessageToByteEncoder<Socks5Message> {
+public class Socks5ClientEncoder extends MessageToByteEncoderForBuffer<Socks5Message> {
 
     public static final Socks5ClientEncoder DEFAULT = new Socks5ClientEncoder();
 
@@ -43,6 +43,11 @@ public class Socks5ClientEncoder extends MessageToByteEncoder<Socks5Message> {
      */
     protected Socks5ClientEncoder() {
         this(Socks5AddressEncoder.DEFAULT);
+    }
+
+    @Override
+    protected Buffer allocateBuffer(ChannelHandlerContext ctx, Socks5Message msg) {
+        return ctx.bufferAllocator().allocate(256);
     }
 
     /**
@@ -62,7 +67,7 @@ public class Socks5ClientEncoder extends MessageToByteEncoder<Socks5Message> {
     }
 
     @Override
-    protected void encode(ChannelHandlerContext ctx, Socks5Message msg, ByteBuf out) throws Exception {
+    protected void encode(ChannelHandlerContext ctx, Socks5Message msg, Buffer out) throws Exception {
         if (msg instanceof Socks5InitialRequest) {
             encodeAuthMethodRequest((Socks5InitialRequest) msg, out);
         } else if (msg instanceof Socks5PasswordAuthRequest) {
@@ -74,12 +79,12 @@ public class Socks5ClientEncoder extends MessageToByteEncoder<Socks5Message> {
         }
     }
 
-    private static void encodeAuthMethodRequest(Socks5InitialRequest msg, ByteBuf out) {
+    private static void encodeAuthMethodRequest(Socks5InitialRequest msg, Buffer out) {
         out.writeByte(msg.version().byteValue());
 
         final List<Socks5AuthMethod> authMethods = msg.authMethods();
         final int numAuthMethods = authMethods.size();
-        out.writeByte(numAuthMethods);
+        out.writeByte((byte) numAuthMethods);
 
         if (authMethods instanceof RandomAccess) {
             for (int i = 0; i < numAuthMethods; i ++) {
@@ -92,26 +97,26 @@ public class Socks5ClientEncoder extends MessageToByteEncoder<Socks5Message> {
         }
     }
 
-    private static void encodePasswordAuthRequest(Socks5PasswordAuthRequest msg, ByteBuf out) {
-        out.writeByte(0x01);
+    private static void encodePasswordAuthRequest(Socks5PasswordAuthRequest msg, Buffer out) {
+        out.writeByte((byte) 0x01);
 
         final String username = msg.username();
-        out.writeByte(username.length());
-        ByteBufUtil.writeAscii(out, username);
+        out.writeByte((byte) username.length());
+        out.writeCharSequence(username, CharsetUtil.US_ASCII);
 
         final String password = msg.password();
-        out.writeByte(password.length());
-        ByteBufUtil.writeAscii(out, password);
+        out.writeByte((byte) password.length());
+        out.writeCharSequence(password, CharsetUtil.US_ASCII);
     }
 
-    private void encodeCommandRequest(Socks5CommandRequest msg, ByteBuf out) throws Exception {
+    private void encodeCommandRequest(Socks5CommandRequest msg, Buffer out) throws Exception {
         out.writeByte(msg.version().byteValue());
         out.writeByte(msg.type().byteValue());
-        out.writeByte(0x00);
+        out.writeByte((byte) 0x00);
 
         final Socks5AddressType dstAddrType = msg.dstAddrType();
         out.writeByte(dstAddrType.byteValue());
         addressEncoder.encodeAddress(dstAddrType, msg.dstAddr(), out);
-        out.writeShort(msg.dstPort());
+        out.writeShort((short) msg.dstPort());
     }
 }

@@ -15,7 +15,6 @@
  */
 package io.netty.contrib.handler.proxy;
 
-import io.netty.buffer.Unpooled;
 import io.netty5.channel.ChannelHandlerContext;
 import io.netty5.channel.ChannelPipeline;
 import io.netty5.channel.socket.SocketChannel;
@@ -42,6 +41,7 @@ import io.netty5.util.internal.SocketUtils;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 
+import static io.netty5.buffer.ByteBufUtil.writeAscii;
 import static org.assertj.core.api.Assertions.assertThat;
 
 final class Socks5ProxyServer extends ProxyServer {
@@ -59,7 +59,7 @@ final class Socks5ProxyServer extends ProxyServer {
     }
 
     @Override
-    protected void configure(SocketChannel ch) throws Exception {
+    protected void configure(SocketChannel ch) {
         ChannelPipeline p = ch.pipeline();
         switch (testMode) {
         case INTERMEDIARY:
@@ -109,7 +109,7 @@ final class Socks5ProxyServer extends ProxyServer {
         private SocketAddress intermediaryDestination;
 
         @Override
-        protected boolean handleProxyProtocol(ChannelHandlerContext ctx, Object msg) throws Exception {
+        protected boolean handleProxyProtocol(ChannelHandlerContext ctx, Object msg) {
             if (!authenticated) {
                 authenticated = authenticate(ctx, msg);
                 return false;
@@ -141,7 +141,7 @@ final class Socks5ProxyServer extends ProxyServer {
         private boolean authenticated;
 
         @Override
-        protected boolean handleProxyProtocol(ChannelHandlerContext ctx, Object msg) throws Exception {
+        protected boolean handleProxyProtocol(ChannelHandlerContext ctx, Object msg) {
             if (!authenticated) {
                 authenticated = authenticate(ctx, msg);
                 return false;
@@ -168,7 +168,7 @@ final class Socks5ProxyServer extends ProxyServer {
             ctx.pipeline().remove(DECODER);
 
             if (sendGreeting) {
-                ctx.write(Unpooled.copiedBuffer("0\n", CharsetUtil.US_ASCII));
+                ctx.write(writeAscii(ctx.bufferAllocator(), "0\n"));
             }
 
             return true;

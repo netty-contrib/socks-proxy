@@ -15,7 +15,6 @@
  */
 package io.netty.contrib.handler.codec.socksx.v5;
 
-import io.netty.buffer.Unpooled;
 import io.netty5.channel.embedded.EmbeddedChannel;
 import io.netty5.handler.codec.DecoderResult;
 import org.junit.jupiter.api.Test;
@@ -28,8 +27,8 @@ public class Socks5InitialRequestDecoderTest {
     @Test
     public void testUnpackingCausesDecodeFail() {
         EmbeddedChannel e = new EmbeddedChannel(new Socks5InitialRequestDecoder());
-        assertFalse(e.writeInbound(Unpooled.wrappedBuffer(new byte[]{5, 2, 0})));
-        assertTrue(e.writeInbound(Unpooled.wrappedBuffer(new byte[]{1})));
+        assertFalse(e.writeInbound(e.bufferAllocator().copyOf(new byte[]{5, 2, 0})));
+        assertTrue(e.writeInbound(e.bufferAllocator().copyOf(new byte[]{1})));
         Object o = e.readInbound();
 
         assertTrue(o instanceof DefaultSocks5InitialRequest);

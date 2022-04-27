@@ -15,8 +15,7 @@
  */
 package io.netty.contrib.handler.codec.socks;
 
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
+import io.netty5.buffer.api.Buffer;
 import io.netty5.channel.embedded.EmbeddedChannel;
 
 final class SocksCommonTestUtils {
@@ -29,8 +28,8 @@ final class SocksCommonTestUtils {
 
     @SuppressWarnings("deprecation")
     public static void writeMessageIntoEmbedder(EmbeddedChannel embedder, SocksMessage msg) {
-        ByteBuf buf = Unpooled.buffer();
-        msg.encodeAsByteBuf(buf);
+        Buffer buf = embedder.bufferAllocator().allocate(64);
+        msg.encodeAsBuffer(buf);
         embedder.writeInbound(buf);
     }
 }

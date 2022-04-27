@@ -15,15 +15,16 @@
  */
 package io.netty.contrib.handler.codec.socks;
 
-import io.netty.buffer.ByteBuf;
+import io.netty5.buffer.api.Buffer;
 import io.netty5.channel.ChannelHandlerContext;
-import io.netty5.handler.codec.ByteToMessageDecoder;
+import io.netty5.handler.codec.ByteToMessageDecoderForBuffer;
+import io.netty5.util.CharsetUtil;
 
 /**
- * Decodes {@link ByteBuf}s into {@link SocksAuthRequest}.
+ * Decodes {@link Buffer}s into {@link SocksAuthRequest}.
  * Before returning SocksRequest decoder removes itself from pipeline.
  */
-public class SocksAuthRequestDecoder extends ByteToMessageDecoder {
+public class SocksAuthRequestDecoder extends ByteToMessageDecoderForBuffer {
 
     private enum State {
         CHECK_PROTOCOL_VERSION,
@@ -34,40 +35,40 @@ public class SocksAuthRequestDecoder extends ByteToMessageDecoder {
     private String username;
 
     @Override
-    protected void decode(ChannelHandlerContext ctx, ByteBuf byteBuf) throws Exception {
+    protected void decode(ChannelHandlerContext ctx, Buffer buffer) throws Exception {
         switch (state) {
             case CHECK_PROTOCOL_VERSION: {
-                if (byteBuf.readableBytes() < 1) {
+                if (buffer.readableBytes() < 1) {
                     return;
                 }
-                if (byteBuf.readByte() != SocksSubnegotiationVersion.AUTH_PASSWORD.byteValue()) {
+                if (buffer.readByte() != SocksSubnegotiationVersion.AUTH_PASSWORD.byteValue()) {
                     ctx.fireChannelRead(SocksCommonUtils.UNKNOWN_SOCKS_REQUEST);
                     break;
                 }
                 state = State.READ_USERNAME;
             }
             case READ_USERNAME: {
-                if (byteBuf.readableBytes() < 1) {
+                if (buffer.readableBytes() < 1) {
                     return;
                 }
-                int fieldLength = byteBuf.getByte(byteBuf.readerIndex());
-                if (byteBuf.readableBytes() < 1 + fieldLength) {
+                int fieldLength = buffer.getByte(buffer.readerOffset());
+                if (buffer.readableBytes() < 1 + fieldLength) {
                     return;
                 }
-                byteBuf.skipBytes(1);
-                username = SocksCommonUtils.readUsAscii(byteBuf, fieldLength);
+                buffer.skipReadable(1);
+                username = buffer.readCharSequence(fieldLength, CharsetUtil.US_ASCII).toString();
                 state = State.READ_PASSWORD;
             }
             case READ_PASSWORD: {
-                if (byteBuf.readableBytes() < 1) {
+                if (buffer.readableBytes() < 1) {
                     return;
                 }
-                int fieldLength = byteBuf.getByte(byteBuf.readerIndex());
-                if (byteBuf.readableBytes() < 1 + fieldLength) {
+                int fieldLength = buffer.getByte(buffer.readerOffset());
+                if (buffer.readableBytes() < 1 + fieldLength) {
                     return;
                 }
-                byteBuf.skipBytes(1);
-                String password = SocksCommonUtils.readUsAscii(byteBuf, fieldLength);
+                buffer.skipReadable(1);
+                String password = buffer.readCharSequence(fieldLength, CharsetUtil.US_ASCII).toString();
                 ctx.fireChannelRead(new SocksAuthRequest(username, password));
                 break;
             }

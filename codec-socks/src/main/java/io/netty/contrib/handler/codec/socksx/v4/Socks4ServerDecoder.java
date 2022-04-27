@@ -15,22 +15,23 @@
  */
 package io.netty.contrib.handler.codec.socksx.v4;
 
-import io.netty.buffer.ByteBuf;
+import io.netty5.buffer.api.Buffer;
 import io.netty5.channel.ChannelHandlerContext;
-import io.netty5.handler.codec.ByteToMessageDecoder;
+import io.netty5.handler.codec.ByteToMessageDecoderForBuffer;
 import io.netty5.handler.codec.DecoderException;
 import io.netty5.handler.codec.DecoderResult;
 import io.netty.contrib.handler.codec.socksx.SocksVersion;
+import io.netty5.util.ByteProcessor;
 import io.netty5.util.CharsetUtil;
 import io.netty5.util.NetUtil;
 
 /**
- * Decodes a single {@link Socks4CommandRequest} from the inbound {@link ByteBuf}s.
+ * Decodes a single {@link Socks4CommandRequest} from the inbound {@link Buffer}s.
  * On successful decode, this decoder will forward the received data to the next handler, so that
  * other handler can remove this decoder later.  On failed decode, this decoder will discard the
  * received data, so that other handler closes the connection later.
  */
-public class Socks4ServerDecoder extends ByteToMessageDecoder {
+public class Socks4ServerDecoder extends ByteToMessageDecoderForBuffer {
 
     private static final int MAX_FIELD_LENGTH = 255;
 
@@ -53,7 +54,7 @@ public class Socks4ServerDecoder extends ByteToMessageDecoder {
     }
 
     @Override
-    protected void decode(ChannelHandlerContext ctx, ByteBuf in) throws Exception {
+    protected void decode(ChannelHandlerContext ctx, Buffer in) throws Exception {
         try {
             switch (state) {
             case START: {
@@ -93,12 +94,12 @@ public class Socks4ServerDecoder extends ByteToMessageDecoder {
             case SUCCESS: {
                 int readableBytes = actualReadableBytes();
                 if (readableBytes > 0) {
-                    ctx.fireChannelRead(in.readRetainedSlice(readableBytes));
+                    ctx.fireChannelRead(in.readSplit(readableBytes));
                 }
                 break;
             }
             case FAILURE: {
-                in.skipBytes(actualReadableBytes());
+                in.skipReadable(actualReadableBytes());
                 break;
             }
             }
@@ -127,14 +128,14 @@ public class Socks4ServerDecoder extends ByteToMessageDecoder {
     /**
      * Reads a variable-length NUL-terminated string as defined in SOCKS4.
      */
-    private static String readString(String fieldName, ByteBuf in) {
-        int length = in.bytesBefore(Math.min(in.readableBytes(), MAX_FIELD_LENGTH + 1), (byte) 0);
-        if (length >= 0) {
+    private static String readString(String fieldName, Buffer in) {
+        int length = in.bytesBefore((byte) 0);
+        if (length >= 0 && length < MAX_FIELD_LENGTH) {
             if (in.readableBytes() < length + 1) {
                 return null;
             }
-            String value = in.readSlice(length).toString(CharsetUtil.US_ASCII);
-            in.skipBytes(1); // Skip the NUL.
+            String value = in.readCharSequence(length, CharsetUtil.US_ASCII).toString();
+            in.skipReadable(1); // Skip the NUL.
 
             return value;
         }

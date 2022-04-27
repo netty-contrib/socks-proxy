@@ -15,19 +15,19 @@
  */
 package io.netty.contrib.handler.codec.socks;
 
-import io.netty.buffer.ByteBuf;
+import io.netty5.buffer.api.Buffer;
 import io.netty5.channel.ChannelHandlerContext;
-import io.netty5.handler.codec.ByteToMessageDecoder;
+import io.netty5.handler.codec.ByteToMessageDecoderForBuffer;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 /**
- * Decodes {@link ByteBuf}s into {@link SocksInitRequest}.
+ * Decodes {@link Buffer}s into {@link SocksInitRequest}.
  * Before returning SocksRequest decoder removes itself from pipeline.
  */
-public class SocksInitRequestDecoder extends ByteToMessageDecoder {
+public class SocksInitRequestDecoder extends ByteToMessageDecoderForBuffer {
 
     private enum State {
         CHECK_PROTOCOL_VERSION,
@@ -36,32 +36,32 @@ public class SocksInitRequestDecoder extends ByteToMessageDecoder {
     private State state = State.CHECK_PROTOCOL_VERSION;
 
     @Override
-    protected void decode(ChannelHandlerContext ctx, ByteBuf byteBuf) throws Exception {
+    protected void decode(ChannelHandlerContext ctx, Buffer buffer) throws Exception {
         switch (state) {
             case CHECK_PROTOCOL_VERSION: {
-                if (byteBuf.readableBytes() < 1) {
+                if (buffer.readableBytes() < 1) {
                     return;
                 }
-                if (byteBuf.readByte() != SocksProtocolVersion.SOCKS5.byteValue()) {
+                if (buffer.readByte() != SocksProtocolVersion.SOCKS5.byteValue()) {
                     ctx.fireChannelRead(SocksCommonUtils.UNKNOWN_SOCKS_REQUEST);
                     break;
                 }
                 state = State.READ_AUTH_SCHEMES;
             }
             case READ_AUTH_SCHEMES: {
-                if (byteBuf.readableBytes() < 1) {
+                if (buffer.readableBytes() < 1) {
                     return;
                 }
-                final byte authSchemeNum = byteBuf.getByte(byteBuf.readerIndex());
-                if (byteBuf.readableBytes() < 1 + authSchemeNum) {
+                final byte authSchemeNum = buffer.getByte(buffer.readerOffset());
+                if (buffer.readableBytes() < 1 + authSchemeNum) {
                     return;
                 }
-                byteBuf.skipBytes(1);
+                buffer.skipReadable(1);
                 final List<SocksAuthScheme> authSchemes;
                 if (authSchemeNum > 0) {
                     authSchemes = new ArrayList<>(authSchemeNum);
                     for (int i = 0; i < authSchemeNum; i++) {
-                        authSchemes.add(SocksAuthScheme.valueOf(byteBuf.readByte()));
+                        authSchemes.add(SocksAuthScheme.valueOf(buffer.readByte()));
                     }
                 } else {
                     authSchemes = Collections.emptyList();

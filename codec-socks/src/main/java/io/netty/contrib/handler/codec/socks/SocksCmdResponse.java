@@ -15,7 +15,7 @@
  */
 package io.netty.contrib.handler.codec.socks;
 
-import io.netty.buffer.ByteBuf;
+import io.netty5.buffer.api.Buffer;
 import io.netty5.util.CharsetUtil;
 import io.netty5.util.NetUtil;
 
@@ -138,35 +138,35 @@ public final class SocksCmdResponse extends SocksResponse {
     }
 
     @Override
-    public void encodeAsByteBuf(ByteBuf byteBuf) {
-        byteBuf.writeByte(protocolVersion().byteValue());
-        byteBuf.writeByte(cmdStatus.byteValue());
-        byteBuf.writeByte(0x00);
-        byteBuf.writeByte(addressType.byteValue());
+    public void encodeAsBuffer(Buffer buffer) {
+        buffer.writeByte(protocolVersion().byteValue());
+        buffer.writeByte(cmdStatus.byteValue());
+        buffer.writeByte((byte) 0x00);
+        buffer.writeByte(addressType.byteValue());
         switch (addressType) {
             case IPv4: {
                 byte[] hostContent = host == null ?
                         IPv4_HOSTNAME_ZEROED : NetUtil.createByteArrayFromIpAddressString(host);
-                byteBuf.writeBytes(hostContent);
-                byteBuf.writeShort(port);
+                buffer.writeBytes(hostContent);
+                buffer.writeShort((short) port);
                 break;
             }
             case DOMAIN: {
                 if (host != null) {
-                    byteBuf.writeByte(host.length());
-                    byteBuf.writeCharSequence(host, CharsetUtil.US_ASCII);
+                    buffer.writeByte((byte) host.length());
+                    buffer.writeCharSequence(host, CharsetUtil.US_ASCII);
                 } else {
-                    byteBuf.writeByte(DOMAIN_ZEROED.length);
-                    byteBuf.writeBytes(DOMAIN_ZEROED);
+                    buffer.writeByte((byte) DOMAIN_ZEROED.length);
+                    buffer.writeBytes(DOMAIN_ZEROED);
                 }
-                byteBuf.writeShort(port);
+                buffer.writeShort((short) port);
                 break;
             }
             case IPv6: {
                 byte[] hostContent = host == null
                         ? IPv6_HOSTNAME_ZEROED : NetUtil.createByteArrayFromIpAddressString(host);
-                byteBuf.writeBytes(hostContent);
-                byteBuf.writeShort(port);
+                buffer.writeBytes(hostContent);
+                buffer.writeShort((short) port);
                 break;
             }
         }

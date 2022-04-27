@@ -15,20 +15,20 @@
  */
 package io.netty.contrib.handler.codec.socksx.v5;
 
-import io.netty.buffer.ByteBuf;
+import io.netty5.buffer.api.Buffer;
 import io.netty5.channel.ChannelHandler.Sharable;
 import io.netty5.channel.ChannelHandlerContext;
 import io.netty5.handler.codec.EncoderException;
-import io.netty5.handler.codec.MessageToByteEncoder;
+import io.netty5.handler.codec.MessageToByteEncoderForBuffer;
 import io.netty5.util.internal.StringUtil;
 
 import static java.util.Objects.requireNonNull;
 
 /**
- * Encodes a server-side {@link Socks5Message} into a {@link ByteBuf}.
+ * Encodes a server-side {@link Socks5Message} into a {@link Buffer}.
  */
 @Sharable
-public class Socks5ServerEncoder extends MessageToByteEncoder<Socks5Message> {
+public class Socks5ServerEncoder extends MessageToByteEncoderForBuffer<Socks5Message> {
 
     public static final Socks5ServerEncoder DEFAULT = new Socks5ServerEncoder(Socks5AddressEncoder.DEFAULT);
 
@@ -39,6 +39,11 @@ public class Socks5ServerEncoder extends MessageToByteEncoder<Socks5Message> {
      */
     protected Socks5ServerEncoder() {
         this(Socks5AddressEncoder.DEFAULT);
+    }
+
+    @Override
+    protected Buffer allocateBuffer(ChannelHandlerContext ctx, Socks5Message msg) {
+        return ctx.bufferAllocator().allocate(256);
     }
 
     /**
@@ -58,7 +63,7 @@ public class Socks5ServerEncoder extends MessageToByteEncoder<Socks5Message> {
     }
 
     @Override
-    protected void encode(ChannelHandlerContext ctx, Socks5Message msg, ByteBuf out) throws Exception {
+    protected void encode(ChannelHandlerContext ctx, Socks5Message msg, Buffer out) throws Exception {
         if (msg instanceof Socks5InitialResponse) {
             encodeAuthMethodResponse((Socks5InitialResponse) msg, out);
         } else if (msg instanceof Socks5PasswordAuthResponse) {
@@ -70,25 +75,25 @@ public class Socks5ServerEncoder extends MessageToByteEncoder<Socks5Message> {
         }
     }
 
-    private static void encodeAuthMethodResponse(Socks5InitialResponse msg, ByteBuf out) {
+    private static void encodeAuthMethodResponse(Socks5InitialResponse msg, Buffer out) {
         out.writeByte(msg.version().byteValue());
         out.writeByte(msg.authMethod().byteValue());
     }
 
-    private static void encodePasswordAuthResponse(Socks5PasswordAuthResponse msg, ByteBuf out) {
-        out.writeByte(0x01);
+    private static void encodePasswordAuthResponse(Socks5PasswordAuthResponse msg, Buffer out) {
+        out.writeByte((byte) 0x01);
         out.writeByte(msg.status().byteValue());
     }
 
-    private void encodeCommandResponse(Socks5CommandResponse msg, ByteBuf out) throws Exception {
+    private void encodeCommandResponse(Socks5CommandResponse msg, Buffer out) throws Exception {
         out.writeByte(msg.version().byteValue());
         out.writeByte(msg.status().byteValue());
-        out.writeByte(0x00);
+        out.writeByte((byte) 0x00);
 
         final Socks5AddressType bndAddrType = msg.bndAddrType();
         out.writeByte(bndAddrType.byteValue());
         addressEncoder.encodeAddress(bndAddrType, msg.bndAddr(), out);
 
-        out.writeShort(msg.bndPort());
+        out.writeShort((short) msg.bndPort());
     }
 }

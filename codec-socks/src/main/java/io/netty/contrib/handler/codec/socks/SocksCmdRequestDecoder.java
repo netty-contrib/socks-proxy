@@ -15,16 +15,17 @@
  */
 package io.netty.contrib.handler.codec.socks;
 
-import io.netty.buffer.ByteBuf;
+import io.netty5.buffer.api.Buffer;
 import io.netty5.channel.ChannelHandlerContext;
-import io.netty5.handler.codec.ByteToMessageDecoder;
+import io.netty5.handler.codec.ByteToMessageDecoderForBuffer;
+import io.netty5.util.CharsetUtil;
 import io.netty5.util.NetUtil;
 
 /**
- * Decodes {@link ByteBuf}s into {@link SocksCmdRequest}.
+ * Decodes {@link Buffer}s into {@link SocksCmdRequest}.
  * Before returning SocksRequest decoder removes itself from pipeline.
  */
-public class SocksCmdRequestDecoder extends ByteToMessageDecoder {
+public class SocksCmdRequestDecoder extends ByteToMessageDecoderForBuffer {
 
     private enum State {
         CHECK_PROTOCOL_VERSION,
@@ -37,60 +38,60 @@ public class SocksCmdRequestDecoder extends ByteToMessageDecoder {
     private SocksAddressType addressType;
 
     @Override
-    protected void decode(ChannelHandlerContext ctx, ByteBuf byteBuf) throws Exception {
+    protected void decode(ChannelHandlerContext ctx, Buffer buffer) throws Exception {
         switch (state) {
             case CHECK_PROTOCOL_VERSION: {
-                if (byteBuf.readableBytes() < 1) {
+                if (buffer.readableBytes() < 1) {
                     return;
                 }
-                if (byteBuf.readByte() != SocksProtocolVersion.SOCKS5.byteValue()) {
+                if (buffer.readByte() != SocksProtocolVersion.SOCKS5.byteValue()) {
                     ctx.fireChannelRead(SocksCommonUtils.UNKNOWN_SOCKS_REQUEST);
                     break;
                 }
                 state = State.READ_CMD_HEADER;
             }
             case READ_CMD_HEADER: {
-                if (byteBuf.readableBytes() < 3) {
+                if (buffer.readableBytes() < 3) {
                     return;
                 }
-                cmdType = SocksCmdType.valueOf(byteBuf.readByte());
-                byteBuf.skipBytes(1); // reserved
-                addressType = SocksAddressType.valueOf(byteBuf.readByte());
+                cmdType = SocksCmdType.valueOf(buffer.readByte());
+                buffer.skipReadable(1); // reserved
+                addressType = SocksAddressType.valueOf(buffer.readByte());
                 state = State.READ_CMD_ADDRESS;
             }
             case READ_CMD_ADDRESS: {
                 switch (addressType) {
                     case IPv4: {
-                        if (byteBuf.readableBytes() < 6) {
+                        if (buffer.readableBytes() < 6) {
                             return;
                         }
-                        String host = NetUtil.intToIpAddress(byteBuf.readInt());
-                        int port = byteBuf.readUnsignedShort();
+                        String host = NetUtil.intToIpAddress(buffer.readInt());
+                        int port = buffer.readUnsignedShort();
                         ctx.fireChannelRead(new SocksCmdRequest(cmdType, addressType, host, port));
                         break;
                     }
                     case DOMAIN: {
-                        if (byteBuf.readableBytes() < 1) {
+                        if (buffer.readableBytes() < 1) {
                             return;
                         }
-                        int fieldLength = byteBuf.getByte(byteBuf.readerIndex());
-                        if (byteBuf.readableBytes() < 3 + fieldLength) {
+                        int fieldLength = buffer.getByte(buffer.readerOffset());
+                        if (buffer.readableBytes() < 3 + fieldLength) {
                             return;
                         }
-                        byteBuf.skipBytes(1);
-                        String host = SocksCommonUtils.readUsAscii(byteBuf, fieldLength);
-                        int port = byteBuf.readUnsignedShort();
+                        buffer.skipReadable(1);
+                        String host = buffer.readCharSequence(fieldLength, CharsetUtil.US_ASCII).toString();
+                        int port = buffer.readUnsignedShort();
                         ctx.fireChannelRead(new SocksCmdRequest(cmdType, addressType, host, port));
                         break;
                     }
                     case IPv6: {
-                        if (byteBuf.readableBytes() < 18) {
+                        if (buffer.readableBytes() < 18) {
                             return;
                         }
                         byte[] bytes = new byte[16];
-                        byteBuf.readBytes(bytes);
+                        buffer.readBytes(bytes, 0, bytes.length);
                         String host = SocksCommonUtils.ipv6toStr(bytes);
-                        int port = byteBuf.readUnsignedShort();
+                        int port = buffer.readUnsignedShort();
                         ctx.fireChannelRead(new SocksCmdRequest(cmdType, addressType, host, port));
                         break;
                     }

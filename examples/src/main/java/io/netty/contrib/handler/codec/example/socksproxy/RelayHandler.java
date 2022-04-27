@@ -15,7 +15,6 @@
  */
 package io.netty.contrib.handler.codec.example.socksproxy;
 
-import io.netty.buffer.Unpooled;
 import io.netty5.channel.Channel;
 import io.netty5.channel.ChannelHandler;
 import io.netty5.channel.ChannelHandlerContext;
@@ -31,7 +30,7 @@ public final class RelayHandler implements ChannelHandler {
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) {
-        ctx.writeAndFlush(Unpooled.EMPTY_BUFFER);
+        ctx.writeAndFlush(ctx.bufferAllocator().allocate(0));
     }
 
     @Override

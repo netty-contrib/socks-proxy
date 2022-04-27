@@ -15,7 +15,7 @@
  */
 package io.netty.contrib.handler.codec.socksx.v5;
 
-import io.netty.buffer.ByteBuf;
+import io.netty5.buffer.api.Buffer;
 import io.netty5.handler.codec.DecoderException;
 import io.netty5.util.CharsetUtil;
 import io.netty5.util.NetUtil;
@@ -33,7 +33,7 @@ public interface Socks5AddressDecoder {
         private static final int IPv6_LEN = 16;
 
         @Override
-        public String decodeAddress(Socks5AddressType addrType, ByteBuf in) throws Exception {
+        public String decodeAddress(Socks5AddressType addrType, Buffer in) {
             int readableBytes = in.readableBytes();
             if (addrType == Socks5AddressType.IPv4) {
                 if (readableBytes < 4) {
@@ -45,28 +45,20 @@ public interface Socks5AddressDecoder {
                 if (readableBytes < 1) {
                     return null;
                 }
-                final int length = in.getUnsignedByte(in.readerIndex());
+                final int length = in.getUnsignedByte(in.readerOffset());
                 if (readableBytes - 1 < length) {
                     return null;
                 }
-                in.skipBytes(1);
-                final String domain = in.toString(in.readerIndex(), length, CharsetUtil.US_ASCII);
-                in.skipBytes(length);
-                return domain;
+                in.skipReadable(1);
+                return in.readCharSequence(length, CharsetUtil.US_ASCII).toString();
             }
             if (addrType == Socks5AddressType.IPv6) {
                 if (readableBytes < IPv6_LEN) {
                     return null;
                 }
-                if (in.hasArray()) {
-                    final int readerIdx = in.readerIndex();
-                    in.readerIndex(readerIdx + IPv6_LEN);
-                    return NetUtil.bytesToIpAddress(in.array(), in.arrayOffset() + readerIdx, IPv6_LEN);
-                } else {
-                    byte[] tmp = new byte[IPv6_LEN];
-                    in.readBytes(tmp);
-                    return NetUtil.bytesToIpAddress(tmp);
-                }
+                byte[] tmp = new byte[IPv6_LEN];
+                in.readBytes(tmp, 0, tmp.length);
+                return NetUtil.bytesToIpAddress(tmp);
             } else {
                 throw new DecoderException("unsupported address type: " + (addrType.byteValue() & 0xFF));
             }
@@ -80,5 +72,5 @@ public interface Socks5AddressDecoder {
      * @param in the input buffer which contains the SOCKS5 address field at its reader index
      * @return the address or {@code null} if not enough bytes are readable yet.
      */
-    String decodeAddress(Socks5AddressType addrType, ByteBuf in) throws Exception;
+    String decodeAddress(Socks5AddressType addrType, Buffer in) throws Exception;
 }

@@ -15,15 +15,15 @@
  */
 package io.netty.contrib.handler.codec.socks;
 
-import io.netty.buffer.ByteBuf;
+import io.netty5.buffer.api.Buffer;
 import io.netty5.channel.ChannelHandlerContext;
-import io.netty5.handler.codec.ByteToMessageDecoder;
+import io.netty5.handler.codec.ByteToMessageDecoderForBuffer;
 
 /**
- * Decodes {@link ByteBuf}s into {@link SocksAuthResponse}.
+ * Decodes {@link Buffer}s into {@link SocksAuthResponse}.
  * Before returning SocksResponse decoder removes itself from pipeline.
  */
-public class SocksAuthResponseDecoder extends ByteToMessageDecoder {
+public class SocksAuthResponseDecoder extends ByteToMessageDecoderForBuffer {
 
     private enum State {
         CHECK_PROTOCOL_VERSION,
@@ -33,24 +33,24 @@ public class SocksAuthResponseDecoder extends ByteToMessageDecoder {
     private State state = State.CHECK_PROTOCOL_VERSION;
 
     @Override
-    protected void decode(ChannelHandlerContext ctx, ByteBuf byteBuf)
+    protected void decode(ChannelHandlerContext ctx, Buffer buffer)
             throws Exception {
         switch (state) {
             case CHECK_PROTOCOL_VERSION: {
-                if (byteBuf.readableBytes() < 1) {
+                if (buffer.readableBytes() < 1) {
                     return;
                 }
-                if (byteBuf.readByte() != SocksSubnegotiationVersion.AUTH_PASSWORD.byteValue()) {
+                if (buffer.readByte() != SocksSubnegotiationVersion.AUTH_PASSWORD.byteValue()) {
                     ctx.fireChannelRead(SocksCommonUtils.UNKNOWN_SOCKS_RESPONSE);
                     break;
                 }
                 state = State.READ_AUTH_RESPONSE;
             }
             case READ_AUTH_RESPONSE: {
-                if (byteBuf.readableBytes() < 1) {
+                if (buffer.readableBytes() < 1) {
                     return;
                 }
-                SocksAuthStatus authStatus = SocksAuthStatus.valueOf(byteBuf.readByte());
+                SocksAuthStatus authStatus = SocksAuthStatus.valueOf(buffer.readByte());
                 ctx.fireChannelRead(new SocksAuthResponse(authStatus));
                 break;
             }

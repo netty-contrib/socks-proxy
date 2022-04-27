@@ -15,7 +15,6 @@
  */
 package io.netty.contrib.handler.codec.example.socksproxy;
 
-import io.netty.buffer.Unpooled;
 import io.netty5.channel.Channel;
 import io.netty5.channel.ChannelFutureListeners;
 
@@ -26,7 +25,7 @@ public final class SocksServerUtils {
      */
     public static void closeOnFlush(Channel ch) {
         if (ch.isActive()) {
-            ch.writeAndFlush(Unpooled.EMPTY_BUFFER).addListener(ch, ChannelFutureListeners.CLOSE);
+            ch.writeAndFlush(ch.bufferAllocator().allocate(0)).addListener(ch, ChannelFutureListeners.CLOSE);
         }
     }
 

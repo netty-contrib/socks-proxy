@@ -15,8 +15,6 @@
  */
 package io.netty.contrib.handler.codec.socks;
 
-import io.netty.buffer.ByteBuf;
-import io.netty5.util.CharsetUtil;
 import io.netty5.util.internal.StringUtil;
 
 final class SocksCommonUtils {
@@ -55,11 +53,5 @@ final class SocksCommonUtils {
 
     private static void appendHextet(StringBuilder sb, byte[] src, int i) {
         StringUtil.toHexString(sb, src, i << 1, 2);
-    }
-
-    static String readUsAscii(ByteBuf buffer, int length) {
-        String s = buffer.toString(buffer.readerIndex(), length, CharsetUtil.US_ASCII);
-        buffer.skipBytes(length);
-        return s;
     }
 }

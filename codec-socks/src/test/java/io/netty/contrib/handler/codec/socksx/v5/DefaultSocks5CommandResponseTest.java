@@ -15,7 +15,7 @@
  */
 package io.netty.contrib.handler.codec.socksx.v5;
 
-import io.netty.buffer.ByteBuf;
+import io.netty5.buffer.api.Buffer;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
@@ -42,18 +42,18 @@ public class DefaultSocks5CommandResponseTest {
         assertNull(socks5CmdResponse.bndAddr());
         assertEquals(0, socks5CmdResponse.bndPort());
 
-        ByteBuf buffer = Socks5CommonTestUtils.encodeServer(socks5CmdResponse);
-        byte[] expected = {
-                0x05, // version
-                0x00, // success reply
-                0x00, // reserved
-                0x03, // address type domain
-                0x00, // length of domain
-                0x00, // port value
-                0x00
-        };
-        assertByteBufEquals(expected, buffer);
-        buffer.release();
+        try (Buffer buffer = Socks5CommonTestUtils.encodeServer(socks5CmdResponse)) {
+            byte[] expected = {
+                    0x05, // version
+                    0x00, // success reply
+                    0x00, // reserved
+                    0x03, // address type domain
+                    0x00, // length of domain
+                    0x00, // port value
+                    0x00
+            };
+            assertBufferEquals(expected, buffer);
+        }
     }
 
     /**
@@ -66,21 +66,21 @@ public class DefaultSocks5CommandResponseTest {
         assertEquals("127.0.0.1", socks5CmdResponse.bndAddr());
         assertEquals(80, socks5CmdResponse.bndPort());
 
-        ByteBuf buffer = Socks5CommonTestUtils.encodeServer(socks5CmdResponse);
-        byte[] expected = {
-                0x05, // version
-                0x00, // success reply
-                0x00, // reserved
-                0x01, // address type IPv4
-                0x7F, // address 127.0.0.1
-                0x00,
-                0x00,
-                0x01,
-                0x00, // port
-                0x50
-                };
-        assertByteBufEquals(expected, buffer);
-        buffer.release();
+        try (Buffer buffer = Socks5CommonTestUtils.encodeServer(socks5CmdResponse)) {
+            byte[] expected = {
+                    0x05, // version
+                    0x00, // success reply
+                    0x00, // reserved
+                    0x01, // address type IPv4
+                    0x7F, // address 127.0.0.1
+                    0x00,
+                    0x00,
+                    0x01,
+                    0x00, // port
+                    0x50
+            };
+            assertBufferEquals(expected, buffer);
+        }
     }
 
     /**
@@ -93,18 +93,18 @@ public class DefaultSocks5CommandResponseTest {
         assertEquals("", socks5CmdResponse.bndAddr());
         assertEquals(80, socks5CmdResponse.bndPort());
 
-        ByteBuf buffer = Socks5CommonTestUtils.encodeServer(socks5CmdResponse);
-        byte[] expected = {
-                0x05, // version
-                0x00, // success reply
-                0x00, // reserved
-                0x03, // address type domain
-                0x00, // domain length
-                0x00, // port
-                0x50
-        };
-        assertByteBufEquals(expected, buffer);
-        buffer.release();
+        try (Buffer buffer = Socks5CommonTestUtils.encodeServer(socks5CmdResponse)) {
+            byte[] expected = {
+                    0x05, // version
+                    0x00, // success reply
+                    0x00, // reserved
+                    0x03, // address type domain
+                    0x00, // domain length
+                    0x00, // port
+                    0x50
+            };
+            assertBufferEquals(expected, buffer);
+        }
     }
 
     /**
@@ -116,9 +116,9 @@ public class DefaultSocks5CommandResponseTest {
                 Socks5CommandStatus.SUCCESS, Socks5AddressType.IPv4, "127.0.0", 1000));
     }
 
-    private static void assertByteBufEquals(byte[] expected, ByteBuf actual) {
+    private static void assertBufferEquals(byte[] expected, Buffer actual) {
         byte[] actualBytes = new byte[actual.readableBytes()];
-        actual.readBytes(actualBytes);
+        actual.readBytes(actualBytes, 0, actualBytes.length);
         assertEquals(expected.length, actualBytes.length, "Generated response has incorrect length");
         assertArrayEquals(expected, actualBytes, "Generated response differs from expected");
     }
