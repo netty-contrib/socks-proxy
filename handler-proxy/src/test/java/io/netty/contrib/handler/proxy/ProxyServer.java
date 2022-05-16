@@ -44,7 +44,7 @@ import java.util.ArrayDeque;
 import java.util.Queue;
 import java.util.concurrent.LinkedBlockingQueue;
 
-import static io.netty5.buffer.ByteBufUtil.writeAscii;
+import static io.netty5.buffer.BufferUtil.writeAscii;
 
 abstract class ProxyServer {
 

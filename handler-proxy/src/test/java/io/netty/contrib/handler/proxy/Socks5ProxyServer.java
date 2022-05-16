@@ -41,7 +41,7 @@ import io.netty5.util.internal.SocketUtils;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 
-import static io.netty5.buffer.ByteBufUtil.writeAscii;
+import static io.netty5.buffer.BufferUtil.writeAscii;
 import static org.assertj.core.api.Assertions.assertThat;
 
 final class Socks5ProxyServer extends ProxyServer {

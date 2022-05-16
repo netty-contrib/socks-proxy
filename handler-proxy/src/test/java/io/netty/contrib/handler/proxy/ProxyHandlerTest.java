@@ -61,7 +61,7 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
-import static io.netty5.buffer.ByteBufUtil.writeAscii;
+import static io.netty5.buffer.BufferUtil.writeAscii;
 import static io.netty5.buffer.api.DefaultBufferAllocators.preferredAllocator;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;

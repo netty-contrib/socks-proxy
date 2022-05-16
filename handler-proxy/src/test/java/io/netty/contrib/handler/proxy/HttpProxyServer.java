@@ -36,7 +36,7 @@ import java.net.SocketAddress;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
-import static io.netty5.buffer.ByteBufUtil.writeAscii;
+import static io.netty5.buffer.BufferUtil.writeAscii;
 import static io.netty5.buffer.api.DefaultBufferAllocators.preferredAllocator;
 import static org.assertj.core.api.Assertions.assertThat;
 
