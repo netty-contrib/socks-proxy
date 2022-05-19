@@ -64,7 +64,7 @@ public class Socks5InitialResponseDecoder extends ByteToMessageDecoderForBuffer 
                 break;
             }
             case FAILURE: {
-                in.skipReadable(actualReadableBytes());
+                in.skipReadableBytes(actualReadableBytes());
                 break;
             }
             }

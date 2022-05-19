@@ -55,7 +55,7 @@ public class SocksAuthRequestDecoder extends ByteToMessageDecoderForBuffer {
                 if (buffer.readableBytes() < 1 + fieldLength) {
                     return;
                 }
-                buffer.skipReadable(1);
+                buffer.skipReadableBytes(1);
                 username = buffer.readCharSequence(fieldLength, CharsetUtil.US_ASCII).toString();
                 state = State.READ_PASSWORD;
             }
@@ -67,7 +67,7 @@ public class SocksAuthRequestDecoder extends ByteToMessageDecoderForBuffer {
                 if (buffer.readableBytes() < 1 + fieldLength) {
                     return;
                 }
-                buffer.skipReadable(1);
+                buffer.skipReadableBytes(1);
                 String password = buffer.readCharSequence(fieldLength, CharsetUtil.US_ASCII).toString();
                 ctx.fireChannelRead(new SocksAuthRequest(username, password));
                 break;

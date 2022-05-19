@@ -54,7 +54,7 @@ public class SocksCmdResponseDecoder extends ByteToMessageDecoderForBuffer {
                     return;
                 }
                 cmdStatus = SocksCmdStatus.valueOf(buffer.readByte());
-                buffer.skipReadable(1); // reserved
+                buffer.skipReadableBytes(1); // reserved
                 addressType = SocksAddressType.valueOf(buffer.readByte());
                 state = State.READ_CMD_ADDRESS;
             }
@@ -77,7 +77,7 @@ public class SocksCmdResponseDecoder extends ByteToMessageDecoderForBuffer {
                         if (buffer.readableBytes() < 3 + fieldLength) {
                             return;
                         }
-                        buffer.skipReadable(1);
+                        buffer.skipReadableBytes(1);
                         String host = buffer.readCharSequence(fieldLength, CharsetUtil.US_ASCII).toString();
                         int port = buffer.readUnsignedShort();
                         ctx.fireChannelRead(new SocksCmdResponse(cmdStatus, addressType, host, port));

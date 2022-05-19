@@ -62,7 +62,7 @@ public class Socks5PasswordAuthResponseDecoder extends ByteToMessageDecoderForBu
                 break;
             }
             case FAILURE: {
-                in.skipReadable(actualReadableBytes());
+                in.skipReadableBytes(actualReadableBytes());
                 break;
             }
             }

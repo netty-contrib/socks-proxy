@@ -58,9 +58,9 @@ public class Socks5PasswordAuthRequestDecoder extends ByteToMessageDecoderForBuf
                 if (in.readableBytes() < totalLength) {
                     return;
                 }
-                in.skipReadable(2);
+                in.skipReadableBytes(2);
                 String username = in.readCharSequence(usernameLength, CharsetUtil.US_ASCII).toString();
-                in.skipReadable(1);
+                in.skipReadableBytes(1);
                 String password = in.readCharSequence(passwordLength, CharsetUtil.US_ASCII).toString();
                 ctx.fireChannelRead(new DefaultSocks5PasswordAuthRequest(username, password));
 
@@ -74,7 +74,7 @@ public class Socks5PasswordAuthRequestDecoder extends ByteToMessageDecoderForBuf
                 break;
             }
             case FAILURE: {
-                in.skipReadable(actualReadableBytes());
+                in.skipReadableBytes(actualReadableBytes());
                 break;
             }
             }

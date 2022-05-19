@@ -56,7 +56,7 @@ public class SocksInitRequestDecoder extends ByteToMessageDecoderForBuffer {
                 if (buffer.readableBytes() < 1 + authSchemeNum) {
                     return;
                 }
-                buffer.skipReadable(1);
+                buffer.skipReadableBytes(1);
                 final List<SocksAuthScheme> authSchemes;
                 if (authSchemeNum > 0) {
                     authSchemes = new ArrayList<>(authSchemeNum);

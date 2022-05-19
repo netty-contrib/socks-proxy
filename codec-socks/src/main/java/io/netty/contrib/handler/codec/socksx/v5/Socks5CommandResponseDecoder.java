@@ -63,7 +63,7 @@ public class Socks5CommandResponseDecoder extends ByteToMessageDecoderForBuffer 
                             "unsupported version: " + version + " (expected: " + SocksVersion.SOCKS5.byteValue() + ')');
                 }
                 final Socks5CommandStatus status = Socks5CommandStatus.valueOf(in.readByte());
-                in.skipReadable(1); // Reserved
+                in.skipReadableBytes(1); // Reserved
                 final Socks5AddressType addrType = Socks5AddressType.valueOf(in.readByte());
                 final String addr = addressDecoder.decodeAddress(addrType, in);
                 if (addr == null || in.readableBytes() < 2) {
@@ -83,7 +83,7 @@ public class Socks5CommandResponseDecoder extends ByteToMessageDecoderForBuffer 
                 break;
             }
             case FAILURE: {
-                in.skipReadable(actualReadableBytes());
+                in.skipReadableBytes(actualReadableBytes());
                 break;
             }
             }
