@@ -49,7 +49,7 @@ public interface Socks5AddressDecoder {
                 if (readableBytes - 1 < length) {
                     return null;
                 }
-                in.skipReadable(1);
+                in.skipReadableBytes(1);
                 return in.readCharSequence(length, CharsetUtil.US_ASCII).toString();
             }
             if (addrType == Socks5AddressType.IPv6) {

@@ -21,7 +21,6 @@ import io.netty5.handler.codec.ByteToMessageDecoderForBuffer;
 import io.netty5.handler.codec.DecoderException;
 import io.netty5.handler.codec.DecoderResult;
 import io.netty.contrib.handler.codec.socksx.SocksVersion;
-import io.netty5.util.ByteProcessor;
 import io.netty5.util.CharsetUtil;
 import io.netty5.util.NetUtil;
 
@@ -99,7 +98,7 @@ public class Socks4ServerDecoder extends ByteToMessageDecoderForBuffer {
                 break;
             }
             case FAILURE: {
-                in.skipReadable(actualReadableBytes());
+                in.skipReadableBytes(actualReadableBytes());
                 break;
             }
             }
@@ -135,7 +134,7 @@ public class Socks4ServerDecoder extends ByteToMessageDecoderForBuffer {
                 return null;
             }
             String value = in.readCharSequence(length, CharsetUtil.US_ASCII).toString();
-            in.skipReadable(1); // Skip the NUL.
+            in.skipReadableBytes(1); // Skip the NUL.
 
             return value;
         }

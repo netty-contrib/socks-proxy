@@ -66,7 +66,7 @@ public class Socks5CommandRequestDecoder extends ByteToMessageDecoderForBuffer {
                 }
 
                 final Socks5CommandType type = Socks5CommandType.valueOf(in.readByte());
-                in.skipReadable(1); // RSV
+                in.skipReadableBytes(1); // RSV
                 final Socks5AddressType dstAddrType = Socks5AddressType.valueOf(in.readByte());
 
                 final String dstAddr = addressDecoder.decodeAddress(dstAddrType, in);
@@ -88,7 +88,7 @@ public class Socks5CommandRequestDecoder extends ByteToMessageDecoderForBuffer {
                 break;
             }
             case FAILURE: {
-                in.skipReadable(actualReadableBytes());
+                in.skipReadableBytes(actualReadableBytes());
                 break;
             }
             }

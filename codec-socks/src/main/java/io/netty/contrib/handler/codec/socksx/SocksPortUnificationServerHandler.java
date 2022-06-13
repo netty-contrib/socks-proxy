@@ -81,7 +81,7 @@ public class SocksPortUnificationServerHandler extends ByteToMessageDecoderForBu
             break;
         default:
             logUnknownVersion(ctx, versionVal);
-            in.skipReadable(in.readableBytes());
+            in.skipReadableBytes(in.readableBytes());
             ctx.close();
             return;
         }

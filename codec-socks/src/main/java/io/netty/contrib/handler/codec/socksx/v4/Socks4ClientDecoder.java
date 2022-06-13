@@ -72,7 +72,7 @@ public class Socks4ClientDecoder extends ByteToMessageDecoderForBuffer {
                 break;
             }
             case FAILURE: {
-                in.skipReadable(actualReadableBytes());
+                in.skipReadableBytes(actualReadableBytes());
                 break;
             }
             }
