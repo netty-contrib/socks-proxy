@@ -44,6 +44,7 @@ import io.netty5.util.internal.logging.InternalLogger;
 import io.netty5.util.internal.logging.InternalLoggerFactory;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -100,36 +101,53 @@ public class ProxyHandlerTest {
         clientSslCtx = cctx;
     }
 
-    static final ProxyServer deadHttpProxy = new HttpProxyServer(false, TestMode.UNRESPONSIVE, null);
-    static final ProxyServer interHttpProxy = new HttpProxyServer(false, TestMode.INTERMEDIARY, null);
-    static final ProxyServer anonHttpProxy = new HttpProxyServer(false, TestMode.TERMINAL, DESTINATION);
-    static final ProxyServer httpProxy =
-            new HttpProxyServer(false, TestMode.TERMINAL, DESTINATION, USERNAME, PASSWORD);
+    static ProxyServer deadHttpProxy;
+    static ProxyServer interHttpProxy;
+    static ProxyServer anonHttpProxy;
+    static ProxyServer httpProxy;
+    static ProxyServer deadHttpsProxy;
+    static ProxyServer interHttpsProxy;
+    static ProxyServer anonHttpsProxy;
+    static ProxyServer httpsProxy;
+    static ProxyServer deadSocks4Proxy;
+    static ProxyServer interSocks4Proxy;
+    static ProxyServer anonSocks4Proxy;
+    static ProxyServer socks4Proxy;
+    static ProxyServer deadSocks5Proxy;
+    static ProxyServer interSocks5Proxy;
+    static ProxyServer anonSocks5Proxy;
+    static ProxyServer socks5Proxy;
+    private static Collection<ProxyServer> allProxies;
 
-    static final ProxyServer deadHttpsProxy = new HttpProxyServer(true, TestMode.UNRESPONSIVE, null);
-    static final ProxyServer interHttpsProxy = new HttpProxyServer(true, TestMode.INTERMEDIARY, null);
-    static final ProxyServer anonHttpsProxy = new HttpProxyServer(true, TestMode.TERMINAL, DESTINATION);
-    static final ProxyServer httpsProxy =
-            new HttpProxyServer(true, TestMode.TERMINAL, DESTINATION, USERNAME, PASSWORD);
+    @BeforeAll
+    public static void startServers() throws InterruptedException {
+        deadHttpProxy = new HttpProxyServer(false, TestMode.UNRESPONSIVE, null);
+        interHttpProxy = new HttpProxyServer(false, TestMode.INTERMEDIARY, null);
+        anonHttpProxy = new HttpProxyServer(false, TestMode.TERMINAL, DESTINATION);
+        httpProxy = new HttpProxyServer(false, TestMode.TERMINAL, DESTINATION, USERNAME, PASSWORD);
 
-    static final ProxyServer deadSocks4Proxy = new Socks4ProxyServer(false, TestMode.UNRESPONSIVE, null);
-    static final ProxyServer interSocks4Proxy = new Socks4ProxyServer(false, TestMode.INTERMEDIARY, null);
-    static final ProxyServer anonSocks4Proxy = new Socks4ProxyServer(false, TestMode.TERMINAL, DESTINATION);
-    static final ProxyServer socks4Proxy = new Socks4ProxyServer(false, TestMode.TERMINAL, DESTINATION, USERNAME);
+        deadHttpsProxy = new HttpProxyServer(true, TestMode.UNRESPONSIVE, null);
+        interHttpsProxy = new HttpProxyServer(true, TestMode.INTERMEDIARY, null);
+        anonHttpsProxy = new HttpProxyServer(true, TestMode.TERMINAL, DESTINATION);
+        httpsProxy = new HttpProxyServer(true, TestMode.TERMINAL, DESTINATION, USERNAME, PASSWORD);
 
-    static final ProxyServer deadSocks5Proxy = new Socks5ProxyServer(false, TestMode.UNRESPONSIVE, null);
-    static final ProxyServer interSocks5Proxy = new Socks5ProxyServer(false, TestMode.INTERMEDIARY, null);
-    static final ProxyServer anonSocks5Proxy = new Socks5ProxyServer(false, TestMode.TERMINAL, DESTINATION);
-    static final ProxyServer socks5Proxy =
-            new Socks5ProxyServer(false, TestMode.TERMINAL, DESTINATION, USERNAME, PASSWORD);
+        deadSocks4Proxy = new Socks4ProxyServer(false, TestMode.UNRESPONSIVE, null);
+        interSocks4Proxy = new Socks4ProxyServer(false, TestMode.INTERMEDIARY, null);
+        anonSocks4Proxy = new Socks4ProxyServer(false, TestMode.TERMINAL, DESTINATION);
+        socks4Proxy = new Socks4ProxyServer(false, TestMode.TERMINAL, DESTINATION, USERNAME);
 
-    private static final Collection<ProxyServer> allProxies = Arrays.asList(
-            deadHttpProxy, interHttpProxy, anonHttpProxy, httpProxy,
-            deadHttpsProxy, interHttpsProxy, anonHttpsProxy, httpsProxy,
-            deadSocks4Proxy, interSocks4Proxy, anonSocks4Proxy, socks4Proxy,
-            deadSocks5Proxy, interSocks5Proxy, anonSocks5Proxy, socks5Proxy
-    );
+        deadSocks5Proxy = new Socks5ProxyServer(false, TestMode.UNRESPONSIVE, null);
+        interSocks5Proxy = new Socks5ProxyServer(false, TestMode.INTERMEDIARY, null);
+        anonSocks5Proxy = new Socks5ProxyServer(false, TestMode.TERMINAL, DESTINATION);
+        socks5Proxy = new Socks5ProxyServer(false, TestMode.TERMINAL, DESTINATION, USERNAME, PASSWORD);
 
+        allProxies = Arrays.asList(
+                deadHttpProxy, interHttpProxy, anonHttpProxy, httpProxy,
+                deadHttpsProxy, interHttpsProxy, anonHttpsProxy, httpsProxy,
+                deadSocks4Proxy, interSocks4Proxy, anonSocks4Proxy, socks4Proxy,
+                deadSocks5Proxy, interSocks5Proxy, anonSocks5Proxy, socks5Proxy
+        );
+    }
     // set to non-zero value in case you need predictable shuffling of test cases
     // look for "Seed used: *" debug message in test logs
     private static final long reproducibleSeed = 0L;
@@ -466,7 +484,7 @@ public class ProxyHandlerTest {
         }
 
         @Override
-        public void userEventTriggered(ChannelHandlerContext ctx, Object evt) {
+        public void inboundEventTriggered(ChannelHandlerContext ctx, Object evt) {
             if (evt instanceof ProxyConnectionEvent) {
                 eventCount ++;
 
@@ -527,7 +545,7 @@ public class ProxyHandlerTest {
         }
 
         @Override
-        public void userEventTriggered(ChannelHandlerContext ctx, Object evt) {
+        public void inboundEventTriggered(ChannelHandlerContext ctx, Object evt) {
             if (evt instanceof ProxyConnectionEvent) {
                 fail("Unexpected event: " + evt);
             }

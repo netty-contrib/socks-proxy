@@ -278,7 +278,7 @@ public abstract class ProxyHandler implements ChannelHandler {
 
             removedCodec &= safeRemoveEncoder();
 
-            ctx.fireUserEventTriggered(
+            ctx.fireInboundEventTriggered(
                     new ProxyConnectionEvent(protocol(), authScheme(), proxyAddress, destinationAddress));
 
             removedCodec &= safeRemoveDecoder();

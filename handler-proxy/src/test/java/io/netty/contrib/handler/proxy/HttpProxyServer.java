@@ -42,12 +42,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 final class HttpProxyServer extends ProxyServer {
 
-    HttpProxyServer(boolean useSsl, TestMode testMode, InetSocketAddress destination) {
+    HttpProxyServer(boolean useSsl, TestMode testMode, InetSocketAddress destination) throws InterruptedException {
         super(useSsl, testMode, destination);
     }
 
     HttpProxyServer(
-            boolean useSsl, TestMode testMode, InetSocketAddress destination, String username, String password) {
+            boolean useSsl, TestMode testMode, InetSocketAddress destination, String username, String password)
+            throws InterruptedException {
         super(useSsl, testMode, destination, username, password);
     }
 

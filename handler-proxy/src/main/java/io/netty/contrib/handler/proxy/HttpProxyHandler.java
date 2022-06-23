@@ -18,6 +18,7 @@ package io.netty.contrib.handler.proxy;
 import io.netty5.channel.ChannelHandler;
 import io.netty5.channel.ChannelHandlerContext;
 import io.netty5.channel.ChannelPipeline;
+import io.netty5.channel.ChannelShutdownDirection;
 import io.netty5.handler.codec.http.DefaultFullHttpRequest;
 import io.netty5.handler.codec.http.FullHttpRequest;
 import io.netty5.handler.codec.http.HttpClientCodec;
@@ -263,6 +264,11 @@ public final class HttpProxyHandler extends ProxyHandler {
         }
 
         @Override
+        public void channelShutdown(ChannelHandlerContext ctx, ChannelShutdownDirection direction) throws Exception {
+            codec.channelShutdown(ctx, direction);
+        }
+
+        @Override
         public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
             codec.channelRead(ctx, msg);
         }
@@ -273,8 +279,8 @@ public final class HttpProxyHandler extends ProxyHandler {
         }
 
         @Override
-        public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
-            codec.userEventTriggered(ctx, evt);
+        public void inboundEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
+            codec.inboundEventTriggered(ctx, evt);
         }
 
         @Override
@@ -304,6 +310,16 @@ public final class HttpProxyHandler extends ProxyHandler {
         }
 
         @Override
+        public Future<Void> shutdown(ChannelHandlerContext ctx, ChannelShutdownDirection direction) {
+            return codec.shutdown(ctx, direction);
+        }
+
+        @Override
+        public Future<Void> register(ChannelHandlerContext ctx) {
+            return codec.register(ctx);
+        }
+
+        @Override
         public Future<Void> deregister(ChannelHandlerContext ctx) {
             return codec.deregister(ctx);
         }
@@ -321,6 +337,11 @@ public final class HttpProxyHandler extends ProxyHandler {
         @Override
         public void flush(ChannelHandlerContext ctx) {
             codec.flush(ctx);
+        }
+
+        @Override
+        public Future<Void> triggerOutboundEvent(ChannelHandlerContext ctx, Object event) {
+            return codec.triggerOutboundEvent(ctx, event);
         }
     }
 }
