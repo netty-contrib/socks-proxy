@@ -65,7 +65,8 @@ abstract class ProxyServer {
      * @param destination the expected destination. If the client requests proxying to a different destination, this
      * server will reject the connection request.
      */
-    protected ProxyServer(boolean useSsl, TestMode testMode, InetSocketAddress destination) {
+    protected ProxyServer(boolean useSsl, TestMode testMode, InetSocketAddress destination)
+            throws InterruptedException {
         this(useSsl, testMode, destination, null, null);
     }
 
@@ -83,7 +84,7 @@ abstract class ProxyServer {
      */
     protected ProxyServer(
             final boolean useSsl, TestMode testMode,
-            InetSocketAddress destination, String username, String password) {
+            InetSocketAddress destination, String username, String password) throws InterruptedException {
 
         this.testMode = testMode;
         this.destination = destination;
@@ -105,7 +106,7 @@ abstract class ProxyServer {
             }
         });
 
-        ch = (ServerSocketChannel) b.bind(NetUtil.LOCALHOST, 0).syncUninterruptibly().getNow();
+        ch = (ServerSocketChannel) b.bind(NetUtil.LOCALHOST, 0).sync().getNow();
     }
 
     public final InetSocketAddress address() {

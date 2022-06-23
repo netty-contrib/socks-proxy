@@ -49,12 +49,13 @@ final class Socks5ProxyServer extends ProxyServer {
     private static final String ENCODER = "encoder";
     private static final String DECODER = "decoder";
 
-    Socks5ProxyServer(boolean useSsl, TestMode testMode, InetSocketAddress destination) {
+    Socks5ProxyServer(boolean useSsl, TestMode testMode, InetSocketAddress destination) throws InterruptedException {
         super(useSsl, testMode, destination);
     }
 
     Socks5ProxyServer(
-            boolean useSsl, TestMode testMode, InetSocketAddress destination, String username, String password) {
+            boolean useSsl, TestMode testMode, InetSocketAddress destination, String username, String password)
+            throws InterruptedException {
         super(useSsl, testMode, destination, username, password);
     }
 

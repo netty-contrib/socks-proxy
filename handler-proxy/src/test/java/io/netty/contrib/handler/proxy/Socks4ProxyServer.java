@@ -36,11 +36,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 final class Socks4ProxyServer extends ProxyServer {
 
-    Socks4ProxyServer(boolean useSsl, TestMode testMode, InetSocketAddress destination) {
+    Socks4ProxyServer(boolean useSsl, TestMode testMode, InetSocketAddress destination) throws InterruptedException {
         super(useSsl, testMode, destination);
     }
 
-    Socks4ProxyServer(boolean useSsl, TestMode testMode, InetSocketAddress destination, String username) {
+    Socks4ProxyServer(boolean useSsl, TestMode testMode, InetSocketAddress destination, String username)
+            throws InterruptedException {
         super(useSsl, testMode, destination, username, null);
     }
 
