@@ -126,7 +126,7 @@ public final class SocksServerConnectHandler extends SimpleChannelInboundHandler
     }
 
     @Override
-    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+    public void channelExceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
         SocksServerUtils.closeOnFlush(ctx.channel());
     }
 }

@@ -35,7 +35,7 @@ public final class DirectClientHandler implements ChannelHandler {
     }
 
     @Override
-    public void exceptionCaught(ChannelHandlerContext ctx, Throwable throwable) {
+    public void channelExceptionCaught(ChannelHandlerContext ctx, Throwable throwable) {
         promise.setFailure(throwable);
     }
 }
