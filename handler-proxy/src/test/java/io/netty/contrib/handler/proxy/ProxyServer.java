@@ -224,7 +224,7 @@ abstract class ProxyServer {
         }
 
         @Override
-        public final void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
+        public final void channelExceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
             recordException(cause);
             ctx.close();
         }
@@ -253,7 +253,7 @@ abstract class ProxyServer {
             }
 
             @Override
-            public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
+            public void channelExceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
                 recordException(cause);
                 ctx.close();
             }
@@ -295,7 +295,7 @@ abstract class ProxyServer {
         }
 
         @Override
-        public final void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
+        public final void channelExceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
             recordException(cause);
             ctx.close();
         }

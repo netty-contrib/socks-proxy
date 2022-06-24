@@ -239,8 +239,8 @@ public final class HttpProxyHandler extends ProxyHandler {
         }
 
         @Override
-        public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-            codec.exceptionCaught(ctx, cause);
+        public void channelExceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+            codec.channelExceptionCaught(ctx, cause);
         }
 
         @Override
@@ -279,8 +279,8 @@ public final class HttpProxyHandler extends ProxyHandler {
         }
 
         @Override
-        public void inboundEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
-            codec.inboundEventTriggered(ctx, evt);
+        public void channelInboundEvent(ChannelHandlerContext ctx, Object evt) throws Exception {
+            codec.channelInboundEvent(ctx, evt);
         }
 
         @Override
@@ -340,8 +340,8 @@ public final class HttpProxyHandler extends ProxyHandler {
         }
 
         @Override
-        public Future<Void> triggerOutboundEvent(ChannelHandlerContext ctx, Object event) {
-            return codec.triggerOutboundEvent(ctx, event);
+        public Future<Void> sendOutboundEvent(ChannelHandlerContext ctx, Object event) {
+            return codec.sendOutboundEvent(ctx, event);
         }
     }
 }

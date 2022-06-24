@@ -217,7 +217,7 @@ public class HttpProxyHandlerTest {
                         ch.pipeline().addFirst(new HttpProxyHandler(addr));
                         ch.pipeline().addLast(new ChannelHandler() {
                             @Override
-                            public void exceptionCaught(ChannelHandlerContext ctx,
+                            public void channelExceptionCaught(ChannelHandlerContext ctx,
                                 Throwable cause) {
                                 exception.set(cause);
                             }

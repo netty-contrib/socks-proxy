@@ -226,9 +226,9 @@ public abstract class ProxyHandler implements ChannelHandler {
     }
 
     @Override
-    public final void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+    public final void channelExceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
         if (finished) {
-            ctx.fireExceptionCaught(cause);
+            ctx.fireChannelExceptionCaught(cause);
         } else {
             // Exception was raised before the connection attempt is finished.
             setConnectFailure(cause);
@@ -278,7 +278,7 @@ public abstract class ProxyHandler implements ChannelHandler {
 
             removedCodec &= safeRemoveEncoder();
 
-            ctx.fireInboundEventTriggered(
+            ctx.fireChannelInboundEvent(
                     new ProxyConnectionEvent(protocol(), authScheme(), proxyAddress, destinationAddress));
 
             removedCodec &= safeRemoveDecoder();
@@ -341,7 +341,7 @@ public abstract class ProxyHandler implements ChannelHandler {
     private void failPendingWritesAndClose(Throwable cause) {
         failPendingWrites(cause);
         connectPromise.tryFailure(cause);
-        ctx.fireExceptionCaught(cause);
+        ctx.fireChannelExceptionCaught(cause);
         ctx.close();
     }
 

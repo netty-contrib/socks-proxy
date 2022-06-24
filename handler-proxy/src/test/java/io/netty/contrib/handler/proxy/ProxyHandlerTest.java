@@ -484,7 +484,7 @@ public class ProxyHandlerTest {
         }
 
         @Override
-        public void inboundEventTriggered(ChannelHandlerContext ctx, Object evt) {
+        public void channelInboundEvent(ChannelHandlerContext ctx, Object evt) {
             if (evt instanceof ProxyConnectionEvent) {
                 eventCount ++;
 
@@ -508,7 +508,7 @@ public class ProxyHandlerTest {
         }
 
         @Override
-        public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
+        public void channelExceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
             exceptions.add(cause);
             ctx.close();
         }
@@ -545,7 +545,7 @@ public class ProxyHandlerTest {
         }
 
         @Override
-        public void inboundEventTriggered(ChannelHandlerContext ctx, Object evt) {
+        public void channelInboundEvent(ChannelHandlerContext ctx, Object evt) {
             if (evt instanceof ProxyConnectionEvent) {
                 fail("Unexpected event: " + evt);
             }
@@ -557,7 +557,7 @@ public class ProxyHandlerTest {
         }
 
         @Override
-        public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
+        public void channelExceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
             exceptions.add(cause);
             ctx.close();
         }
