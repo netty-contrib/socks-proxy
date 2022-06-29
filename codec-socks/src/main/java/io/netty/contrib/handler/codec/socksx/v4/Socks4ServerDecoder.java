@@ -17,7 +17,7 @@ package io.netty.contrib.handler.codec.socksx.v4;
 
 import io.netty5.buffer.api.Buffer;
 import io.netty5.channel.ChannelHandlerContext;
-import io.netty5.handler.codec.ByteToMessageDecoderForBuffer;
+import io.netty5.handler.codec.ByteToMessageDecoder;
 import io.netty5.handler.codec.DecoderException;
 import io.netty5.handler.codec.DecoderResult;
 import io.netty.contrib.handler.codec.socksx.SocksVersion;
@@ -30,7 +30,7 @@ import io.netty5.util.NetUtil;
  * other handler can remove this decoder later.  On failed decode, this decoder will discard the
  * received data, so that other handler closes the connection later.
  */
-public class Socks4ServerDecoder extends ByteToMessageDecoderForBuffer {
+public class Socks4ServerDecoder extends ByteToMessageDecoder {
 
     private static final int MAX_FIELD_LENGTH = 255;
 

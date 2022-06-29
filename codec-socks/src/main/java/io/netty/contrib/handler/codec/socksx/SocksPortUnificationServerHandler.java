@@ -23,7 +23,7 @@ import io.netty.contrib.handler.codec.socksx.v4.Socks4ServerEncoder;
 import io.netty.contrib.handler.codec.socksx.v5.Socks5AddressEncoder;
 import io.netty.contrib.handler.codec.socksx.v5.Socks5InitialRequestDecoder;
 import io.netty.contrib.handler.codec.socksx.v5.Socks5ServerEncoder;
-import io.netty5.handler.codec.ByteToMessageDecoderForBuffer;
+import io.netty5.handler.codec.ByteToMessageDecoder;
 import io.netty5.util.internal.logging.InternalLogger;
 import io.netty5.util.internal.logging.InternalLoggerFactory;
 
@@ -33,7 +33,7 @@ import static java.util.Objects.requireNonNull;
  * Detects the version of the current SOCKS connection and initializes the pipeline with
  * {@link Socks4ServerDecoder} or {@link Socks5InitialRequestDecoder}.
  */
-public class SocksPortUnificationServerHandler extends ByteToMessageDecoderForBuffer {
+public class SocksPortUnificationServerHandler extends ByteToMessageDecoder {
 
     private static final InternalLogger logger =
             InternalLoggerFactory.getInstance(SocksPortUnificationServerHandler.class);
