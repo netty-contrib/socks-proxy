@@ -16,7 +16,6 @@
 package io.netty.contrib.handler.codec.socksx.v4;
 
 import io.netty5.buffer.api.Buffer;
-import io.netty5.channel.ChannelHandler.Sharable;
 import io.netty5.channel.ChannelHandlerContext;
 import io.netty5.handler.codec.MessageToByteEncoder;
 import io.netty5.util.CharsetUtil;
@@ -25,7 +24,6 @@ import io.netty5.util.NetUtil;
 /**
  * Encodes a {@link Socks4CommandRequest} into a {@link Buffer}.
  */
-@Sharable
 public final class Socks4ClientEncoder extends MessageToByteEncoder<Socks4CommandRequest> {
 
     /**
@@ -58,5 +56,10 @@ public final class Socks4ClientEncoder extends MessageToByteEncoder<Socks4Comman
             out.writeCharSequence(msg.dstAddr(), CharsetUtil.US_ASCII);
             out.writeByte((byte) 0);
         }
+    }
+
+    @Override
+    public boolean isSharable() {
+        return true;
     }
 }
