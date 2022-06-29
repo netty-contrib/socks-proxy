@@ -16,16 +16,14 @@
 package io.netty.contrib.handler.codec.socksx.v4;
 
 import io.netty5.buffer.api.Buffer;
-import io.netty5.channel.ChannelHandler.Sharable;
 import io.netty5.channel.ChannelHandlerContext;
-import io.netty5.handler.codec.MessageToByteEncoderForBuffer;
+import io.netty5.handler.codec.MessageToByteEncoder;
 import io.netty5.util.NetUtil;
 
 /**
  * Encodes a {@link Socks4CommandResponse} into a {@link Buffer}.
  */
-@Sharable
-public final class Socks4ServerEncoder extends MessageToByteEncoderForBuffer<Socks4CommandResponse> {
+public final class Socks4ServerEncoder extends MessageToByteEncoder<Socks4CommandResponse> {
 
     public static final Socks4ServerEncoder INSTANCE = new Socks4ServerEncoder();
 
@@ -45,5 +43,10 @@ public final class Socks4ServerEncoder extends MessageToByteEncoderForBuffer<Soc
         out.writeShort((short) msg.dstPort());
         out.writeBytes(msg.dstAddr() == null? IPv4_HOSTNAME_ZEROED
                                             : NetUtil.createByteArrayFromIpAddressString(msg.dstAddr()));
+    }
+
+    @Override
+    public boolean isSharable() {
+        return true;
     }
 }

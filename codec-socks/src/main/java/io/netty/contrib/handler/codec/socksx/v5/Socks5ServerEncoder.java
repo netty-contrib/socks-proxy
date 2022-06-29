@@ -16,10 +16,9 @@
 package io.netty.contrib.handler.codec.socksx.v5;
 
 import io.netty5.buffer.api.Buffer;
-import io.netty5.channel.ChannelHandler.Sharable;
 import io.netty5.channel.ChannelHandlerContext;
 import io.netty5.handler.codec.EncoderException;
-import io.netty5.handler.codec.MessageToByteEncoderForBuffer;
+import io.netty5.handler.codec.MessageToByteEncoder;
 import io.netty5.util.internal.StringUtil;
 
 import static java.util.Objects.requireNonNull;
@@ -27,8 +26,7 @@ import static java.util.Objects.requireNonNull;
 /**
  * Encodes a server-side {@link Socks5Message} into a {@link Buffer}.
  */
-@Sharable
-public class Socks5ServerEncoder extends MessageToByteEncoderForBuffer<Socks5Message> {
+public class Socks5ServerEncoder extends MessageToByteEncoder<Socks5Message> {
 
     public static final Socks5ServerEncoder DEFAULT = new Socks5ServerEncoder(Socks5AddressEncoder.DEFAULT);
 
@@ -95,5 +93,10 @@ public class Socks5ServerEncoder extends MessageToByteEncoderForBuffer<Socks5Mes
         addressEncoder.encodeAddress(bndAddrType, msg.bndAddr(), out);
 
         out.writeShort((short) msg.bndPort());
+    }
+
+    @Override
+    public boolean isSharable() {
+        return true;
     }
 }

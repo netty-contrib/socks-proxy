@@ -15,11 +15,9 @@
  */
 package io.netty.contrib.handler.proxy;
 
-import io.netty5.channel.ChannelHandler.Sharable;
 import io.netty5.channel.ChannelHandlerContext;
 import io.netty5.channel.SimpleChannelInboundHandler;
 
-@Sharable
 final class UnresponsiveHandler extends SimpleChannelInboundHandler<Object> {
 
     static final UnresponsiveHandler INSTANCE = new UnresponsiveHandler();
@@ -29,5 +27,10 @@ final class UnresponsiveHandler extends SimpleChannelInboundHandler<Object> {
     @Override
     protected void messageReceived(ChannelHandlerContext ctx, Object msg) throws Exception {
         // Ignore
+    }
+
+    @Override
+    public boolean isSharable() {
+        return true;
     }
 }

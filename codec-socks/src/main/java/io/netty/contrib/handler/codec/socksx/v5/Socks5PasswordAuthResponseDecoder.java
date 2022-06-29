@@ -17,7 +17,7 @@ package io.netty.contrib.handler.codec.socksx.v5;
 
 import io.netty5.buffer.api.Buffer;
 import io.netty5.channel.ChannelHandlerContext;
-import io.netty5.handler.codec.ByteToMessageDecoderForBuffer;
+import io.netty5.handler.codec.ByteToMessageDecoder;
 import io.netty5.handler.codec.DecoderException;
 import io.netty5.handler.codec.DecoderResult;
 
@@ -27,7 +27,7 @@ import io.netty5.handler.codec.DecoderResult;
  * other handler can remove or replace this decoder later.  On failed decode, this decoder will
  * discard the received data, so that other handler closes the connection later.
  */
-public class Socks5PasswordAuthResponseDecoder extends ByteToMessageDecoderForBuffer {
+public class Socks5PasswordAuthResponseDecoder extends ByteToMessageDecoder {
 
     private enum State {
         INIT,

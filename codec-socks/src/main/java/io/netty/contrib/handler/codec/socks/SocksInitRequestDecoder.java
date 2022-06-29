@@ -17,7 +17,7 @@ package io.netty.contrib.handler.codec.socks;
 
 import io.netty5.buffer.api.Buffer;
 import io.netty5.channel.ChannelHandlerContext;
-import io.netty5.handler.codec.ByteToMessageDecoderForBuffer;
+import io.netty5.handler.codec.ByteToMessageDecoder;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -27,7 +27,7 @@ import java.util.List;
  * Decodes {@link Buffer}s into {@link SocksInitRequest}.
  * Before returning SocksRequest decoder removes itself from pipeline.
  */
-public class SocksInitRequestDecoder extends ByteToMessageDecoderForBuffer {
+public class SocksInitRequestDecoder extends ByteToMessageDecoder {
 
     private enum State {
         CHECK_PROTOCOL_VERSION,

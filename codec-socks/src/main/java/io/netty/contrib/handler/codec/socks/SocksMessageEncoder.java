@@ -16,18 +16,16 @@
 package io.netty.contrib.handler.codec.socks;
 
 import io.netty5.buffer.api.Buffer;
-import io.netty5.channel.ChannelHandler;
 import io.netty5.channel.ChannelHandlerContext;
-import io.netty5.handler.codec.MessageToByteEncoderForBuffer;
+import io.netty5.handler.codec.MessageToByteEncoder;
 
 /**
  * Encodes an {@link SocksMessage} into a {@link Buffer}.
- * {@link MessageToByteEncoderForBuffer} implementation.
+ * {@link MessageToByteEncoder} implementation.
  * Use this with {@link SocksInitRequest}, {@link SocksInitResponse}, {@link SocksAuthRequest},
  * {@link SocksAuthResponse}, {@link SocksCmdRequest} and {@link SocksCmdResponse}
  */
-@ChannelHandler.Sharable
-public class SocksMessageEncoder extends MessageToByteEncoderForBuffer<SocksMessage> {
+public class SocksMessageEncoder extends MessageToByteEncoder<SocksMessage> {
 
     @Override
     protected Buffer allocateBuffer(ChannelHandlerContext ctx, SocksMessage msg) {
@@ -38,5 +36,10 @@ public class SocksMessageEncoder extends MessageToByteEncoderForBuffer<SocksMess
     @SuppressWarnings("deprecation")
     protected void encode(ChannelHandlerContext ctx, SocksMessage msg, Buffer out) {
         msg.encodeAsBuffer(out);
+    }
+
+    @Override
+    public boolean isSharable() {
+        return true;
     }
 }

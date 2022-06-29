@@ -17,14 +17,14 @@ package io.netty.contrib.handler.codec.socks;
 
 import io.netty5.buffer.api.Buffer;
 import io.netty5.channel.ChannelHandlerContext;
-import io.netty5.handler.codec.ByteToMessageDecoderForBuffer;
+import io.netty5.handler.codec.ByteToMessageDecoder;
 import io.netty5.util.CharsetUtil;
 
 /**
  * Decodes {@link Buffer}s into {@link SocksAuthRequest}.
  * Before returning SocksRequest decoder removes itself from pipeline.
  */
-public class SocksAuthRequestDecoder extends ByteToMessageDecoderForBuffer {
+public class SocksAuthRequestDecoder extends ByteToMessageDecoder {
 
     private enum State {
         CHECK_PROTOCOL_VERSION,

@@ -17,7 +17,6 @@ package io.netty.contrib.handler.codec.example.socksproxy;
 
 import io.netty5.bootstrap.Bootstrap;
 import io.netty5.channel.Channel;
-import io.netty5.channel.ChannelHandler;
 import io.netty5.channel.ChannelHandlerContext;
 import io.netty5.channel.ChannelOption;
 import io.netty5.channel.SimpleChannelInboundHandler;
@@ -32,7 +31,6 @@ import io.netty.contrib.handler.codec.socksx.v5.Socks5CommandStatus;
 import io.netty5.util.concurrent.Future;
 import io.netty5.util.concurrent.Promise;
 
-@ChannelHandler.Sharable
 public final class SocksServerConnectHandler extends SimpleChannelInboundHandler<SocksMessage> {
 
     private final Bootstrap b = new Bootstrap();
@@ -128,5 +126,10 @@ public final class SocksServerConnectHandler extends SimpleChannelInboundHandler
     @Override
     public void channelExceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
         SocksServerUtils.closeOnFlush(ctx.channel());
+    }
+
+    @Override
+    public boolean isSharable() {
+        return true;
     }
 }

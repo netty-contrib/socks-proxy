@@ -16,10 +16,9 @@
 package io.netty.contrib.handler.codec.socksx.v5;
 
 import io.netty5.buffer.api.Buffer;
-import io.netty5.channel.ChannelHandler.Sharable;
 import io.netty5.channel.ChannelHandlerContext;
 import io.netty5.handler.codec.EncoderException;
-import io.netty5.handler.codec.MessageToByteEncoderForBuffer;
+import io.netty5.handler.codec.MessageToByteEncoder;
 import io.netty5.util.CharsetUtil;
 import io.netty5.util.internal.StringUtil;
 
@@ -31,8 +30,7 @@ import static java.util.Objects.requireNonNull;
 /**
  * Encodes a client-side {@link Socks5Message} into a {@link Buffer}.
  */
-@Sharable
-public class Socks5ClientEncoder extends MessageToByteEncoderForBuffer<Socks5Message> {
+public class Socks5ClientEncoder extends MessageToByteEncoder<Socks5Message> {
 
     public static final Socks5ClientEncoder DEFAULT = new Socks5ClientEncoder();
 
@@ -118,5 +116,10 @@ public class Socks5ClientEncoder extends MessageToByteEncoderForBuffer<Socks5Mes
         out.writeByte(dstAddrType.byteValue());
         addressEncoder.encodeAddress(dstAddrType, msg.dstAddr(), out);
         out.writeShort((short) msg.dstPort());
+    }
+
+    @Override
+    public boolean isSharable() {
+        return true;
     }
 }
