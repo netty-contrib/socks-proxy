@@ -247,7 +247,7 @@ public abstract class ProxyHandler implements ChannelHandler {
             try {
                 boolean done = handleResponse(ctx, msg);
                 if (done) {
-                    setConnectSuccess();
+                    setConnectSuccess(ctx);
                 }
             } catch (Throwable t) {
                 cause = t;
@@ -269,7 +269,7 @@ public abstract class ProxyHandler implements ChannelHandler {
      */
     protected abstract boolean handleResponse(ChannelHandlerContext ctx, Object response) throws Exception;
 
-    private void setConnectSuccess() {
+    private void setConnectSuccess(ChannelHandlerContext ctx) {
         finished = true;
         cancelConnectTimeoutFuture();
 
@@ -284,7 +284,7 @@ public abstract class ProxyHandler implements ChannelHandler {
             removedCodec &= safeRemoveDecoder();
 
             if (removedCodec) {
-                writePendingWrites();
+                writePendingWrites(ctx);
 
                 if (flushedPrematurely) {
                     ctx.flush();
@@ -390,7 +390,7 @@ public abstract class ProxyHandler implements ChannelHandler {
     @Override
     public final Future<Void> write(ChannelHandlerContext ctx, Object msg) {
         if (finished) {
-            writePendingWrites();
+            writePendingWrites(ctx);
             return ctx.write(msg);
         }
         Promise<Void> promise = ctx.newPromise();
@@ -401,7 +401,7 @@ public abstract class ProxyHandler implements ChannelHandler {
     @Override
     public final void flush(ChannelHandlerContext ctx) {
         if (finished) {
-            writePendingWrites();
+            writePendingWrites(ctx);
             ctx.flush();
         } else {
             flushedPrematurely = true;
@@ -414,11 +414,11 @@ public abstract class ProxyHandler implements ChannelHandler {
         }
     }
 
-    private void writePendingWrites() {
+    private void writePendingWrites(ChannelHandlerContext ctx) {
         if (pendingWrites != null) {
             PendingWriteQueue queue = pendingWrites;
             pendingWrites = null;
-            queue.removeAndWriteAll();
+            queue.removeAndTransferAll(ctx::write);
         }
     }
 
@@ -432,7 +432,8 @@ public abstract class ProxyHandler implements ChannelHandler {
     private void addPendingWrite(ChannelHandlerContext ctx, Object msg, Promise<Void> promise) {
         PendingWriteQueue pendingWrites = this.pendingWrites;
         if (pendingWrites == null) {
-            this.pendingWrites = pendingWrites = new PendingWriteQueue(ctx);
+            this.pendingWrites = pendingWrites = new PendingWriteQueue(ctx.executor(),
+                    ctx.channel().config().getMessageSizeEstimator().newHandle());
         }
         pendingWrites.add(msg, promise);
     }
