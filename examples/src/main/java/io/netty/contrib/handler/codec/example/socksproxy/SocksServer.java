@@ -36,7 +36,7 @@ public final class SocksServer {
              .channel(NioServerSocketChannel.class)
              .handler(new LoggingHandler(LogLevel.INFO))
              .childHandler(new SocksServerInitializer());
-            b.bind(PORT).get().closeFuture().sync();
+            b.bind(PORT).asStage().get().closeFuture().sync();
         } finally {
             bossGroup.shutdownGracefully();
             workerGroup.shutdownGracefully();

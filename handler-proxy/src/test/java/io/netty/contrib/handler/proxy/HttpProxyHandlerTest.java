@@ -209,7 +209,7 @@ public class HttpProxyHandlerTest {
                             });
                         }
                     }).bind(addr);
-            serverChannel = sf.get();
+            serverChannel = sf.asStage().get();
             Future<Channel> cf = new Bootstrap().channel(LocalChannel.class).group(group).handler(
                 new ChannelInitializer<Channel>() {
                     @Override
@@ -224,7 +224,7 @@ public class HttpProxyHandlerTest {
                         });
                     }
                 }).connect(new InetSocketAddress("localhost", 1234));
-            clientChannel = cf.get();
+            clientChannel = cf.asStage().get();
             clientChannel.close().sync();
 
             assertTrue(exception.get() instanceof HttpProxyConnectException);
