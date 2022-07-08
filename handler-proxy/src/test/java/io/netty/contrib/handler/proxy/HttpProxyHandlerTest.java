@@ -225,7 +225,7 @@ public class HttpProxyHandlerTest {
                     }
                 }).connect(new InetSocketAddress("localhost", 1234));
             clientChannel = cf.asStage().get();
-            clientChannel.close().sync();
+            clientChannel.close().asStage().sync();
 
             assertTrue(exception.get() instanceof HttpProxyConnectException);
             HttpProxyConnectException actual = (HttpProxyConnectException) exception.get();
