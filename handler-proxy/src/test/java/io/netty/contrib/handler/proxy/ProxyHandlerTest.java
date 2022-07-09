@@ -659,7 +659,7 @@ public class ProxyHandlerTest {
             });
 
             Channel channel = b.connect(destination).asStage().get();
-            boolean finished = channel.closeFuture().await(10, TimeUnit.SECONDS);
+            boolean finished = channel.closeFuture().asStage().await(10, TimeUnit.SECONDS);
 
             logger.debug("Received messages: {}", testHandler.received);
 
@@ -708,7 +708,7 @@ public class ProxyHandlerTest {
             });
 
             Channel channel = b.connect(destination).asStage().get();
-            boolean finished = channel.closeFuture().await(10, TimeUnit.SECONDS);
+            boolean finished = channel.closeFuture().asStage().await(10, TimeUnit.SECONDS);
             finished &= testHandler.latch.await(10, TimeUnit.SECONDS);
 
             logger.debug("Recorded exceptions: {}", testHandler.exceptions);
@@ -755,7 +755,7 @@ public class ProxyHandlerTest {
 
             Channel channel = b.connect(DESTINATION).asStage().get();
             Future<Void> cf = channel.closeFuture();
-            boolean finished = cf.await(TIMEOUT * 2, TimeUnit.MILLISECONDS);
+            boolean finished = cf.asStage().await(TIMEOUT * 2, TimeUnit.MILLISECONDS);
             finished &= testHandler.latch.await(TIMEOUT * 2, TimeUnit.MILLISECONDS);
 
             logger.debug("Recorded exceptions: {}", testHandler.exceptions);

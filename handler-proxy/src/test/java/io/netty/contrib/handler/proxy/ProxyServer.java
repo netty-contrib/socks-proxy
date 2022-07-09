@@ -106,7 +106,7 @@ abstract class ProxyServer {
             }
         });
 
-        ch = (ServerSocketChannel) b.bind(NetUtil.LOCALHOST, 0).sync().getNow();
+        ch = (ServerSocketChannel) b.bind(NetUtil.LOCALHOST, 0).asStage().sync().getNow();
     }
 
     public final InetSocketAddress address() {
