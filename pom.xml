@@ -236,25 +236,14 @@
       </plugin>
       <plugin>
         <artifactId>maven-release-plugin</artifactId>
-        <version>2.5.3</version>
+        <version>3.0.0-M6</version>
         <configuration>
           <useReleaseProfile>false</useReleaseProfile>
-          <arguments>-P sonatype-oss-release -Dgpg.keyname=${release.gpg.keyname} -Dgpg.passphrase=${release.gpg.passphrase}</arguments>
+          <arguments>-P sonatype-oss-release -DskipTests -Dgpg.keyname=${release.gpg.keyname} -Dgpg.passphrase=${release.gpg.passphrase}</arguments>
           <autoVersionSubmodules>true</autoVersionSubmodules>
           <allowTimestampedSnapshots>false</allowTimestampedSnapshots>
+          <localCheckout>true</localCheckout>
         </configuration>
-        <dependencies>
-          <dependency>
-            <groupId>org.apache.maven.scm</groupId>
-            <artifactId>maven-scm-api</artifactId>
-            <version>1.9.4</version>
-          </dependency>
-          <dependency>
-            <groupId>org.apache.maven.scm</groupId>
-            <artifactId>maven-scm-provider-gitexe</artifactId>
-            <version>1.9.4</version>
-          </dependency>
-        </dependencies>
       </plugin>
       <plugin>
         <artifactId>maven-jar-plugin</artifactId>

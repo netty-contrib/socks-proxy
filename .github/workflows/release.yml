@@ -45,16 +45,11 @@ jobs:
       - name: Configure Maven Release Repository
         uses: s4u/maven-settings-action@v2
         with:
-          githubServer: false
           servers: |
             [{
               "id": "sonatype-nexus",
               "username": "${{ secrets.SONATYPE_USERNAME }}",
               "password": "${{ secrets.SONATYPE_PASSWORD }}"
-            },{
-              "id": "github",
-              "username": "${{ github.actor }}",
-              "password": "${{ secrets.GITHUB_TOKEN }}"
             }]
 
       # See https://docs.github.com/en/actions/learn-github-actions/workflow-commands-for-github-actions#setting-an-environment-variable
@@ -77,7 +72,7 @@ jobs:
           git commit -m 'Update versions for release'
 
       - name: Prepare release with Maven
-        run: mvn -B -ntp --file pom.xml release:prepare -DpreparationGoals=clean -DskipTests '-DreleaseVersion=${{ github.event.inputs.version }}' '-Dtag=${{ env.tag }}'
+        run: mvn -B -ntp --file pom.xml release:prepare -DpreparationGoals=clean -DskipTests '-DreleaseVersion=${{ github.event.inputs.version }}' '-Dtag=${{ env.tag }}' -Drelease.gpg.keyname=${{ secrets.GPG_KEYNAME }} -Drelease.gpg.passphrase=${{ secrets.GPG_PASSPHRASE }}
 
       - name: Perform release with Maven
         run: mvn -B -ntp --file pom.xml release:perform -Drelease.gpg.keyname=${{ secrets.GPG_KEYNAME }} -Drelease.gpg.passphrase=${{ secrets.GPG_PASSPHRASE }}
@@ -88,7 +83,7 @@ jobs:
           mvn versions:commit
           git add .
           git commit -m 'Update versions for development'
-          git push
+          git push --tags
 
       - name: Rollback release on failure
         if: ${{ failure() }}
