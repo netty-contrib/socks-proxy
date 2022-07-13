@@ -64,7 +64,7 @@ jobs:
 
       - name: Verify Build
         run: |
-          mvn clean install -B -ntp
+          mvn clean install -B -ntp -DperformRelease
 
       - name: Update versions for release
         run: |
