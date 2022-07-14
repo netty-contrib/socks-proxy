@@ -38,9 +38,9 @@ public final class SocksInitRequest extends SocksRequest {
     }
 
     /**
-     * Returns the List<{@link SocksAuthScheme}> of this {@link SocksInitRequest}
+     * Returns the List&lt;{@link SocksAuthScheme}&gt; of this {@link SocksInitRequest}
      *
-     * @return The List<{@link SocksAuthScheme}> of this {@link SocksInitRequest}
+     * @return The List&lt;{@link SocksAuthScheme}&gt; of this {@link SocksInitRequest}
      */
     public List<SocksAuthScheme> authSchemes() {
         return Collections.unmodifiableList(authSchemes);
