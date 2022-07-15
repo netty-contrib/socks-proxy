@@ -24,7 +24,7 @@
 
   <groupId>io.netty.contrib</groupId>
   <artifactId>netty-socks-proxy-parent</artifactId>
-  <version>5.0.1.Alpha1-SNAPSHOT</version>
+  <version>5.0.0.Alpha2-SNAPSHOT</version>
   <name>Netty/Codec/Socks Proxy Parent</name>
   <packaging>pom</packaging>
   <url>https://netty.io/</url>
