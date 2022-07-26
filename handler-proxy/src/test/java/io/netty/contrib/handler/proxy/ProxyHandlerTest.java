@@ -472,7 +472,7 @@ public class ProxyHandlerTest {
         volatile int eventCount;
 
         private static void readIfNeeded(ChannelHandlerContext ctx) {
-            if (!ctx.channel().config().isAutoRead()) {
+            if (!ctx.channel().getOption(ChannelOption.AUTO_READ)) {
                 ctx.read();
             }
         }

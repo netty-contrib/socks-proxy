@@ -24,7 +24,7 @@ import static java.util.Objects.requireNonNull;
  */
 public abstract class AbstractSocksMessage implements SocksMessage {
 
-    private DecoderResult decoderResult = DecoderResult.SUCCESS;
+    private DecoderResult decoderResult = DecoderResult.success();
 
     @Override
     public DecoderResult decoderResult() {

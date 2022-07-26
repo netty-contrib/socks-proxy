@@ -18,6 +18,7 @@ package io.netty.contrib.handler.proxy;
 import io.netty5.channel.Channel;
 import io.netty5.channel.ChannelHandler;
 import io.netty5.channel.ChannelHandlerContext;
+import io.netty5.channel.ChannelOption;
 import io.netty5.channel.PendingWriteQueue;
 import io.netty5.util.ReferenceCountUtil;
 import io.netty5.util.concurrent.DefaultPromise;
@@ -409,7 +410,7 @@ public abstract class ProxyHandler implements ChannelHandler {
     }
 
     private static void readIfNeeded(ChannelHandlerContext ctx) {
-        if (!ctx.channel().config().isAutoRead()) {
+        if (!ctx.channel().getOption(ChannelOption.AUTO_READ)) {
             ctx.read();
         }
     }
@@ -433,7 +434,7 @@ public abstract class ProxyHandler implements ChannelHandler {
         PendingWriteQueue pendingWrites = this.pendingWrites;
         if (pendingWrites == null) {
             this.pendingWrites = pendingWrites = new PendingWriteQueue(ctx.executor(),
-                    ctx.channel().config().getMessageSizeEstimator().newHandle());
+                    ctx.channel().getOption(ChannelOption.MESSAGE_SIZE_ESTIMATOR).newHandle());
         }
         pendingWrites.add(msg, promise);
     }

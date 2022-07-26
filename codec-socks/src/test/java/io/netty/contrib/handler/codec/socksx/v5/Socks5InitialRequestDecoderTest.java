@@ -33,7 +33,7 @@ public class Socks5InitialRequestDecoderTest {
 
         assertTrue(o instanceof DefaultSocks5InitialRequest);
         DefaultSocks5InitialRequest req = (DefaultSocks5InitialRequest) o;
-        assertSame(req.decoderResult(), DecoderResult.SUCCESS);
+        assertSame(req.decoderResult(), DecoderResult.success());
         assertFalse(e.finish());
     }
 }
