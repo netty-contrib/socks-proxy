@@ -5,11 +5,11 @@
     <parent>
         <groupId>io.netty.contrib</groupId>
         <artifactId>netty-socks-proxy-parent</artifactId>
-        <version>5.0.1.Alpha1-SNAPSHOT</version>
+        <version>5.0.0.Alpha2-SNAPSHOT</version>
     </parent>
 
     <artifactId>netty-handler-proxy</artifactId>
-    <version>5.0.1.Alpha1-SNAPSHOT</version>
+    <version>5.0.0.Alpha2-SNAPSHOT</version>
 
     <build>
         <extensions>
