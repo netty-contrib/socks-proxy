@@ -19,6 +19,7 @@ import io.netty5.channel.ChannelHandler;
 import io.netty5.channel.ChannelHandlerContext;
 import io.netty5.channel.ChannelPipeline;
 import io.netty5.channel.ChannelShutdownDirection;
+import io.netty5.channel.ReadBufferAllocator;
 import io.netty5.handler.codec.http.DefaultFullHttpRequest;
 import io.netty5.handler.codec.http.FullHttpRequest;
 import io.netty5.handler.codec.http.HttpClientCodec;
@@ -325,8 +326,13 @@ public final class HttpProxyHandler extends ProxyHandler {
         }
 
         @Override
-        public void read(ChannelHandlerContext ctx)  {
-            codec.read(ctx);
+        public void read(ChannelHandlerContext ctx, ReadBufferAllocator readBufferAllocator) {
+            codec.read(ctx, readBufferAllocator);
+        }
+
+        @Override
+        public long pendingOutboundBytes(ChannelHandlerContext ctx) {
+            return codec.pendingOutboundBytes(ctx);
         }
 
         @Override
