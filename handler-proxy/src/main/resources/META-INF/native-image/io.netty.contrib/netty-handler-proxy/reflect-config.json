@@ -1,0 +1,22 @@
+[
+  {
+    "name": "io.netty.contrib.handler.proxy.HttpProxyHandler",
+    "queryAllPublicMethods": true
+  },
+  {
+    "name": "io.netty.contrib.handler.proxy.HttpProxyHandler$HttpClientCodecWrapper",
+    "queryAllPublicMethods": true
+  },
+  {
+    "name": "io.netty.contrib.handler.proxy.ProxyHandler",
+    "queryAllPublicMethods": true
+  },
+  {
+    "name": "io.netty.contrib.handler.proxy.Socks4ProxyHandler",
+    "queryAllPublicMethods": true
+  },
+  {
+    "name": "io.netty.contrib.handler.proxy.Socks5ProxyHandler",
+    "queryAllPublicMethods": true
+  }
+]
