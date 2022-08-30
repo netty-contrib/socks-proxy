@@ -21,7 +21,7 @@ import io.netty5.handler.codec.ByteToMessageDecoder;
 import io.netty5.handler.codec.DecoderException;
 import io.netty5.handler.codec.DecoderResult;
 import io.netty.contrib.handler.codec.socksx.SocksVersion;
-import io.netty5.util.CharsetUtil;
+import java.nio.charset.StandardCharsets;
 import io.netty5.util.NetUtil;
 
 /**
@@ -133,7 +133,7 @@ public class Socks4ServerDecoder extends ByteToMessageDecoder {
             if (in.readableBytes() < length + 1) {
                 return null;
             }
-            String value = in.readCharSequence(length, CharsetUtil.US_ASCII).toString();
+            String value = in.readCharSequence(length, StandardCharsets.US_ASCII).toString();
             in.skipReadableBytes(1); // Skip the NUL.
 
             return value;

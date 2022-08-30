@@ -20,7 +20,7 @@ import io.netty5.channel.ChannelHandlerContext;
 import io.netty5.handler.codec.ByteToMessageDecoder;
 import io.netty5.handler.codec.DecoderException;
 import io.netty5.handler.codec.DecoderResult;
-import io.netty5.util.CharsetUtil;
+import java.nio.charset.StandardCharsets;
 
 /**
  * Decodes a single {@link Socks5PasswordAuthRequest} from the inbound {@link Buffer}s.
@@ -59,9 +59,9 @@ public class Socks5PasswordAuthRequestDecoder extends ByteToMessageDecoder {
                     return;
                 }
                 in.skipReadableBytes(2);
-                String username = in.readCharSequence(usernameLength, CharsetUtil.US_ASCII).toString();
+                String username = in.readCharSequence(usernameLength, StandardCharsets.US_ASCII).toString();
                 in.skipReadableBytes(1);
-                String password = in.readCharSequence(passwordLength, CharsetUtil.US_ASCII).toString();
+                String password = in.readCharSequence(passwordLength, StandardCharsets.US_ASCII).toString();
                 ctx.fireChannelRead(new DefaultSocks5PasswordAuthRequest(username, password));
 
                 state = State.SUCCESS;

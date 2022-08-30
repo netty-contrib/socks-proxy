@@ -17,7 +17,7 @@ package io.netty.contrib.handler.codec.socksx.v5;
 
 import io.netty5.buffer.api.Buffer;
 import io.netty5.handler.codec.EncoderException;
-import io.netty5.util.CharsetUtil;
+import java.nio.charset.StandardCharsets;
 import io.netty5.util.NetUtil;
 
 /**
@@ -39,7 +39,7 @@ public interface Socks5AddressEncoder {
         } else if (typeVal == Socks5AddressType.DOMAIN.byteValue()) {
             if (addrValue != null) {
                 out.writeByte((byte) addrValue.length());
-                out.writeCharSequence(addrValue, CharsetUtil.US_ASCII);
+                out.writeCharSequence(addrValue, StandardCharsets.US_ASCII);
             } else {
                 out.writeByte((byte) 0);
             }

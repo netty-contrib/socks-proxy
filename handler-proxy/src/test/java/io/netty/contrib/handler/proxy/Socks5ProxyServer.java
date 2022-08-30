@@ -35,7 +35,7 @@ import io.netty.contrib.handler.codec.socksx.v5.Socks5PasswordAuthRequestDecoder
 import io.netty.contrib.handler.codec.socksx.v5.Socks5PasswordAuthStatus;
 import io.netty.contrib.handler.codec.socksx.v5.Socks5ServerEncoder;
 import io.netty5.handler.codec.LineBasedFrameDecoder;
-import io.netty5.util.CharsetUtil;
+import java.nio.charset.StandardCharsets;
 import io.netty5.util.internal.SocketUtils;
 
 import java.net.InetSocketAddress;

@@ -18,7 +18,7 @@ package io.netty.contrib.handler.codec.socks;
 import io.netty5.buffer.api.Buffer;
 import io.netty5.channel.ChannelHandlerContext;
 import io.netty5.handler.codec.ByteToMessageDecoder;
-import io.netty5.util.CharsetUtil;
+import java.nio.charset.StandardCharsets;
 
 /**
  * Decodes {@link Buffer}s into {@link SocksAuthRequest}.
@@ -56,7 +56,7 @@ public class SocksAuthRequestDecoder extends ByteToMessageDecoder {
                     return;
                 }
                 buffer.skipReadableBytes(1);
-                username = buffer.readCharSequence(fieldLength, CharsetUtil.US_ASCII).toString();
+                username = buffer.readCharSequence(fieldLength, StandardCharsets.US_ASCII).toString();
                 state = State.READ_PASSWORD;
             }
             case READ_PASSWORD: {
@@ -68,7 +68,7 @@ public class SocksAuthRequestDecoder extends ByteToMessageDecoder {
                     return;
                 }
                 buffer.skipReadableBytes(1);
-                String password = buffer.readCharSequence(fieldLength, CharsetUtil.US_ASCII).toString();
+                String password = buffer.readCharSequence(fieldLength, StandardCharsets.US_ASCII).toString();
                 ctx.fireChannelRead(new SocksAuthRequest(username, password));
                 break;
             }

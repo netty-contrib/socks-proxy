@@ -35,7 +35,7 @@ import io.netty5.handler.ssl.SslContextBuilder;
 import io.netty5.handler.ssl.util.InsecureTrustManagerFactory;
 import io.netty5.handler.ssl.util.SelfSignedCertificate;
 import io.netty5.resolver.NoopAddressResolverGroup;
-import io.netty5.util.CharsetUtil;
+import java.nio.charset.StandardCharsets;
 import io.netty5.util.concurrent.DefaultThreadFactory;
 import io.netty5.util.concurrent.Future;
 import io.netty5.util.internal.SocketUtils;
@@ -499,7 +499,7 @@ public class ProxyHandlerTest {
 
         @Override
         protected void messageReceived(ChannelHandlerContext ctx, Object msg) {
-            String str = ((Buffer) msg).toString(CharsetUtil.US_ASCII);
+            String str = ((Buffer) msg).toString(StandardCharsets.US_ASCII);
             received.add(str);
             if ("2".equals(str)) {
                 ctx.writeAndFlush(writeAscii(ctx.bufferAllocator(), "C\n"));

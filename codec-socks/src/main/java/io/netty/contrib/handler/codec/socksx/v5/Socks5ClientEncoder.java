@@ -19,7 +19,7 @@ import io.netty5.buffer.api.Buffer;
 import io.netty5.channel.ChannelHandlerContext;
 import io.netty5.handler.codec.EncoderException;
 import io.netty5.handler.codec.MessageToByteEncoder;
-import io.netty5.util.CharsetUtil;
+import java.nio.charset.StandardCharsets;
 import io.netty5.util.internal.StringUtil;
 
 import java.util.List;
@@ -100,11 +100,11 @@ public class Socks5ClientEncoder extends MessageToByteEncoder<Socks5Message> {
 
         final String username = msg.username();
         out.writeByte((byte) username.length());
-        out.writeCharSequence(username, CharsetUtil.US_ASCII);
+        out.writeCharSequence(username, StandardCharsets.US_ASCII);
 
         final String password = msg.password();
         out.writeByte((byte) password.length());
-        out.writeCharSequence(password, CharsetUtil.US_ASCII);
+        out.writeCharSequence(password, StandardCharsets.US_ASCII);
     }
 
     private void encodeCommandRequest(Socks5CommandRequest msg, Buffer out) throws Exception {

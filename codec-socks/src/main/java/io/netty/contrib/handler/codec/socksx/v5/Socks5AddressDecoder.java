@@ -17,7 +17,7 @@ package io.netty.contrib.handler.codec.socksx.v5;
 
 import io.netty5.buffer.api.Buffer;
 import io.netty5.handler.codec.DecoderException;
-import io.netty5.util.CharsetUtil;
+import java.nio.charset.StandardCharsets;
 import io.netty5.util.NetUtil;
 
 /**
@@ -50,7 +50,7 @@ public interface Socks5AddressDecoder {
                     return null;
                 }
                 in.skipReadableBytes(1);
-                return in.readCharSequence(length, CharsetUtil.US_ASCII).toString();
+                return in.readCharSequence(length, StandardCharsets.US_ASCII).toString();
             }
             if (addrType == Socks5AddressType.IPv6) {
                 if (readableBytes < IPv6_LEN) {
