@@ -16,7 +16,7 @@
 package io.netty.contrib.handler.codec.socks;
 
 import io.netty5.buffer.api.Buffer;
-import io.netty5.util.CharsetUtil;
+import java.nio.charset.StandardCharsets;
 import org.junit.jupiter.api.Test;
 
 import java.net.IDN;
@@ -151,7 +151,7 @@ public class SocksCmdResponseTest {
             assertEquals(SocksAddressType.DOMAIN.byteValue(), buffer.readByte());
             assertEquals((byte) asciiHost.length(), buffer.readUnsignedByte());
             assertEquals(asciiHost,
-                    CharBuffer.wrap(buffer.readCharSequence(asciiHost.length(), CharsetUtil.US_ASCII)));
+                    CharBuffer.wrap(buffer.readCharSequence(asciiHost.length(), StandardCharsets.US_ASCII)));
             assertEquals(port, buffer.readUnsignedShort());
         }
     }

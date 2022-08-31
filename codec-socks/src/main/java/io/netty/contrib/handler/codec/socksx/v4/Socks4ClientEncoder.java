@@ -18,7 +18,7 @@ package io.netty.contrib.handler.codec.socksx.v4;
 import io.netty5.buffer.api.Buffer;
 import io.netty5.channel.ChannelHandlerContext;
 import io.netty5.handler.codec.MessageToByteEncoder;
-import io.netty5.util.CharsetUtil;
+import java.nio.charset.StandardCharsets;
 import io.netty5.util.NetUtil;
 
 /**
@@ -47,13 +47,13 @@ public final class Socks4ClientEncoder extends MessageToByteEncoder<Socks4Comman
         out.writeShort((short) msg.dstPort());
         if (NetUtil.isValidIpV4Address(msg.dstAddr())) {
             out.writeBytes(NetUtil.createByteArrayFromIpAddressString(msg.dstAddr()));
-            out.writeCharSequence(msg.userId(), CharsetUtil.US_ASCII);
+            out.writeCharSequence(msg.userId(), StandardCharsets.US_ASCII);
             out.writeByte((byte) 0);
         } else {
             out.writeBytes(IPv4_DOMAIN_MARKER);
-            out.writeCharSequence(msg.userId(), CharsetUtil.US_ASCII);
+            out.writeCharSequence(msg.userId(), StandardCharsets.US_ASCII);
             out.writeByte((byte) 0);
-            out.writeCharSequence(msg.dstAddr(), CharsetUtil.US_ASCII);
+            out.writeCharSequence(msg.dstAddr(), StandardCharsets.US_ASCII);
             out.writeByte((byte) 0);
         }
     }

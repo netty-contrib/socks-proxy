@@ -18,6 +18,7 @@ package io.netty.contrib.handler.codec.socks;
 import io.netty5.buffer.api.Buffer;
 import io.netty5.util.CharsetUtil;
 
+import java.nio.charset.StandardCharsets;
 import java.nio.charset.CharsetEncoder;
 
 import static java.util.Objects.requireNonNull;
@@ -38,7 +39,7 @@ public final class SocksAuthRequest extends SocksRequest {
         requireNonNull(username, "username");
         requireNonNull(password, "password");
 
-        final CharsetEncoder asciiEncoder = CharsetUtil.encoder(CharsetUtil.US_ASCII);
+        final CharsetEncoder asciiEncoder = CharsetUtil.encoder(StandardCharsets.US_ASCII);
         if (!asciiEncoder.canEncode(username) || !asciiEncoder.canEncode(password)) {
             throw new IllegalArgumentException(
                     "username: " + username + " or password: **** values should be in pure ascii");
@@ -75,8 +76,8 @@ public final class SocksAuthRequest extends SocksRequest {
     public void encodeAsBuffer(Buffer buffer) {
         buffer.writeByte(SUBNEGOTIATION_VERSION.byteValue());
         buffer.writeByte((byte) username.length());
-        buffer.writeCharSequence(username, CharsetUtil.US_ASCII);
+        buffer.writeCharSequence(username, StandardCharsets.US_ASCII);
         buffer.writeByte((byte) password.length());
-        buffer.writeCharSequence(password, CharsetUtil.US_ASCII);
+        buffer.writeCharSequence(password, StandardCharsets.US_ASCII);
     }
 }

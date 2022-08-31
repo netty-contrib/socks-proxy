@@ -16,7 +16,7 @@
 package io.netty.contrib.handler.codec.socks;
 
 import io.netty5.buffer.api.Buffer;
-import io.netty5.util.CharsetUtil;
+import java.nio.charset.StandardCharsets;
 import io.netty5.util.NetUtil;
 
 import java.net.IDN;
@@ -122,7 +122,7 @@ public final class SocksCmdRequest extends SocksRequest {
 
             case DOMAIN: {
                 buffer.writeByte((byte) host.length());
-                buffer.writeCharSequence(host, CharsetUtil.US_ASCII);
+                buffer.writeCharSequence(host, StandardCharsets.US_ASCII);
                 buffer.writeShort((short) port);
                 break;
             }

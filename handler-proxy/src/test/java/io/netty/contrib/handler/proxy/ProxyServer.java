@@ -30,7 +30,7 @@ import io.netty5.channel.socket.ServerSocketChannel;
 import io.netty5.channel.socket.SocketChannel;
 import io.netty5.channel.socket.nio.NioServerSocketChannel;
 import io.netty5.channel.socket.nio.NioSocketChannel;
-import io.netty5.util.CharsetUtil;
+import java.nio.charset.StandardCharsets;
 import io.netty5.util.NetUtil;
 import io.netty5.util.ReferenceCountUtil;
 import io.netty5.util.concurrent.Future;
@@ -267,7 +267,7 @@ abstract class ProxyServer {
         @Override
         protected final void messageReceived(ChannelHandlerContext ctx, Object msg) throws Exception {
             if (finished) {
-                String str = ((Buffer) msg).toString(CharsetUtil.US_ASCII);
+                String str = ((Buffer) msg).toString(StandardCharsets.US_ASCII);
                 if ("A\n".equals(str)) {
                     ctx.write(writeAscii(ctx.bufferAllocator(), "1\n"));
                 } else if ("B\n".equals(str)) {

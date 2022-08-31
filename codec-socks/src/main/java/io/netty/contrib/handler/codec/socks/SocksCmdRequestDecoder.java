@@ -18,7 +18,7 @@ package io.netty.contrib.handler.codec.socks;
 import io.netty5.buffer.api.Buffer;
 import io.netty5.channel.ChannelHandlerContext;
 import io.netty5.handler.codec.ByteToMessageDecoder;
-import io.netty5.util.CharsetUtil;
+import java.nio.charset.StandardCharsets;
 import io.netty5.util.NetUtil;
 
 /**
@@ -79,7 +79,7 @@ public class SocksCmdRequestDecoder extends ByteToMessageDecoder {
                             return;
                         }
                         buffer.skipReadableBytes(1);
-                        String host = buffer.readCharSequence(fieldLength, CharsetUtil.US_ASCII).toString();
+                        String host = buffer.readCharSequence(fieldLength, StandardCharsets.US_ASCII).toString();
                         int port = buffer.readUnsignedShort();
                         ctx.fireChannelRead(new SocksCmdRequest(cmdType, addressType, host, port));
                         break;
