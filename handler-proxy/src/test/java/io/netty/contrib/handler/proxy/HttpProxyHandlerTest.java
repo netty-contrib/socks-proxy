@@ -19,6 +19,7 @@ import io.netty5.bootstrap.Bootstrap;
 import io.netty5.bootstrap.ServerBootstrap;
 import io.netty5.channel.Channel;
 import io.netty5.channel.ChannelHandler;
+import io.netty5.channel.ChannelHandlerAdapter;
 import io.netty5.channel.ChannelHandlerContext;
 import io.netty5.channel.ChannelInitializer;
 import io.netty5.channel.EventLoopGroup;
@@ -31,6 +32,8 @@ import io.netty5.channel.local.LocalServerChannel;
 import io.netty.contrib.handler.proxy.HttpProxyHandler.HttpProxyConnectException;
 import io.netty5.handler.codec.http.DefaultFullHttpResponse;
 import io.netty5.handler.codec.http.DefaultHttpHeaders;
+import io.netty5.handler.codec.http.DefaultHttpResponse;
+import io.netty5.handler.codec.http.EmptyLastHttpContent;
 import io.netty5.handler.codec.http.FullHttpRequest;
 import io.netty5.handler.codec.http.HttpClientCodec;
 import io.netty5.handler.codec.http.HttpHeaderNames;
@@ -48,6 +51,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import static io.netty5.buffer.api.DefaultBufferAllocators.preferredAllocator;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -292,5 +296,35 @@ public class HttpProxyHandlerTest {
         };
         assertNotNull(channel.pipeline().get(HttpProxyHandler.class));
         assertNull(channel.pipeline().get(HttpClientCodec.class));
+    }
+
+    @Test
+    void testAllMessagesAreReleased() {
+        HttpProxyHandler proxyHandler = new HttpProxyHandler(new InetSocketAddress(NetUtil.LOCALHOST, 8080));
+        ChannelHandlerAdapter testHandler =
+                new ChannelHandlerAdapter() {
+
+                    @Override
+                    public void channelExceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
+                        // ProxyConnectException is expected as there is no real proxy setup
+                        if (!(cause instanceof ProxyConnectException)) {
+                            ctx.fireChannelExceptionCaught(cause);
+                        }
+                    }
+                };
+        EmbeddedChannel channel = new EmbeddedChannel(proxyHandler, testHandler) {
+
+            @Override
+            public boolean isActive() {
+                // Initial request to proxy cannot be sent as there is no real proxy setup
+                return false;
+            }
+        };
+
+        DefaultHttpResponse httpResponse = new DefaultHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.OK);
+        EmptyLastHttpContent emptyLastHttpContent = new EmptyLastHttpContent(preferredAllocator());
+        channel.writeInbound(httpResponse, emptyLastHttpContent);
+
+        assertFalse(emptyLastHttpContent.isAccessible());
     }
 }

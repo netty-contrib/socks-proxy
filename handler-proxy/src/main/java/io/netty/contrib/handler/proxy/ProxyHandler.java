@@ -20,7 +20,7 @@ import io.netty5.channel.ChannelHandler;
 import io.netty5.channel.ChannelHandlerContext;
 import io.netty5.channel.ChannelOption;
 import io.netty5.channel.PendingWriteQueue;
-import io.netty5.util.ReferenceCountUtil;
+import io.netty5.util.Resource;
 import io.netty5.util.concurrent.DefaultPromise;
 import io.netty5.util.concurrent.Future;
 import io.netty5.util.concurrent.FutureListener;
@@ -253,7 +253,7 @@ public abstract class ProxyHandler implements ChannelHandler {
             } catch (Throwable t) {
                 cause = t;
             } finally {
-                ReferenceCountUtil.release(msg);
+                Resource.dispose(msg);
                 if (cause != null) {
                     setConnectFailure(cause);
                 }
