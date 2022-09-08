@@ -24,6 +24,7 @@ import io.netty5.handler.codec.http.DefaultHttpContent;
 import io.netty5.handler.codec.http.FullHttpRequest;
 import io.netty5.handler.codec.http.FullHttpResponse;
 import io.netty5.handler.codec.http.HttpHeaderNames;
+import io.netty5.handler.codec.http.HttpHeaderValues;
 import io.netty5.handler.codec.http.HttpMethod;
 import io.netty5.handler.codec.http.HttpObjectAggregator;
 import io.netty5.handler.codec.http.HttpResponseStatus;
@@ -111,7 +112,7 @@ final class HttpProxyServer extends ProxyServer {
             if (!authenticate(ctx, req)) {
                 res = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.UNAUTHORIZED,
                         preferredAllocator().allocate(0));
-                res.headers().set(HttpHeaderNames.CONTENT_LENGTH, 0);
+                res.headers().set(HttpHeaderNames.CONTENT_LENGTH, HttpHeaderValues.ZERO);
             } else {
                 res = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.OK,
                         preferredAllocator().allocate(0));
@@ -144,11 +145,11 @@ final class HttpProxyServer extends ProxyServer {
             if (!authenticate(ctx, req)) {
                 res = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.UNAUTHORIZED,
                         preferredAllocator().allocate(0));
-                res.headers().set(HttpHeaderNames.CONTENT_LENGTH, 0);
+                res.headers().set(HttpHeaderNames.CONTENT_LENGTH, HttpHeaderValues.ZERO);
             } else if (!req.uri().equals(destination.getHostString() + ':' + destination.getPort())) {
                 res = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.FORBIDDEN,
                         preferredAllocator().allocate(0));
-                res.headers().set(HttpHeaderNames.CONTENT_LENGTH, 0);
+                res.headers().set(HttpHeaderNames.CONTENT_LENGTH, HttpHeaderValues.ZERO);
             } else {
                 res = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.OK,
                         preferredAllocator().allocate(0));

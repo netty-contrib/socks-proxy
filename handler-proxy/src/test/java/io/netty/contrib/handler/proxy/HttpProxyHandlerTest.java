@@ -31,13 +31,12 @@ import io.netty5.channel.local.LocalHandler;
 import io.netty5.channel.local.LocalServerChannel;
 import io.netty.contrib.handler.proxy.HttpProxyHandler.HttpProxyConnectException;
 import io.netty5.handler.codec.http.DefaultFullHttpResponse;
-import io.netty5.handler.codec.http.DefaultHttpHeaders;
 import io.netty5.handler.codec.http.DefaultHttpResponse;
 import io.netty5.handler.codec.http.EmptyLastHttpContent;
 import io.netty5.handler.codec.http.FullHttpRequest;
 import io.netty5.handler.codec.http.HttpClientCodec;
 import io.netty5.handler.codec.http.HttpHeaderNames;
-import io.netty5.handler.codec.http.HttpHeaders;
+import io.netty5.handler.codec.http.headers.HttpHeaders;
 import io.netty5.handler.codec.http.HttpResponseEncoder;
 import io.netty5.handler.codec.http.HttpResponseStatus;
 import io.netty5.handler.codec.http.HttpVersion;
@@ -52,6 +51,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import static io.netty5.buffer.api.DefaultBufferAllocators.preferredAllocator;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertIterableEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -177,7 +177,7 @@ public class HttpProxyHandlerTest {
                 socketAddress,
                 "10.0.0.1:8080",
                 "10.0.0.1:8080",
-                new DefaultHttpHeaders()
+                HttpHeaders.newHeaders()
                         .add("CUSTOM_HEADER", "CUSTOM_VALUE1")
                         .add("CUSTOM_HEADER", "CUSTOM_VALUE2"),
                 true);
@@ -276,8 +276,8 @@ public class HttpProxyHandlerTest {
 
             if (headers != null) {
                 // The actual request header is a strict superset of the custom header
-                for (String name : headers.names()) {
-                    assertEquals(headers.getAll(name), actualHeaders.getAll(name));
+                for (CharSequence name : headers.names()) {
+                    assertIterableEquals(headers.values(name), actualHeaders.values(name));
                 }
             }
         }
