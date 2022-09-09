@@ -1,22 +1,37 @@
 [
   {
     "name": "io.netty.contrib.handler.proxy.HttpProxyHandler",
+    "condition": {
+      "typeReachable": "io.netty.contrib.handler.proxy.HttpProxyHandler"
+    },
     "queryAllPublicMethods": true
   },
   {
     "name": "io.netty.contrib.handler.proxy.HttpProxyHandler$HttpClientCodecWrapper",
+    "condition": {
+      "typeReachable": "io.netty.contrib.handler.proxy.HttpProxyHandler$HttpClientCodecWrapper"
+    },
     "queryAllPublicMethods": true
   },
   {
     "name": "io.netty.contrib.handler.proxy.ProxyHandler",
+    "condition": {
+      "typeReachable": "io.netty.contrib.handler.proxy.ProxyHandler"
+    },
     "queryAllPublicMethods": true
   },
   {
     "name": "io.netty.contrib.handler.proxy.Socks4ProxyHandler",
+    "condition": {
+      "typeReachable": "io.netty.contrib.handler.proxy.Socks4ProxyHandler"
+    },
     "queryAllPublicMethods": true
   },
   {
     "name": "io.netty.contrib.handler.proxy.Socks5ProxyHandler",
+    "condition": {
+      "typeReachable": "io.netty.contrib.handler.proxy.Socks5ProxyHandler"
+    },
     "queryAllPublicMethods": true
   }
 ]

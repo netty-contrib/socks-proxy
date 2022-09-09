@@ -59,5 +59,24 @@
             <version>4.1.0</version>
             <scope>test</scope>
         </dependency>
+
+        <!-- Automatic native-image reflection metadata generation for handlers dependencies -->
+        <dependency>
+            <groupId>org.reflections</groupId>
+            <artifactId>reflections</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty5-transport</artifactId>
+            <type>test-jar</type>
+        </dependency>
     </dependencies>
 </project>
