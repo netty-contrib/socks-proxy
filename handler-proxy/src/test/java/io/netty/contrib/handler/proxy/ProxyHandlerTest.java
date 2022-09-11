@@ -16,7 +16,7 @@
 package io.netty.contrib.handler.proxy;
 
 import io.netty5.bootstrap.Bootstrap;
-import io.netty5.buffer.api.Buffer;
+import io.netty5.buffer.Buffer;
 import io.netty5.channel.Channel;
 import io.netty5.channel.ChannelHandler;
 import io.netty5.channel.ChannelHandlerContext;
@@ -63,7 +63,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
 import static io.netty5.buffer.BufferUtil.writeAscii;
-import static io.netty5.buffer.api.DefaultBufferAllocators.preferredAllocator;
+import static io.netty5.buffer.DefaultBufferAllocators.preferredAllocator;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;

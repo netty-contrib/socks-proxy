@@ -15,14 +15,14 @@
  */
 package io.netty.contrib.handler.codec.socks;
 
-import io.netty5.buffer.api.Buffer;
+import io.netty5.buffer.Buffer;
 import java.nio.charset.StandardCharsets;
 import org.junit.jupiter.api.Test;
 
 import java.net.IDN;
 import java.nio.CharBuffer;
 
-import static io.netty5.buffer.api.DefaultBufferAllocators.preferredAllocator;
+import static io.netty5.buffer.DefaultBufferAllocators.preferredAllocator;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;

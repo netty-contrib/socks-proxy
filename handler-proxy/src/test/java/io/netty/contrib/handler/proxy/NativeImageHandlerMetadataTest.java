@@ -23,7 +23,7 @@ package io.netty.contrib.handler.proxy;
      @Test
      public void collectAndCompareMetadata() {
          ChannelHandlerMetadataUtil.generateMetadata(
-                 "src/main/resources/META-INF/native-image/io.netty.contrib/netty-handler-proxy/reflect-config.json",
+                 "io.netty.contrib/netty-handler-proxy/reflect-config.json",
                  "io.netty.contrib.handler.proxy");
      }
 

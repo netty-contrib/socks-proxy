@@ -15,7 +15,7 @@
  */
 package io.netty.contrib.handler.codec.socksx.v5;
 
-import io.netty5.buffer.api.Buffer;
+import io.netty5.buffer.Buffer;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;

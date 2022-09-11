@@ -15,7 +15,7 @@
  */
 package io.netty.contrib.handler.codec.socks;
 
-import io.netty5.buffer.api.Buffer;
+import io.netty5.buffer.Buffer;
 import io.netty5.channel.embedded.EmbeddedChannel;
 import org.junit.jupiter.api.Test;
 
