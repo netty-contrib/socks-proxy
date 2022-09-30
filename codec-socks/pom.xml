@@ -5,11 +5,11 @@
     <parent>
         <groupId>io.netty.contrib</groupId>
         <artifactId>netty-socks-proxy-parent</artifactId>
-        <version>5.0.1.Alpha2-SNAPSHOT</version>
+        <version>5.0.0.Alpha3-SNAPSHOT</version>
     </parent>
 
     <artifactId>netty-codec-socks</artifactId>
-    <version>5.0.1.Alpha2-SNAPSHOT</version>
+    <version>5.0.0.Alpha3-SNAPSHOT</version>
     <name>Netty/Codec/Socks</name>
     <packaging>jar</packaging>
 
