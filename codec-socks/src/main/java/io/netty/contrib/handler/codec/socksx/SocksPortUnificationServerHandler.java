@@ -24,8 +24,8 @@ import io.netty.contrib.handler.codec.socksx.v5.Socks5AddressEncoder;
 import io.netty.contrib.handler.codec.socksx.v5.Socks5InitialRequestDecoder;
 import io.netty.contrib.handler.codec.socksx.v5.Socks5ServerEncoder;
 import io.netty5.handler.codec.ByteToMessageDecoder;
-import io.netty5.util.internal.logging.InternalLogger;
-import io.netty5.util.internal.logging.InternalLoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static java.util.Objects.requireNonNull;
 
@@ -35,8 +35,8 @@ import static java.util.Objects.requireNonNull;
  */
 public class SocksPortUnificationServerHandler extends ByteToMessageDecoder {
 
-    private static final InternalLogger logger =
-            InternalLoggerFactory.getInstance(SocksPortUnificationServerHandler.class);
+    private static final Logger logger =
+            LoggerFactory.getLogger(SocksPortUnificationServerHandler.class);
 
     private final Socks5ServerEncoder socks5encoder;
 

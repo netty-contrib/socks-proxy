@@ -17,8 +17,8 @@ package io.netty.contrib.handler.codec.socks;
 
 import io.netty5.channel.embedded.EmbeddedChannel;
 import io.netty5.util.internal.SocketUtils;
-import io.netty5.util.internal.logging.InternalLogger;
-import io.netty5.util.internal.logging.InternalLoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.junit.jupiter.api.Test;
 
 import java.net.UnknownHostException;
@@ -29,7 +29,7 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class SocksCmdRequestDecoderTest {
-    private static final InternalLogger logger = InternalLoggerFactory.getInstance(SocksCmdRequestDecoderTest.class);
+    private static final Logger logger = LoggerFactory.getLogger(SocksCmdRequestDecoderTest.class);
 
     private static void testSocksCmdRequestDecoderWithDifferentParams(SocksCmdType cmdType,
                                                                       SocksAddressType addressType,
