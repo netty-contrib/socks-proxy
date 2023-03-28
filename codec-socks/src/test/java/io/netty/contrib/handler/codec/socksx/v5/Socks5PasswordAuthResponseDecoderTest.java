@@ -16,15 +16,15 @@
 package io.netty.contrib.handler.codec.socksx.v5;
 
 import io.netty5.channel.embedded.EmbeddedChannel;
-import io.netty5.util.internal.logging.InternalLogger;
-import io.netty5.util.internal.logging.InternalLoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 
 public class Socks5PasswordAuthResponseDecoderTest {
-    private static final InternalLogger logger = InternalLoggerFactory.getInstance(
+    private static final Logger logger = LoggerFactory.getLogger(
             Socks5PasswordAuthResponseDecoderTest.class);
 
     private static void test(Socks5PasswordAuthStatus status) {

@@ -16,8 +16,8 @@
 package io.netty.contrib.handler.codec.socksx.v5;
 
 import io.netty5.channel.embedded.EmbeddedChannel;
-import io.netty5.util.internal.logging.InternalLogger;
-import io.netty5.util.internal.logging.InternalLoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
@@ -28,8 +28,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class Socks5CommandResponseDecoderTest {
 
-    private static final InternalLogger logger =
-            InternalLoggerFactory.getInstance(Socks5CommandResponseDecoderTest.class);
+    private static final Logger logger =
+            LoggerFactory.getLogger(Socks5CommandResponseDecoderTest.class);
 
     private static final Socks5CommandStatus[] STATUSES = {
             Socks5CommandStatus.ADDRESS_UNSUPPORTED,

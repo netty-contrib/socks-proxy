@@ -26,8 +26,8 @@ import io.netty5.util.concurrent.Future;
 import io.netty5.util.concurrent.FutureListener;
 import io.netty5.util.concurrent.ImmediateEventExecutor;
 import io.netty5.util.concurrent.Promise;
-import io.netty5.util.internal.logging.InternalLogger;
-import io.netty5.util.internal.logging.InternalLoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.net.SocketAddress;
 import java.nio.channels.ConnectionPendingException;
@@ -37,7 +37,7 @@ import static java.util.Objects.requireNonNull;
 
 public abstract class ProxyHandler implements ChannelHandler {
 
-    private static final InternalLogger logger = InternalLoggerFactory.getInstance(ProxyHandler.class);
+    private static final Logger logger = LoggerFactory.getLogger(ProxyHandler.class);
 
     /**
      * The default connect timeout: 10 seconds.

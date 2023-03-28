@@ -16,8 +16,8 @@
 package io.netty.contrib.handler.codec.socksx.v4;
 
 import io.netty5.channel.embedded.EmbeddedChannel;
-import io.netty5.util.internal.logging.InternalLogger;
-import io.netty5.util.internal.logging.InternalLoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
@@ -27,7 +27,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 
 public class Socks4ServerDecoderTest {
-    private static final InternalLogger logger = InternalLoggerFactory.getInstance(Socks4ServerDecoderTest.class);
+    private static final Logger logger = LoggerFactory.getLogger(Socks4ServerDecoderTest.class);
 
     private static void test(String userId, Socks4CommandType type, String dstAddr, int dstPort) {
         logger.debug(
