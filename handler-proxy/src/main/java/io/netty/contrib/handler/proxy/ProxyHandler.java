@@ -35,6 +35,9 @@ import java.util.concurrent.TimeUnit;
 
 import static java.util.Objects.requireNonNull;
 
+/**
+ * A common abstraction for protocols that establish blind forwarding proxy tunnels.
+ */
 public abstract class ProxyHandler implements ChannelHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(ProxyHandler.class);
