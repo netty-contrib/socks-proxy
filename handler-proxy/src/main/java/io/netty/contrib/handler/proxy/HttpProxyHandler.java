@@ -24,6 +24,7 @@ import io.netty5.handler.codec.http.DefaultFullHttpRequest;
 import io.netty5.handler.codec.http.FullHttpRequest;
 import io.netty5.handler.codec.http.HttpClientCodec;
 import io.netty5.handler.codec.http.HttpHeaderNames;
+import io.netty5.handler.codec.http.headers.DefaultHttpHeadersFactory;
 import io.netty5.handler.codec.http.headers.HttpHeaders;
 import io.netty5.handler.codec.http.HttpMethod;
 import io.netty5.handler.codec.http.HttpResponse;
@@ -31,6 +32,7 @@ import io.netty5.handler.codec.http.HttpResponseStatus;
 import io.netty5.handler.codec.http.HttpUtil;
 import io.netty5.handler.codec.http.HttpVersion;
 import io.netty5.handler.codec.http.LastHttpContent;
+import io.netty5.handler.codec.http.headers.HttpHeadersFactory;
 import io.netty5.util.AsciiString;
 import io.netty5.util.concurrent.Future;
 
@@ -168,10 +170,13 @@ public final class HttpProxyHandler extends ProxyHandler {
                 hostString :
                 url;
 
+        HttpHeadersFactory httpHeadersFactory = DefaultHttpHeadersFactory.headersFactory().withNameValidation(false).withValueValidation(false);
+        HttpHeadersFactory httpTrailersFactory = DefaultHttpHeadersFactory.trailersFactory().withNameValidation(false).withValueValidation(false);
+
         FullHttpRequest req = new DefaultFullHttpRequest(
                 HttpVersion.HTTP_1_1, HttpMethod.CONNECT,
                 url,
-                ctx.bufferAllocator().allocate(0), false);
+                ctx.bufferAllocator().allocate(0), httpHeadersFactory, httpTrailersFactory);
 
         req.headers().set(HttpHeaderNames.HOST, hostHeader);
 
